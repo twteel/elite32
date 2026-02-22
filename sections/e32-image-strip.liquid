@@ -1,0 +1,162 @@
+<section class="e32-media" data-section="e32-image-strip">
+  <div class="e32-wrap">
+    <header class="e32-media__head">
+      <div class="e32-media__kicker">{{ section.settings.kicker }}</div>
+      <h2 class="e32-title e32-media__title" style="font-size: clamp(28px, 4vw, 54px);">
+        {{ section.settings.title }}
+      </h2>
+      {% if section.settings.sub != blank %}
+        <p class="e32-lede e32-media__sub">{{ section.settings.sub }}</p>
+      {% endif %}
+    </header>
+
+    <div class="e32-image-strip e32-image-strip--{{ section.settings.layout }}">
+      {% if section.settings.layout == 'scroll' %}
+        <div class="e32-strip e32-strip--scroll" role="list" aria-label="Image gallery">
+          {% for block in section.blocks %}
+            {% if block.settings.image != blank %}
+              <div class="e32-strip__card" role="listitem">
+                <img
+                  src="{{ block.settings.image | image_url: width: 2000 }}"
+                  alt="{{ block.settings.alt | escape }}"
+                  loading="lazy"
+                  decoding="async"
+                >
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="e32-strip e32-strip--grid">
+          {% for block in section.blocks %}
+            {% if block.settings.image != blank %}
+              {% liquid assign col = block.settings.col_span | default: 4 %}
+              <div class="e32-strip__card" style="grid-column: span {{ col }};">
+                <img
+                  src="{{ block.settings.image | image_url: width: 2000 }}"
+                  alt="{{ block.settings.alt | escape }}"
+                  loading="lazy"
+                  decoding="async"
+                >
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if section.settings.cta_label != blank and section.settings.cta_link != blank %}
+        <div class="e32-actions e32-image-strip__cta">
+          <a class="e32-btn e32-btn--primary" href="{{ section.settings.cta_link }}">{{ section.settings.cta_label }}</a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<style>
+/* ====== Section padding ====== */
+.e32-media[data-section="e32-image-strip"]{
+  padding-left: clamp(16px, 4vw, 44px);
+  padding-right: clamp(16px, 4vw, 44px);
+  box-sizing: border-box;
+}
+
+/* Tighten rhythm so it feels premium */
+.e32-image-strip{ margin-top: -10px; }
+.e32-image-strip__cta{ margin-top: 18px; }
+
+/* ====== Base cards ====== */
+.e32-strip__card{
+  border-radius: 18px;
+  overflow: hidden;
+  background: rgba(255,255,255,.04);
+  box-shadow: 0 12px 32px rgba(0,0,0,.35);
+  border: 1px solid rgba(255,255,255,.10);
+}
+
+/* Lock height to kill "random tall image" */
+.e32-strip__card{
+  height: 340px;
+}
+.e32-strip__card img{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit: cover;
+  transform: scale(1.02);
+  filter: contrast(1.06) saturate(1.05);
+}
+
+/* ====== GRID mode ====== */
+.e32-strip--grid{
+  display:grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap:14px;
+}
+
+/* ====== SCROLL mode ====== */
+.e32-strip--scroll{
+  display:flex;
+  gap:14px;
+  overflow-x:auto;
+  padding-bottom: 10px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+.e32-strip--scroll::-webkit-scrollbar{ height: 8px; }
+.e32-strip--scroll::-webkit-scrollbar-thumb{
+  background: rgba(255,255,255,.16);
+  border-radius: 999px;
+}
+.e32-strip--scroll .e32-strip__card{
+  flex: 0 0 auto;
+  width: clamp(260px, 34vw, 520px);
+  scroll-snap-align: start;
+}
+
+/* ====== Responsive ====== */
+@media (max-width: 980px){
+  .e32-strip__card{ height: 260px; }
+}
+@media (max-width: 600px){
+  .e32-strip__card{ height: 220px; }
+}
+</style>
+
+{% schema %}
+{
+  "name": "E32 Image Strip",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "ELITE32" },
+    { "type": "text", "id": "title", "label": "Title", "default": "THE LOOK" },
+    { "type": "textarea", "id": "sub", "label": "Subhead", "default": "Premium production and real moments. This is the environment teams step into." },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "default": "grid",
+      "options": [
+        { "value": "grid", "label": "Grid" },
+        { "value": "scroll", "label": "Horizontal scroll (gallery)" }
+      ]
+    },
+    { "type": "text", "id": "cta_label", "label": "CTA label (optional)", "default": "REGISTER A TEAM" },
+    { "type": "url", "id": "cta_link", "label": "CTA link (optional)" }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image",
+      "limit": 10,
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "alt", "label": "Alt text", "default": "Elite 32 photo" },
+        { "type": "range", "id": "col_span", "label": "Desktop column span (2–12)", "min": 2, "max": 12, "step": 1, "default": 4 }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "E32 Image Strip" }
+  ]
+}
+{% endschema %}

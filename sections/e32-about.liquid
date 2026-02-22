@@ -1,0 +1,953 @@
+{%- comment -%}
+ELITE32 ABOUT PAGE — SINGLE BLOCK (v5)
+Balance + rhythm upgrade. Image-led sections + stat strip + mosaic gallery.
+Paste into: Theme Editor -> Pages -> About -> Add section -> Custom Liquid
+Edit ONLY the CONFIG section.
+{%- endcomment -%}
+
+{%- comment -%} ============== CONFIG (edit) ============== {%- endcomment -%}
+{%- assign HERO_HEADLINE = "MADE FOR<br>REAL" -%}
+{%- assign HERO_SUB = "Elite 32 is a year-round youth basketball platform built for access, visibility, and real outcomes. We operate at scale, professionally, consistently, and with intention." -%}
+
+{%- assign PRIMARY_CTA = "REGISTER A TEAM" -%}
+{%- assign PRIMARY_LINK = "/pages/register" -%}
+{%- assign SECONDARY_CTA = "MEDIA PASS" -%}
+{%- assign SECONDARY_LINK = "/pages/media-registration" -%}
+
+{%- assign HERO_IMAGE = "https://www.elite32.org/wp-content/uploads/2025/02/PJCheri-2312287969-scaled.jpg" -%}
+
+{%- assign IMG_1 = "https://cdn.shopify.com/s/files/1/0659/5565/9835/files/Honored._Inspired._Locked_in_Blessed_to_be_a_part_of_another_ballin4peace_x_nycelite32_event.jpg?v=1771788616" -%}
+{%- assign IMG_2 = "https://cdn.shopify.com/s/files/1/0659/5565/9835/files/Another_milestone_for_NYC_hoops_Our_ballin4peace_nycelite32_Fall_Brawl_Classic_brought_toge.jpg?v=1771788616" -%}
+{%- assign IMG_3 = "https://cdn.shopify.com/s/files/1/0659/5565/9835/files/01214129-scaled.jpg?v=1771793013" -%}
+
+{%- capture TIMELINE -%}
+FEB | Prep Showcase | High school and prep exposure event.
+APRIL | Middle School Madness | NCAA-style youth tournament experience.
+JUNE | Annual Celebrity All-Star Event | Flagship cultural and scholarship moment.
+JULY | Summer Invitational | Large-scale multi-court competition.
+OCT | Fall Brawl | Preseason showcase.
+DEC | Holiday Invitational | Two-week varsity showcase.
+{%- endcapture -%}
+
+<section class="e32p" aria-label="Elite32 About">
+
+  <!-- HERO -->
+  <header class="e32p-hero">
+    {%- if HERO_IMAGE != blank -%}
+      <div class="e32p-heroMedia" aria-hidden="true">
+        <img src="{{ HERO_IMAGE }}" alt="" loading="eager">
+      </div>
+    {%- endif -%}
+    <div class="e32p-heroOverlay" aria-hidden="true"></div>
+
+    <div class="e32p-wrap e32p-heroInner">
+      <div class="e32p-heroTop">
+        <span class="e32p-kicker">ELITE32</span>
+        <span class="e32p-kicker e32p-kicker--ghost">YEAR-ROUND PLATFORM</span>
+      </div>
+
+      <h1 class="e32p-h1">{{ HERO_HEADLINE }}</h1>
+      <p class="e32p-sub">{{ HERO_SUB }}</p>
+
+      <div class="e32p-actions" role="group" aria-label="About page actions">
+        <a class="e32p-btn e32p-btn--primary" href="{{ PRIMARY_LINK }}">{{ PRIMARY_CTA }}</a>
+        <a class="e32p-btn e32p-btn--ghost" href="{{ SECONDARY_LINK }}">{{ SECONDARY_CTA }}</a>
+      </div>
+
+      <div class="e32p-meta" aria-label="Highlights">
+        <span>ACCESS</span><span class="e32p-dot" aria-hidden="true"></span>
+        <span>PRODUCTION</span><span class="e32p-dot" aria-hidden="true"></span>
+        <span>DISTRIBUTION</span><span class="e32p-dot" aria-hidden="true"></span>
+        <span>IMPACT</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- BODY -->
+  <div class="e32p-body">
+
+    <!-- STAT STRIP -->
+    <section class="e32p-strip" aria-label="Quick credibility">
+      <div class="e32p-wrap e32p-stripInner">
+        <div class="e32p-stat">
+          <div class="e32p-statTop">MULTI-COURT</div>
+          <div class="e32p-statMain">Built to run clean at scale.</div>
+        </div>
+        <div class="e32p-stat">
+          <div class="e32p-statTop">MEDIA BUILT-IN</div>
+          <div class="e32p-statMain">Coverage is infrastructure.</div>
+        </div>
+        <div class="e32p-stat">
+          <div class="e32p-statTop">CONSISTENT STANDARD</div>
+          <div class="e32p-statMain">Same experience, every time.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURE: The Shift -->
+    <section class="e32p-sec" aria-label="The shift">
+      <div class="e32p-wrap">
+        <div class="e32p-head">
+          <p class="e32p-eyebrow">THE SHIFT</p>
+          <h2 class="e32p-h2">The game changed. Access did not.</h2>
+        </div>
+
+        <div class="e32p-feature">
+          <div class="e32p-featureMedia">
+            <div class="e32p-mediaCard e32p-mediaCard--tall">
+              <img src="{{ IMG_1 }}" alt="" loading="lazy">
+              <div class="e32p-mediaCap">Premium environment. Consistent standard.</div>
+            </div>
+          </div>
+
+          <div class="e32p-featureBody">
+            <div class="e32p-prose">
+              <p>
+                Basketball is evaluated, shared, and discovered in real time. Highlights, livestreams, and digital visibility influence opportunity as much as performance on the court.
+                Yet most student-athletes still compete in environments that do not reflect how the modern game is consumed or assessed.
+              </p>
+              <p class="e32p-strong">Elite 32 exists to close that gap.</p>
+            </div>
+
+            <div class="e32p-box">
+              <div class="e32p-boxTitle">What we deliver</div>
+              <ul class="e32p-list">
+                <li><span class="e32p-check" aria-hidden="true"></span>Professional venues</li>
+                <li><span class="e32p-check" aria-hidden="true"></span>Structured competition</li>
+                <li><span class="e32p-check" aria-hidden="true"></span>Built-in media visibility</li>
+                <li><span class="e32p-check" aria-hidden="true"></span>Standards that stay consistent</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- FEATURE: Built to Scale -->
+    <section class="e32p-sec e32p-sec--tint" aria-label="Built to scale">
+      <div class="e32p-wrap">
+        <div class="e32p-head">
+          <p class="e32p-eyebrow">BUILT TO SCALE</p>
+          <h2 class="e32p-h2">A platform, not a tournament.</h2>
+        </div>
+
+        <div class="e32p-feature e32p-feature--flip">
+          <div class="e32p-featureMedia">
+            <div class="e32p-mediaCard e32p-mediaCard--tall">
+              <img src="{{ IMG_2 }}" alt="" loading="lazy">
+              <div class="e32p-mediaCap">Scheduling. Staffing. Repeatable execution.</div>
+            </div>
+          </div>
+
+          <div class="e32p-featureBody">
+            <div class="e32p-prose">
+              <p>
+                Elite 32 operates a structured, year-round competitive ecosystem designed to mirror how the game actually works today.
+                We deliver professional venues, real scheduling, staffing, and consistent media output across the calendar.
+              </p>
+            </div>
+
+            <div class="e32p-box">
+              <div class="e32p-boxTitle">The standard</div>
+              <p class="e32p-muted">Not built for one event. Built to operate.</p>
+              <div class="e32p-pills" aria-label="Pill list">
+                <span class="e32p-pill">Year-round</span>
+                <span class="e32p-pill">Multi-court</span>
+                <span class="e32p-pill">Media built-in</span>
+                <span class="e32p-pill">Culture-first</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- MOSAIC GALLERY MOMENT -->
+    <section class="e32p-sec" aria-label="Gallery">
+      <div class="e32p-wrap">
+        <div class="e32p-head">
+          <p class="e32p-eyebrow">THE ENVIRONMENT</p>
+          <h2 class="e32p-h2">Proof of execution.</h2>
+        </div>
+
+        <div class="e32p-mosaic" role="list" aria-label="About gallery">
+          <div class="e32p-mosaicA" role="listitem">
+            <img src="{{ IMG_3 }}" alt="" loading="lazy">
+          </div>
+          <div class="e32p-mosaicB" role="listitem">
+            <img src="{{ IMG_1 }}" alt="" loading="lazy">
+          </div>
+          <div class="e32p-mosaicC" role="listitem">
+            <img src="{{ IMG_2 }}" alt="" loading="lazy">
+          </div>
+        </div>
+
+        <div class="e32p-mosaicNote">
+          <span class="e32p-badge">REAL VENUES</span>
+          <span class="e32p-badge">REAL OPERATIONS</span>
+          <span class="e32p-badge">REAL OUTPUT</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- CALENDAR -->
+    <section class="e32p-sec e32p-sec--tint" aria-label="Calendar">
+      <div class="e32p-wrap">
+        <div class="e32p-head">
+          <p class="e32p-eyebrow">THE CALENDAR</p>
+          <h2 class="e32p-h2">A year-round competitive ecosystem.</h2>
+        </div>
+
+        <div class="e32p-table" role="list" aria-label="Elite32 yearly calendar">
+          {%- assign lines = TIMELINE | strip | newline_to_br | split: "<br />" -%}
+          {%- for l in lines -%}
+            {%- assign row = l | strip -%}
+            {%- if row != "" -%}
+              {%- assign parts = row | split: " | " -%}
+              {%- assign when = parts[0] | strip -%}
+              {%- assign title = parts[1] | strip -%}
+              {%- assign desc = parts[2] | strip -%}
+              <div class="e32p-row" role="listitem">
+                <div class="e32p-when">{{ when }}</div>
+                <div class="e32p-main">
+                  <div class="e32p-title">{{ title }}</div>
+                  <div class="e32p-desc">{{ desc }}</div>
+                </div>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+
+        <p class="e32p-muted e32p-after">Every activation builds on the last. Visibility compounds. Standards remain consistent.</p>
+      </div>
+    </section>
+
+    <!-- MEDIA -->
+    <section class="e32p-sec" aria-label="Media">
+      <div class="e32p-wrap">
+        <div class="e32p-head">
+          <p class="e32p-eyebrow">MEDIA AS INFRASTRUCTURE</p>
+          <h2 class="e32p-h2">Built for visibility at scale.</h2>
+        </div>
+
+        <div class="e32p-feature">
+          <div class="e32p-featureMedia">
+            <div class="e32p-mediaCard e32p-mediaCard--wide">
+              <img src="{{ IMG_3 }}" alt="" loading="lazy">
+              <div class="e32p-mediaCap">Livestream. Highlights. Archive. Distribution.</div>
+            </div>
+          </div>
+
+          <div class="e32p-featureBody">
+            <div class="e32p-prose">
+              <p>
+                Elite 32 is structured around how basketball is discovered today. Every event is designed to generate real-time coverage and long-tail value.
+                Flagship moments reach major platforms through momentum, not paid boosts.
+              </p>
+            </div>
+
+            <div class="e32p-box">
+              <div class="e32p-boxTitle">Outputs</div>
+              <ul class="e32p-list">
+                <li><span class="e32p-check" aria-hidden="true"></span>Livestreamed games</li>
+                <li><span class="e32p-check" aria-hidden="true"></span>Highlights and athlete reposts</li>
+                <li><span class="e32p-check" aria-hidden="true"></span>Archived footage for coaches</li>
+                <li><span class="e32p-check" aria-hidden="true"></span>Earned media moments</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- VALUES -->
+    <section class="e32p-sec e32p-sec--tint" aria-label="What we stand for">
+      <div class="e32p-wrap">
+        <div class="e32p-head">
+          <p class="e32p-eyebrow">WHAT WE STAND FOR</p>
+          <h2 class="e32p-h2">Systems that create outcomes.</h2>
+        </div>
+
+        <div class="e32p-cards" role="list" aria-label="Values">
+          <div class="e32p-card" role="listitem"><div class="e32p-cardTitle">Access</div><div class="e32p-cardDesc">College-level venues and premium environments across the calendar.</div></div>
+          <div class="e32p-card" role="listitem"><div class="e32p-cardTitle">Production</div><div class="e32p-cardDesc">Multi-court livestreaming, highlights, and archival footage.</div></div>
+          <div class="e32p-card" role="listitem"><div class="e32p-cardTitle">Distribution</div><div class="e32p-cardDesc">Organic reach powered by athletes, families, and culture.</div></div>
+          <div class="e32p-card" role="listitem"><div class="e32p-cardTitle">Impact</div><div class="e32p-cardDesc">Scholarship funding and real outcomes for families.</div></div>
+          <div class="e32p-card" role="listitem"><div class="e32p-cardTitle">Experience</div><div class="e32p-cardDesc">Elevated standards for athletes, coaches, media, and partners.</div></div>
+          <div class="e32p-card" role="listitem"><div class="e32p-cardTitle">Consistency</div><div class="e32p-cardDesc">The same standard every time. No randomness.</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="e32p-cta" aria-label="Call to action">
+      <div class="e32p-wrap e32p-ctaInner">
+        <div>
+          <p class="e32p-ctaKicker">READY WHEN YOU ARE</p>
+          <h2 class="e32p-ctaTitle">Register early. Build your season.</h2>
+          <p class="e32p-ctaSub">Coaches lock spots early. Media request credentials for coverage and distribution.</p>
+        </div>
+        <div class="e32p-ctaActions" role="group" aria-label="CTA actions">
+          <a class="e32p-btn e32p-btn--primary" href="{{ PRIMARY_LINK }}">REGISTER A TEAM</a>
+          <a class="e32p-btn e32p-btn--ghost" href="{{ SECONDARY_LINK }}">MEDIA PASS</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="e32p-foot" aria-label="Footer note">
+      <div class="e32p-wrap">
+        <p class="e32p-footNote">Elite 32 is built for long-term impact, cultural relevance, and professional operations.</p>
+      </div>
+    </section>
+
+  </div>
+
+</section>
+
+<style>
+.e32p{
+  --pink:#ee3a68;
+  --ink:#0b0c0f;
+  --bg:#ffffff;
+  --tint:#f7f7f8;
+  --hair:rgba(11,12,15,.08);
+  --line:rgba(11,12,15,.10);
+  --muted:rgba(11,12,15,.62);
+  --max:1180px;
+  --gutter: clamp(18px, 4vw, 46px);
+
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  width:100vw;
+  margin-left:calc(50% - 50vw);
+  margin-right:calc(50% - 50vw);
+  background: var(--bg);
+  color: var(--ink);
+  overflow:hidden;
+}
+.e32p *{box-sizing:border-box}
+.e32p a{color:inherit}
+.e32p-wrap{
+  width:min(var(--max), calc(100% - (var(--gutter) * 2)));
+  margin:0 auto;
+  padding-left:max(0px, env(safe-area-inset-left));
+  padding-right:max(0px, env(safe-area-inset-right));
+}
+
+/* HERO */
+.e32p-hero{
+  position:relative;
+  min-height: clamp(620px, 82vh, 900px);
+  overflow:hidden;
+  background: #0b0c0f;
+  color:#fff;
+}
+.e32p-heroMedia{position:absolute;inset:0}
+.e32p-heroMedia img{
+  width:100%;height:100%;
+  object-fit:cover;
+  filter: contrast(1.07) saturate(1.05);
+  transform: scale(1.03);
+}
+.e32p-heroOverlay{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(980px 620px at 22% 26%, rgba(255,255,255,.10), rgba(0,0,0,.92)),
+    linear-gradient(180deg, rgba(0,0,0,.76), rgba(0,0,0,.22) 46%, rgba(0,0,0,.88));
+}
+.e32p-heroInner{
+  position:relative;
+  z-index:2;
+  min-height: inherit;
+  display:flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: clamp(110px, 12vh, 150px) 0 84px;
+  max-width: 860px;
+}
+.e32p-heroTop{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.e32p-kicker{
+  display:inline-flex;
+  align-items:center;
+  height:34px;
+  padding:0 12px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.06);
+  font-size:11px;
+  letter-spacing:.30em;
+  text-transform:uppercase;
+  color: rgba(255,255,255,.82);
+}
+.e32p-kicker--ghost{background: rgba(0,0,0,.22);}
+
+.e32p-h1{
+  margin: 10px 0 12px;
+  font-family:"Druk Wide Bold","DrukWide","Impact",sans-serif;
+  font-size: clamp(46px, 6vw, 90px);
+  line-height: 1.0;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+.e32p-sub{
+  margin: 0 0 26px;
+  font-size: 15px;
+  line-height: 1.9;
+  color: rgba(255,255,255,.76);
+  max-width: 72ch;
+}
+.e32p-actions{display:flex;gap:12px;flex-wrap:wrap}
+.e32p-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  height:46px;
+  padding:0 18px;
+  border-radius: 14px;
+  text-decoration:none;
+  font-size:12px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  border:1px solid transparent;
+  transition: transform .18s ease, background-color .18s ease, border-color .18s ease;
+}
+.e32p-btn:focus{outline:none}
+.e32p-btn:focus-visible{box-shadow: 0 0 0 4px rgba(238,58,104,.25);}
+.e32p-btn:hover{transform: translateY(-1px)}
+.e32p-btn--primary{background: var(--pink); border-color: var(--pink); color:#fff}
+.e32p-btn--ghost{background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.18); color:#fff}
+.e32p-btn--ghost:hover{background: rgba(255,255,255,.11)}
+.e32p-meta{
+  margin-top: 18px;
+  display:flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 11px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.58);
+}
+.e32p-dot{
+  width:4px;height:4px;border-radius:999px;
+  background: rgba(255,255,255,.36);
+  transform: translateY(6px);
+}
+
+/* STRIP */
+.e32p-strip{
+  background: #0b0c0f;
+  color:#fff;
+  border-top: 1px solid rgba(255,255,255,.08);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.e32p-stripInner{
+  padding: 22px 0;
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.e32p-stat{
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.04);
+  border-radius: 16px;
+  padding: 14px 14px;
+}
+.e32p-statTop{
+  font-size: 11px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.70);
+  margin-bottom: 6px;
+}
+.e32p-statMain{
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(255,255,255,.86);
+}
+
+/* SECTIONS */
+.e32p-body{background: var(--bg)}
+.e32p-sec{padding: clamp(58px, 6vw, 98px) 0}
+.e32p-sec--tint{
+  background: var(--tint);
+  border-top: 1px solid rgba(11,12,15,.06);
+  border-bottom: 1px solid rgba(11,12,15,.06);
+}
+.e32p-head{max-width: 74ch; margin-bottom: 24px}
+.e32p-eyebrow{
+  margin:0 0 10px;
+  font-size:11px;
+  letter-spacing:.32em;
+  text-transform:uppercase;
+  color: rgba(11,12,15,.52);
+}
+.e32p-h2{
+  margin:0;
+  font-size: clamp(24px, 3vw, 40px);
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  font-weight: 650;
+  color: #0b0c0f;
+}
+.e32p-prose p{
+  margin:0 0 12px;
+  font-size: 15px;
+  line-height: 1.95;
+  color: rgba(11,12,15,.72);
+}
+.e32p-strong{font-weight:700;color:#0b0c0f}
+.e32p-muted{color: var(--muted); font-size:14px; line-height:1.9; margin:0}
+.e32p-after{margin-top:18px}
+
+/* FEATURE LAYOUT */
+.e32p-feature{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(16px, 3vw, 34px);
+  align-items: start;
+}
+.e32p-feature--flip .e32p-featureMedia{order: 2}
+.e32p-featureMedia{position:sticky; top: 18px}
+.e32p-featureBody{display:flex;flex-direction:column;gap:14px}
+
+/* MEDIA */
+.e32p-mediaCard{
+  border: 1px solid rgba(11,12,15,.10);
+  border-radius: 20px;
+  overflow:hidden;
+  background: #fff;
+  box-shadow: 0 18px 34px rgba(0,0,0,.06);
+}
+.e32p-mediaCard img{
+  width:100%;
+  height:auto;
+  display:block;
+  object-fit:cover;
+}
+.e32p-mediaCard--tall img{aspect-ratio: 4/5}
+.e32p-mediaCard--wide img{aspect-ratio: 16/10}
+.e32p-mediaCap{
+  padding: 12px 14px;
+  font-size: 11px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: rgba(11,12,15,.62);
+  border-top: 1px solid rgba(11,12,15,.08);
+  background: #fff;
+}
+
+/* BOX */
+.e32p-box{
+  border: 1px solid rgba(11,12,15,.10);
+  border-radius: 18px;
+  background: rgba(255,255,255,.78);
+  padding: 16px;
+}
+.e32p-sec--tint .e32p-box{background: rgba(255,255,255,.90)}
+.e32p-boxTitle{
+  margin:0 0 10px;
+  font-size:12px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color: rgba(11,12,15,.72);
+}
+
+.e32p-list{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+.e32p-list li{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  font-size:14px;
+  line-height:1.6;
+  color: rgba(11,12,15,.72);
+}
+.e32p-check{
+  width:18px;height:18px;border-radius:6px;
+  background: rgba(238,58,104,.10);
+  border: 1px solid rgba(238,58,104,.22);
+  position:relative;
+  flex:0 0 auto;
+  margin-top:2px;
+}
+.e32p-check:after{
+  content:"";
+  position:absolute;
+  left:6px;top:4px;
+  width:5px;height:9px;
+  border-right:2px solid rgba(238,58,104,.84);
+  border-bottom:2px solid rgba(238,58,104,.84);
+  transform: rotate(40deg);
+}
+.e32p-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.e32p-pill{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  height:32px;
+  padding:0 12px;
+  border-radius:999px;
+  border: 1px solid rgba(11,12,15,.10);
+  background: rgba(11,12,15,.03);
+  color: rgba(11,12,15,.72);
+  font-size:11px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+}
+
+/* MOSAIC */
+.e32p-mosaic{
+  display:grid;
+  grid-template-columns: 1.15fr .85fr;
+  grid-template-rows: 280px 280px;
+  gap: 14px;
+}
+.e32p-mosaic > div{
+  border-radius: 20px;
+  overflow:hidden;
+  border: 1px solid rgba(11,12,15,.10);
+  box-shadow: 0 18px 34px rgba(0,0,0,.06);
+  background:#fff;
+}
+.e32p-mosaic img{width:100%;height:100%;object-fit:cover;display:block}
+.e32p-mosaicA{grid-row: 1 / span 2}
+.e32p-mosaicB{grid-column: 2; grid-row: 1}
+.e32p-mosaicC{grid-column: 2; grid-row: 2}
+
+.e32p-mosaicNote{
+  margin-top: 14px;
+  display:flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.e32p-badge{
+  display:inline-flex;
+  align-items:center;
+  height:30px;
+  padding:0 12px;
+  border-radius:999px;
+  border: 1px solid rgba(11,12,15,.10);
+  background: rgba(11,12,15,.03);
+  color: rgba(11,12,15,.68);
+  font-size:11px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+}
+
+/* CALENDAR */
+.e32p-table{
+  border: 1px solid rgba(11,12,15,.10);
+  border-radius: 18px;
+  background: #fff;
+  overflow:hidden;
+}
+.e32p-row{
+  display:grid;
+  grid-template-columns: 120px 1fr;
+  gap: 18px;
+  padding: 16px 18px;
+  border-top: 1px solid var(--hair);
+}
+.e32p-row:first-child{border-top:none}
+.e32p-when{
+  font-size:11px;
+  letter-spacing:.28em;
+  text-transform:uppercase;
+  color: rgba(11,12,15,.54);
+  padding-top: 2px;
+}
+.e32p-title{
+  font-size:14px;
+  letter-spacing:.10em;
+  text-transform:uppercase;
+  color: #0b0c0f;
+  margin: 0 0 4px;
+}
+.e32p-desc{
+  font-size:14px;
+  line-height:1.75;
+  color: rgba(11,12,15,.64);
+}
+
+/* VALUES */
+.e32p-cards{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.e32p-card{
+  border: 1px solid rgba(11,12,15,.10);
+  border-radius: 18px;
+  background: #fff;
+  padding: 16px;
+  transition: transform .18s ease, border-color .18s ease;
+}
+.e32p-card:hover{transform: translateY(-1px); border-color: rgba(11,12,15,.16);}
+.e32p-cardTitle{
+  font-size:12px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color: #0b0c0f;
+  margin:0 0 8px;
+}
+.e32p-cardDesc{
+  font-size:14px;
+  line-height:1.75;
+  color: rgba(11,12,15,.64);
+  margin:0;
+}
+
+/* CTA */
+.e32p-cta{
+  background: linear-gradient(180deg, #0f1116, #0b0c0f);
+  color:#fff;
+}
+.e32p-ctaInner{
+  padding: clamp(54px, 6vw, 86px) 0;
+  display:grid;
+  grid-template-columns: 1.2fr .8fr;
+  gap: 18px;
+  align-items:center;
+}
+.e32p-ctaKicker{
+  margin:0 0 10px;
+  font-size:11px;
+  letter-spacing:.32em;
+  text-transform:uppercase;
+  color: rgba(255,255,255,.62);
+}
+.e32p-ctaTitle{
+  margin:0 0 10px;
+  font-size: clamp(22px, 3.1vw, 38px);
+  line-height:1.12;
+  letter-spacing:-.01em;
+  font-family:"Druk Wide Bold","DrukWide","Impact",sans-serif;
+  text-transform:uppercase;
+}
+.e32p-ctaSub{
+  margin:0;
+  color: rgba(255,255,255,.70);
+  font-size:14px;
+  line-height:1.9;
+  max-width: 60ch;
+}
+.e32p-ctaActions{display:flex;gap:12px;justify-content:flex-end;flex-wrap:wrap}
+
+/* FOOT */
+.e32p-foot{padding: 26px 0; border-top: 1px solid rgba(11,12,15,.10)}
+.e32p-footNote{margin:0; font-size:13px; color: rgba(11,12,15,.62)}
+
+/* RESPONSIVE */
+@media (max-width: 980px){
+  .e32p-stripInner{grid-template-columns: 1fr}
+  .e32p-feature{grid-template-columns: 1fr}
+  .e32p-featureMedia{position:relative; top:auto}
+  .e32p-mosaic{grid-template-columns: 1fr; grid-template-rows: auto}
+  .e32p-mosaicA{grid-row:auto}
+  .e32p-mosaicB,.e32p-mosaicC{grid-column:auto; grid-row:auto}
+  .e32p-cards{grid-template-columns: 1fr}
+  .e32p-ctaInner{grid-template-columns: 1fr}
+  .e32p-ctaActions{justify-content:flex-start}
+}
+@media (max-width: 720px){
+  .e32p-btn{width:100%}
+  .e32p-actions{width:100%}
+  .e32p-row{grid-template-columns: 92px 1fr}
+}
+
+/* ================================
+   V5 TUNING — shrink tall media
+   Paste at the very bottom of <style>
+================================ */
+
+/* Don’t let the sticky media column become a billboard */
+.e32p-featureMedia{
+  top: 12px;              /* less “stuck” */
+}
+.e32p-mediaCard{
+  max-width: 520px;       /* keeps it elegant on wide screens */
+  margin-left: auto;
+}
+
+/* Reduce the tall card aspect ratio (was 4/5) */
+.e32p-mediaCard--tall img{
+  aspect-ratio: 5 / 6;    /* shorter than 4/5 */
+  max-height: 520px;      /* hard cap */
+}
+
+/* Reduce wide card height slightly too */
+.e32p-mediaCard--wide img{
+  aspect-ratio: 16 / 9;   /* slightly shorter */
+  max-height: 420px;
+}
+
+/* Tighten the mosaic heights (was 280/280) */
+.e32p-mosaic{
+  grid-template-rows: 240px 240px;
+}
+
+/* On very large screens, keep media from getting huge */
+@media (min-width: 1280px){
+  .e32p-mediaCard--tall img{ max-height: 500px; }
+  .e32p-mosaic{ grid-template-rows: 230px 230px; }
+}
+
+/* On tablets, avoid giant images and reduce gaps */
+@media (max-width: 980px){
+  .e32p-mediaCard{ max-width: 100%; }
+  .e32p-mediaCard--tall img{ max-height: 440px; }
+  .e32p-mosaic{ grid-template-rows: auto; }
+}
+
+/* =========================================
+   ELITE32 ABOUT — PREMIUM EDITORIAL RESET
+   Paste at bottom of <style>
+========================================= */
+
+/* Softer typography system */
+.e32p .e32p-prose p{
+  font-size: 16px;
+  line-height: 1.85;
+  color: rgba(11,12,15,.72);
+}
+.e32p .e32p-h2{
+  letter-spacing: -0.02em;
+  font-weight: 600;
+}
+.e32p .e32p-eyebrow{
+  color: rgba(11,12,15,.46);
+  letter-spacing: .28em;
+}
+
+/* Kill “UI kit” borders everywhere */
+.e32p .e32p-card,
+.e32p .e32p-table,
+.e32p .e32p-row,
+.e32p .e32p-box,
+.e32p .e32p-stat,
+.e32p .e32p-mosaic > div,
+.e32p .e32p-mediaCard{
+  border: none !important;
+}
+
+/* Replace borders with subtle depth */
+.e32p .e32p-card,
+.e32p .e32p-box,
+.e32p .e32p-stat{
+  background: rgba(11,12,15,.02);
+  box-shadow: none;
+}
+
+/* Make cards feel like content, not components */
+.e32p .e32p-card{
+  padding: 18px;
+  border-radius: 18px;
+}
+.e32p .e32p-cardTitle{
+  letter-spacing: .14em;
+  color: rgba(11,12,15,.86);
+}
+.e32p .e32p-cardDesc{
+  color: rgba(11,12,15,.66);
+}
+
+/* Make the “box” sections more editorial */
+.e32p .e32p-box{
+  padding: 0;
+  background: transparent;
+}
+.e32p .e32p-boxTitle{
+  font-size: 12px;
+  letter-spacing: .22em;
+  color: rgba(11,12,15,.62);
+  margin-bottom: 12px;
+}
+
+/* List bullets cleaner, less “design-y” */
+.e32p .e32p-check{
+  border: none;
+  background: rgba(238,58,104,.12);
+}
+.e32p .e32p-check:after{
+  border-right-color: rgba(238,58,104,.9);
+  border-bottom-color: rgba(238,58,104,.9);
+}
+
+/* Media should feel like photography, not cards */
+.e32p .e32p-mediaCard{
+  border-radius: 22px;
+  box-shadow: 0 28px 60px rgba(0,0,0,.14);
+}
+.e32p .e32p-mediaCap{
+  border-top: none;
+  background: transparent;
+  padding: 10px 2px 0;
+  color: rgba(11,12,15,.58);
+}
+
+/* Mosaic should be clean and cinematic */
+.e32p .e32p-mosaic > div{
+  box-shadow: 0 28px 60px rgba(0,0,0,.12);
+  border-radius: 22px;
+}
+
+/* Remove the “badge/pill” vibe (big amateur culprit) */
+.e32p .e32p-pills,
+.e32p .e32p-mosaicNote{ display: none !important; }
+
+/* Make the stat strip feel premium, not boxed */
+.e32p .e32p-stripInner{
+  gap: 18px;
+}
+.e32p .e32p-stat{
+  background: transparent;
+  padding: 0;
+}
+.e32p .e32p-statTop{
+  color: rgba(255,255,255,.62);
+}
+.e32p .e32p-statMain{
+  color: rgba(255,255,255,.90);
+  font-size: 14px;
+}
+
+/* Calendar: cleaner, less “table component” */
+.e32p .e32p-table{
+  background: transparent;
+  border-radius: 0;
+}
+.e32p .e32p-row{
+  padding: 16px 0;
+  border-top: 1px solid rgba(11,12,15,.10);
+}
+.e32p .e32p-row:first-child{
+  border-top: none;
+}
+.e32p .e32p-when{
+  color: rgba(11,12,15,.48);
+}
+.e32p .e32p-desc{
+  color: rgba(11,12,15,.64);
+}
+
+/* Tighten overall section rhythm */
+.e32p .e32p-sec{
+  padding: clamp(52px, 5.5vw, 86px) 0;
+}
+
+/* Fix: media caption getting clipped */
+.e32p .e32p-mediaCard{ overflow: hidden; } /* keep rounded corners */
+
+.e32p .e32p-mediaCap{
+  display: block;
+  margin: 0;
+  padding: 12px 14px 16px;   /* bottom padding is the key */
+  line-height: 1.35;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: rgba(11,12,15,.58);
+  background: #fff;          /* prevents weird blend with shadow */
+}
+
+</style>

@@ -1,0 +1,128 @@
+/* =========================================================
+   ELITE32 – ATELIER HOME TAKEOVER (CLEAN SYSTEM)
+   Goals:
+   - Homepage: full-bleed sections, no theme gutters, no random spacing
+   - Elite32 blocks control their own padding and rhythm
+   - Prevent horizontal scroll from 100vw layouts
+========================================================= */
+
+/* -----------------------------
+   SYSTEM TOKENS
+----------------------------- */
+:root{
+  --e32-bg: #050607;
+  --e32-fg: #ffffff;
+
+  --e32-max: 1200px;
+  --e32-gutter: clamp(16px, 4vw, 44px);
+
+  --e32-border: rgba(255,255,255,.08);
+  --e32-muted: rgba(255,255,255,.55);
+}
+
+/* Prevent horizontal scroll caused by 100vw full-bleed */
+html, body{
+  overflow-x: hidden;
+}
+
+/* -----------------------------
+   HOMEPAGE THEME RESET
+   (Scoped to homepage only)
+----------------------------- */
+
+/* Make homepage background + text consistent */
+.template-index main.content-for-layout{
+  background: var(--e32-bg);
+  color: var(--e32-fg);
+}
+
+/* Remove mystery spacing between sections */
+.template-index main.content-for-layout > .shopify-section{
+  margin: 0 !important;
+}
+
+/* Neutralize common theme section padding/gutters */
+.template-index .shopify-section,
+.template-index .section,
+.template-index .spacing-style,
+.template-index .section-background{
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+}
+
+/* Some themes nest a .section wrapper with padding via variables */
+.template-index .shopify-section .section{
+  padding-block: 0 !important;
+}
+
+/* Optional: true full-bleed behavior for all homepage sections
+   Use only if your theme has a centered page wrapper you want to bypass */
+.template-index .shopify-section{
+  width: 100vw !important;
+  margin-left: calc(50% - 50vw) !important;
+  margin-right: calc(50% - 50vw) !important;
+}
+
+/* -----------------------------
+   ELITE32 LAYOUT UTILITIES
+----------------------------- */
+
+/* Full-bleed helper for any Elite32 block */
+.e32-fullbleed{
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+}
+
+/* Controlled inner container + gutters */
+.e32-wrap{
+  width: min(var(--e32-max), calc(100% - (var(--e32-gutter) * 2)));
+  margin: 0 auto;
+}
+
+/* Default Elite32 surface */
+.e32{
+  background: var(--e32-bg);
+  color: var(--e32-fg);
+}
+
+/* -----------------------------
+   ELITE32 – CREDIBILITY BLOCK
+----------------------------- */
+
+.e32-cred{
+  background: var(--e32-bg);
+  padding: 88px 0 104px;
+  border-top: 1px solid var(--e32-border);
+}
+
+.e32-cred__eyebrow{
+  font-size: 11px;
+  letter-spacing: .32em;
+  text-transform: uppercase;
+  color: var(--e32-muted);
+  margin: 0 0 18px;
+}
+
+.e32-cred__title{
+  font-family: "Druk Wide Bold","DrukWide","Impact",sans-serif;
+  font-size: clamp(28px, 4vw, 40px);
+  line-height: 1.1;
+  text-transform: uppercase;
+  margin: 0 0 40px;
+}
+
+.e32-cred__logos{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: clamp(32px, 6vw, 72px);
+}
+
+.e32-cred__logos img{
+  height: 28px;
+  width: auto;
+  opacity: .75;
+  filter: grayscale(1) brightness(1.1);
+}

@@ -1,0 +1,95 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "schedule": {
+      "type": "e32-schedule",
+      "settings": {
+        "hero_image": "shopify://shop_images/Honored._Inspired._Locked_in_Blessed_to_be_a_part_of_another_ballin4peace_x_nycelite32_event.jpg",
+        "hero_title": "2026 TOURNAMENT SCHEDULE",
+        "hero_sub": "Elite youth basketball events. Clear windows. Clean registration.",
+        "per_page": 5
+      }
+    },
+    "custom_liquid_KtjDhD": {
+      "type": "custom-liquid",
+      "name": "t:names.custom_liquid",
+      "settings": {
+        "custom_liquid": "",
+        "color_scheme": "",
+        "section_width": "page-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "e32_image_strip_events": {
+      "type": "e32-image-strip",
+      "blocks": {
+        "image_KE8rfX": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Another_milestone_for_NYC_hoops_Our_ballin4peace_nycelite32_Fall_Brawl_Classic_brought_toge.jpg",
+            "alt": "Elite 32 photo",
+            "col_span": 4
+          }
+        },
+        "image_LCeiTt": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/NYC_Elite_32_Fall_Brawl_Boys_Girls_Next_Gen_Fall_Basketball_Classic_Game_Action_Highlight_Photos_10-25-25-3879-20251025-DxO_DeepPRIME_XD2s_6f2519e6-be74-4329-b47f-85e36dbe1768.jpg",
+            "alt": "Elite 32 photo",
+            "col_span": 4
+          }
+        },
+        "image_MBDeWx": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/IMG_5870.heic",
+            "alt": "Elite 32 photo",
+            "col_span": 4
+          }
+        },
+        "image_kyMkEB": {
+          "type": "image",
+          "settings": {
+            "alt": "Elite 32 photo",
+            "col_span": 4
+          }
+        },
+        "image_kYhMkR": {
+          "type": "image",
+          "settings": {
+            "alt": "Elite 32 photo",
+            "col_span": 4
+          }
+        }
+      },
+      "block_order": [
+        "image_KE8rfX",
+        "image_LCeiTt",
+        "image_MBDeWx",
+        "image_kyMkEB",
+        "image_kYhMkR"
+      ],
+      "settings": {
+        "kicker": "",
+        "title": "PREMIUM VENUES FOR PREMIUM TALENT",
+        "sub": "Premium production and real moments. This is the environment teams step into.",
+        "cta_label": "",
+        "cta_link": "/pages/registration"
+      }
+    }
+  },
+  "order": [
+    "schedule",
+    "custom_liquid_KtjDhD",
+    "e32_image_strip_events"
+  ]
+}

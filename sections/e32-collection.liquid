@@ -1,0 +1,81 @@
+{% schema %}
+{
+  "name": "Elite32 Collection",
+  "settings": [
+    { "type": "image_picker", "id": "hero_image", "label": "Hero image" },
+    { "type": "text", "id": "hero_kicker", "label": "Kicker", "default": "ELITE32 APPAREL" },
+    { "type": "text", "id": "hero_cta_1", "label": "CTA 1 label", "default": "SHOP ALL" },
+    { "type": "url", "id": "hero_cta_1_link", "label": "CTA 1 link" },
+    { "type": "text", "id": "hero_cta_2", "label": "CTA 2 label", "default": "VIEW SIZE GUIDE" },
+    { "type": "url", "id": "hero_cta_2_link", "label": "CTA 2 link" }
+  ],
+  "presets": [{ "name": "Elite32 Collection" }]
+}
+{% endschema %}
+
+<section class="e32-shell" aria-label="Elite32 Collection">
+
+  <header class="e32-hero">
+    <div class="e32-hero__media" aria-hidden="true">
+      {% if section.settings.hero_image != blank %}
+        <img src="{{ section.settings.hero_image | image_url: width: 2400 }}" alt="" loading="eager">
+      {% else %}
+        <img src="{{ collection.featured_image | image_url: width: 2400 }}" alt="" loading="eager">
+      {% endif %}
+    </div>
+    <div class="e32-hero__overlay" aria-hidden="true"></div>
+
+    <div class="e32-wrap" style="position:relative; padding: clamp(72px, 8vw, 110px) 0 clamp(38px, 5vw, 64px);">
+      <span class="e32-eyebrow">{{ section.settings.hero_kicker }}</span>
+      <h1 class="e32-title">{{ collection.title }}</h1>
+      {% if collection.description != blank %}
+        <p class="e32-lede">{{ collection.description | strip_html }}</p>
+      {% else %}
+        <p class="e32-lede">Premium blanks, clean marks, and event-ready gear. Built to wear on and off the court.</p>
+      {% endif %}
+
+      <div class="e32-actions" role="group" aria-label="Actions">
+        <a class="e32-btn e32-btn--primary" href="{{ section.settings.hero_cta_1_link | default: routes.all_products_collection_url }}">{{ section.settings.hero_cta_1 }}</a>
+        <a class="e32-btn e32-btn--secondary" href="{{ section.settings.hero_cta_2_link | default: '/pages/size-guide' }}">{{ section.settings.hero_cta_2 }}</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="e32-bodyWhite" aria-label="Products">
+    <div class="e32-wrap">
+      <h2 class="e32-h2">SHOP {{ collection.title }}</h2>
+      <p class="e32-muted">Fast checkout. Clean fit. Built for the culture.</p>
+
+      {% paginate collection.products by 24 %}
+        <div class="e32-grid" role="list">
+          {% for product in collection.products %}
+            <article class="e32-card" role="listitem">
+              <a class="e32-thumb" href="{{ product.url }}">
+                {% if product.featured_image %}
+                  <img src="{{ product.featured_image | image_url: width: 900 }}" alt="{{ product.title | escape }}" loading="lazy">
+                {% endif %}
+              </a>
+              <div class="e32-cardBody">
+                <h3 class="e32-name">{{ product.title }}</h3>
+                <p class="e32-price">{{ product.price | money }}</p>
+                <a class="e32-miniBtn e32-miniBtn--primary" href="{{ product.url }}">VIEW</a>
+              </div>
+            </article>
+          {% endfor %}
+        </div>
+
+        {% if paginate.pages > 1 %}
+          <div style="margin-top:22px; display:flex; gap:10px; flex-wrap:wrap;">
+            {% if paginate.previous %}
+              <a class="e32-miniBtn" href="{{ paginate.previous.url }}">PREV</a>
+            {% endif %}
+            {% if paginate.next %}
+              <a class="e32-miniBtn" href="{{ paginate.next.url }}">NEXT</a>
+            {% endif %}
+          </div>
+        {% endif %}
+      {% endpaginate %}
+    </div>
+  </main>
+
+</section>

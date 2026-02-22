@@ -1,0 +1,525 @@
+{% schema %}
+{
+  "name": "Elite32 Schedule",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero background image"
+    },
+    {
+      "type": "text",
+      "id": "hero_title",
+      "label": "Hero title",
+      "default": "2026 TOURNAMENT SCHEDULE"
+    },
+    {
+      "type": "text",
+      "id": "hero_sub",
+      "label": "Hero subhead",
+      "default": "Elite youth basketball events. Clear windows. Clean registration."
+    },
+    {
+      "type": "range",
+      "id": "per_page",
+      "label": "Events per page (Load more step)",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "default": 5
+    }
+  ],
+  "presets": [
+    { "name": "Elite32 Schedule" }
+  ]
+}
+{% endschema %}
+
+{%- comment -%}
+EVENTS
+LOGO URL | EVENT NAME | DATE | CITY, STATE | TAG 1 | TAG 2 | LEARN LINK | REGISTER LINK | STATUS
+STATUS: OPEN, LIMITED, TBD, PLANNED, CLOSED, INVITE-ONLY
+{%- endcomment -%}
+{%- capture EVENTS -%}
+https://cdn.shopify.com/s/files/1/0000/0000/files/elite32-mark.png?v=1 | Middle School Madness | Apr 4-5, 2026 | Brooklyn, NY | Boys/Girls | Brackets | /pages/about | /pages/register | OPEN
+https://cdn.shopify.com/s/files/1/0000/0000/files/elite32-mark.png?v=1 | Elite32 HS All-Star Game | Jun 20, 2026 | Queens, NY | Invite | Showcase | /pages/about | /pages/register | INVITE-ONLY
+https://cdn.shopify.com/s/files/1/0000/0000/files/elite32-mark.png?v=1 | Summer Kick-off | Jul 2026 | Queens, NY | Boys/Girls | Tournament | /pages/about | /pages/register | TBD
+https://cdn.shopify.com/s/files/1/0000/0000/files/elite32-mark.png?v=1 | Fall Brawl Preseason Kick-Off | Dec 2026 | Queens, NY | Boys/Girls | Tournament | /pages/about | /pages/register | PLANNED
+https://cdn.shopify.com/s/files/1/0000/0000/files/elite32-mark.png?v=1 | Elite 32 Holiday Invitational | Dec 2026 | Queens, NY | HS | Full Games | /pages/about | /pages/register | PLANNED
+{%- endcapture -%}
+
+<section class="e32-sched" aria-label="Elite32 Schedule Page" data-per-page="{{ section.settings.per_page }}">
+
+  <!-- HERO (dark, image) -->
+  <header class="e32-schedHero" aria-label="Schedule hero">
+    <div class="e32-schedHero__media" aria-hidden="true">
+      {%- if section.settings.hero_image != blank -%}
+        <img
+          src="{{ section.settings.hero_image | image_url: width: 2400 }}"
+          alt=""
+          loading="eager"
+        >
+      {%- else -%}
+        <div class="e32-schedHero__fallback"></div>
+      {%- endif -%}
+    </div>
+
+    <div class="e32-schedHero__overlay" aria-hidden="true"></div>
+
+    <div class="e32-wrap e32-schedHero__content">
+      <span class="e32-eyebrow">ELITE32</span>
+
+      <h1 class="e32-title">{{ section.settings.hero_title }}</h1>
+      <p class="e32-lede">{{ section.settings.hero_sub }}</p>
+
+      <div class="e32-actions" role="group" aria-label="Primary actions">
+        <a href="/pages/register" class="e32-btn e32-btn--primary">REGISTER A TEAM</a>
+        <a href="/pages/media-registration" class="e32-btn e32-btn--secondary">MEDIA PASS</a>
+      </div>
+
+      <div class="e32-heroMeta" aria-label="Highlights">
+        <span>COACHES</span><span class="e32-dot" aria-hidden="true"></span>
+        <span>MEDIA</span><span class="e32-dot" aria-hidden="true"></span>
+        <span>OPERATIONS FIRST</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- BODY (white background) -->
+  <main class="e32-schedBody" aria-label="Schedule list">
+    <div class="e32-wrap">
+
+      <div class="e32-headRow">
+        <div>
+          <h2 class="e32-h2">EVENTS</h2>
+          <p class="e32-bodyMuted">Tap into details, then register your team when you are ready.</p>
+        </div>
+        <div class="e32-headRow__actions">
+          <a class="e32-chip e32-chip--primary" href="/pages/register">REGISTER TEAM</a>
+          <a class="e32-chip" href="/pages/media-registration">MEDIA PASS</a>
+        </div>
+      </div>
+
+      <div class="e32-list" role="list" aria-label="Events">
+        {%- assign lines = EVENTS | strip | newline_to_br | split: "<br />" -%}
+        {%- for l in lines -%}
+          {%- assign row = l | strip -%}
+          {%- if row != "" -%}
+            {%- assign parts = row | split: " | " -%}
+            {%- assign logo = parts[0] | default: "" -%}
+            {%- assign name = parts[1] | default: "" -%}
+            {%- assign date = parts[2] | default: "" -%}
+            {%- assign city = parts[3] | default: "" -%}
+            {%- assign tag1 = parts[4] | default: "" -%}
+            {%- assign tag2 = parts[5] | default: "" -%}
+            {%- assign learn = parts[6] | default: "/pages/about" -%}
+            {%- assign reg = parts[7] | default: "/pages/register" -%}
+            {%- assign status = parts[8] | default: "TBD" -%}
+            {%- assign status_handle = status | strip | downcase | replace: " ", "-" | replace: "_", "-" -%}
+
+            <article class="e32-card" role="listitem" data-e32-item>
+              <div class="e32-card__left">
+                <div class="e32-mark" aria-hidden="true">
+                  {%- if logo != "" -%}
+                    <img src="{{ logo }}" alt="" loading="lazy">
+                  {%- else -%}
+                    <span class="e32-mark__fallback">E32</span>
+                  {%- endif -%}
+                </div>
+
+                <div class="e32-card__main">
+                  <div class="e32-card__top">
+                    <h3 class="e32-card__title">{{ name }}</h3>
+                    <span class="e32-badge e32-badge--{{ status_handle }}">{{ status | strip }}</span>
+                  </div>
+
+                  <div class="e32-card__meta">
+                    <span class="e32-ico" aria-hidden="true">📅</span><span>{{ date }}</span>
+                    <span class="e32-dotSm" aria-hidden="true"></span>
+                    <span class="e32-ico" aria-hidden="true">📍</span><span>{{ city }}</span>
+                  </div>
+
+                  <div class="e32-card__tags" aria-label="Tags">
+                    {%- if tag1 != "" -%}<span class="e32-pill">{{ tag1 }}</span>{%- endif -%}
+                    {%- if tag2 != "" -%}<span class="e32-pill">{{ tag2 }}</span>{%- endif -%}
+                  </div>
+                </div>
+              </div>
+
+              <div class="e32-card__actions" aria-label="Actions">
+                <a class="e32-miniBtn" href="{{ learn }}">LEARN MORE</a>
+                <a class="e32-miniBtn e32-miniBtn--primary" href="{{ reg }}">REGISTER</a>
+              </div>
+            </article>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+
+      <div class="e32-loadRow">
+        <button type="button" class="e32-loadMore" data-e32-load>
+          LOAD MORE
+        </button>
+        <p class="e32-count" data-e32-count></p>
+      </div>
+
+    </div>
+  </main>
+
+</section>
+
+<style>
+/* =========================
+   Elite32 Schedule (White body)
+========================= */
+.e32-sched{
+  --pink:#ee3a68;
+  --max:1200px;
+  --gutter: clamp(16px, 4vw, 44px);
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+  width:100vw;
+  margin-left:calc(50% - 50vw);
+  margin-right:calc(50% - 50vw);
+}
+
+/* container */
+.e32-wrap{
+  width:min(var(--max), calc(100% - (var(--gutter) * 2)));
+  margin:0 auto;
+  padding-left:max(0px, env(safe-area-inset-left));
+  padding-right:max(0px, env(safe-area-inset-right));
+}
+
+/* HERO */
+.e32-schedHero{
+  position:relative;
+  min-height: 56vh;
+  display:flex;
+  align-items:flex-end;
+  padding: clamp(72px, 8vw, 110px) 0 clamp(38px, 5vw, 64px);
+  background:#050607;
+  overflow:hidden;
+}
+.e32-schedHero__media{position:absolute;inset:0;background:#000}
+.e32-schedHero__media img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  filter: contrast(1.05) saturate(1.05);
+  transform: scale(1.02);
+}
+.e32-schedHero__fallback{
+  position:absolute;inset:0;
+  background: radial-gradient(900px 600px at 26% 38%, rgba(0,0,0,.25), rgba(0,0,0,.95));
+}
+.e32-schedHero__overlay{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(900px 600px at 26% 38%, rgba(0,0,0,.15), rgba(0,0,0,.88)),
+    linear-gradient(90deg, rgba(0,0,0,.88), rgba(0,0,0,.55), rgba(0,0,0,.18));
+}
+.e32-schedHero__content{position:relative;z-index:2;max-width:860px;color:#fff}
+
+.e32-eyebrow{
+  display:inline-block;
+  font-size:11px;
+  letter-spacing:.34em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.72);
+  padding:8px 10px;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:999px;
+  background: rgba(0,0,0,.18);
+  backdrop-filter: blur(6px);
+}
+.e32-title{
+  font-family:"Druk Wide Bold","DrukWide","Impact",sans-serif;
+  font-size: clamp(42px, 6.2vw, 88px);
+  line-height:1.02;
+  margin:16px 0 10px;
+  letter-spacing:-0.01em;
+  text-transform:uppercase;
+}
+.e32-lede{
+  margin:0;
+  max-width:70ch;
+  font-size:15px;
+  line-height:1.85;
+  color: rgba(255,255,255,.78);
+}
+
+/* actions */
+.e32-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
+.e32-btn{
+  height:46px;
+  padding:0 18px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-size:12px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  border-radius:14px;
+  text-decoration:none;
+  border:1px solid transparent;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease, background-color .18s ease;
+}
+.e32-btn:hover{transform:translateY(-1px);box-shadow:0 14px 34px rgba(0,0,0,.28)}
+.e32-btn--primary{background:var(--pink);color:#fff}
+.e32-btn--secondary{background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.18);color:#fff}
+
+.e32-heroMeta{
+  margin-top:18px;
+  display:flex;gap:10px;flex-wrap:wrap;
+  font-size:11px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.65);
+}
+.e32-dot{width:4px;height:4px;border-radius:999px;background:rgba(255,255,255,.40);transform:translateY(6px)}
+
+/* BODY (white background to fix the "white underneath" issue cleanly) */
+.e32-schedBody{
+  background:#ffffff;
+  color:#0b0c0f;
+  padding: clamp(34px, 4vw, 56px) 0 clamp(70px, 8vw, 110px);
+}
+
+/* Head row */
+.e32-headRow{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:18px;
+  margin-bottom:18px;
+}
+.e32-h2{
+  font-family:"Druk Wide Bold","DrukWide","Impact",sans-serif;
+  font-size:22px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  margin:0 0 10px;
+  color:#0b0c0f;
+}
+.e32-bodyMuted{
+  margin:0;
+  font-size:14px;
+  line-height:1.75;
+  color: rgba(11,12,15,.70);
+}
+
+/* chips */
+.e32-headRow__actions{display:flex;gap:10px;flex-wrap:wrap}
+.e32-chip{
+  display:inline-flex;align-items:center;justify-content:center;
+  height:36px;padding:0 12px;
+  border-radius:999px;
+  border:1px solid rgba(11,12,15,.14);
+  background: rgba(11,12,15,.03);
+  text-decoration:none;color:#0b0c0f;
+  font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.e32-chip--primary{
+  border-color: rgba(238,58,104,.35);
+  background: rgba(238,58,104,.10);
+}
+
+/* list + cards */
+.e32-list{display:flex;flex-direction:column;gap:16px}
+.e32-card{
+  border:1px solid rgba(11,12,15,.12);
+  border-radius:18px;
+  background:#ffffff;
+  box-shadow:0 10px 26px rgba(11,12,15,.06);
+  padding:22px 22px 18px;
+  display:flex;
+  align-items:stretch;          /* key change */
+  justify-content:space-between;
+  gap:18px;
+}
+.e32-card__left{display:flex;align-items:center;gap:16px;min-width:0;flex:1}
+.e32-mark{
+  width:56px;height:56px;border-radius:999px;
+  border:1px solid rgba(11,12,15,.10);
+  background: rgba(11,12,15,.02);
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;flex:0 0 auto;
+}
+.e32-mark img{width:100%;height:100%;object-fit:contain;padding:10px;filter: grayscale(1);opacity:.92}
+.e32-mark__fallback{
+  font-family:"Druk Wide Bold","Impact",sans-serif;
+  letter-spacing:.18em;
+  font-size:14px;
+  color: rgba(11,12,15,.80);
+}
+
+.e32-card__main{min-width:0;flex:1}
+.e32-card__top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.e32-card__title{
+  margin:0;
+  font-size:16px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:#0b0c0f;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.e32-card__meta{
+  margin-top:8px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  font-size:13px;
+  color: rgba(11,12,15,.68);
+  letter-spacing:.04em;
+}
+.e32-ico{opacity:.9}
+.e32-dotSm{width:3px;height:3px;border-radius:999px;background:rgba(11,12,15,.28);transform:translateY(1px)}
+
+.e32-card__tags{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap}
+.e32-pill{
+  display:inline-flex;align-items:center;
+  height:30px;padding:0 12px;border-radius:999px;
+  border:1px solid rgba(11,12,15,.12);
+  background: rgba(11,12,15,.03);
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color: rgba(11,12,15,.78);
+}
+
+.e32-card__actions{
+  display:flex;
+  gap:10px;
+  flex:0 0 auto;
+  align-self:flex-end;     /* anchors to bottom */
+}.e32-miniBtn{
+  height:44px;min-width:132px;padding:0 18px;border-radius:999px;
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+  text-decoration:none;
+  border:1px solid rgba(11,12,15,.14);
+  background: rgba(11,12,15,.02);
+  color: rgba(11,12,15,.90);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease, filter .18s ease;
+}
+.e32-miniBtn--primary{
+  background: var(--pink);
+  border-color: var(--pink);
+  color:#fff;
+  box-shadow: 0 16px 36px rgba(238,58,104,.22);
+}
+.e32-miniBtn:hover{transform: translateY(-1px);box-shadow: 0 14px 24px rgba(11,12,15,.10)}
+.e32-miniBtn--primary:hover{filter: brightness(1.02);box-shadow: 0 18px 40px rgba(238,58,104,.28)}
+
+/* status */
+.e32-badge{
+  font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  padding:6px 10px;border-radius:999px;
+  border:1px solid rgba(11,12,15,.16);
+  color: rgba(11,12,15,.78);
+  background: rgba(11,12,15,.03);
+  white-space:nowrap;
+}
+.e32-badge--open{
+  background: rgba(238,58,104,.12);
+  border-color: rgba(238,58,104,.38);
+  color: rgba(11,12,15,.92);
+}
+.e32-badge--invite-only{background: rgba(11,12,15,.05);border-color: rgba(11,12,15,.18)}
+.e32-badge--limited{background: rgba(11,12,15,.05);border-color: rgba(11,12,15,.18)}
+.e32-badge--tbd,.e32-badge--planned,.e32-badge--closed{opacity:.75}
+
+/* Load more */
+.e32-loadRow{
+  margin-top:22px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding-top:18px;
+  border-top:1px solid rgba(11,12,15,.10);
+}
+.e32-loadMore{
+  height:46px;
+  padding:0 18px;
+  border-radius:14px;
+  border:1px solid rgba(11,12,15,.14);
+  background:#fff;
+  color:#0b0c0f;
+  font-size:12px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.e32-loadMore:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 14px 24px rgba(11,12,15,.10);
+  border-color: rgba(11,12,15,.22);
+}
+.e32-loadMore[disabled]{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+.e32-count{margin:0;font-size:12px;color: rgba(11,12,15,.60)}
+
+/* responsive */
+@media(max-width:980px){
+  .e32-card{flex-direction:column;align-items:stretch}
+  .e32-card__top{flex-direction:column;align-items:flex-start}
+  .e32-card__actions{width:100%}
+  .e32-miniBtn{flex:1;min-width:0}
+}
+@media(max-width:720px){
+  .e32-btn{width:100%}
+  .e32-actions{width:100%}
+  .e32-headRow{align-items:flex-start;flex-direction:column}
+  .e32-headRow__actions{width:100%}
+  .e32-chip{flex:1;min-width:0}
+  .e32-card__title{white-space:normal}
+  .e32-loadRow{flex-direction:column;align-items:flex-start}
+  .e32-loadMore{width:100%}
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const root = document.querySelector(".e32-sched");
+  if (!root) return;
+
+  const perPage = parseInt(root.getAttribute("data-per-page") || "5", 10);
+  const items = Array.from(root.querySelectorAll("[data-e32-item]"));
+  const btn = root.querySelector("[data-e32-load]");
+  const count = root.querySelector("[data-e32-count]");
+
+  let visible = 0;
+
+  function update() {
+    items.forEach((el, idx) => {
+      el.style.display = idx < visible ? "" : "none";
+    });
+
+    if (count) {
+      count.textContent = `${Math.min(visible, items.length)} of ${items.length} events`;
+    }
+
+    if (!btn) return;
+    if (visible >= items.length) {
+      btn.setAttribute("disabled", "disabled");
+      btn.textContent = "ALL LOADED";
+    } else {
+      btn.removeAttribute("disabled");
+      btn.textContent = "LOAD MORE";
+    }
+  }
+
+  function loadMore() {
+    visible = Math.min(visible + perPage, items.length);
+    update();
+  }
+
+  if (btn) btn.addEventListener("click", loadMore);
+
+  visible = Math.min(perPage, items.length);
+  update();
+});
+</script>

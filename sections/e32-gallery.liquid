@@ -1,0 +1,94 @@
+<section class="e32-media" data-section="e32-gallery">
+  <div class="e32-wrap">
+    <header class="e32-media__head">
+      <div class="e32-media__kicker">{{ section.settings.kicker }}</div>
+      <h1 class="e32-title e32-media__title">{{ section.settings.title }}</h1>
+      {% if section.settings.sub != blank %}
+        <p class="e32-lede e32-media__sub">{{ section.settings.sub }}</p>
+      {% endif %}
+    </header>
+
+    <div class="e32-gallery">
+      <div class="e32-gallery__grid">
+        {% for block in section.blocks %}
+          {% if block.settings.image != blank %}
+            {% liquid
+              assign col = block.settings.col_span | default: 4
+              assign col_m = block.settings.col_span_mobile | default: 6
+              assign row = block.settings.row_span | default: 1
+            %}
+            <a class="e32-gallery__item"
+               href="{{ block.settings.image | image_url: width: 2400 }}"
+               style="grid-column: span {{ col }}; grid-row: span {{ row }};"
+               aria-label="{{ block.settings.label | escape }}">
+              <img class="e32-gallery__img"
+                   src="{{ block.settings.image | image_url: width: 1600 }}"
+                   alt="{{ block.settings.alt | escape }}"
+                   loading="lazy">
+              <span class="e32-gallery__overlay"></span>
+              <span class="e32-gallery__cap">
+                <span class="e32-gallery__label">{{ block.settings.label }}</span>
+                <span class="e32-gallery__hint">{{ section.settings.hint }}</span>
+              </span>
+            </a>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      {% if section.settings.cta_label != blank and section.settings.cta_link != blank %}
+        <div class="e32-actions" style="margin-top:18px">
+          <a class="e32-btn e32-btn--primary" href="{{ section.settings.cta_link }}">{{ section.settings.cta_label }}</a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "E32 Gallery",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "ELITE32" },
+    { "type": "text", "id": "title", "label": "Title", "default": "GALLERY" },
+    { "type": "textarea", "id": "sub", "label": "Subhead", "default": "A closer look at the environment: energy, execution, and moments that make teams come back." },
+    { "type": "text", "id": "hint", "label": "Hover hint", "default": "View" },
+    { "type": "text", "id": "cta_label", "label": "CTA label (optional)", "default": "REGISTER A TEAM" },
+    { "type": "url", "id": "cta_link", "label": "CTA link (optional)" }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "label", "label": "Label", "default": "ELITE32" },
+        { "type": "text", "id": "alt", "label": "Alt text", "default": "Elite 32 event photo" },
+        {
+          "type": "range",
+          "id": "col_span",
+          "label": "Desktop column span (1–12)",
+          "min": 2, "max": 12, "step": 1,
+          "default": 4
+        },
+        {
+          "type": "range",
+          "id": "row_span",
+          "label": "Desktop row span (1–3)",
+          "min": 1, "max": 3, "step": 1,
+          "default": 1
+        },
+        {
+          "type": "range",
+          "id": "col_span_mobile",
+          "label": "Mobile column span (1–6)",
+          "min": 3, "max": 6, "step": 1,
+          "default": 6
+        }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "E32 Gallery" }
+  ]
+}
+{% endschema %}

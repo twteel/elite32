@@ -1,0 +1,98 @@
+{% liquid
+  assign events = shop.metaobjects.event.values | sort: 'fields.sort.value'
+%}
+{% if events.size > 0 %}
+<section class="e32-events-block">
+  <style>
+    .e32-events-block {
+      background: #0b0b0b;
+      padding: 4rem 0;
+    }
+    .e32-events-block .wrapper {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    .e32-events-block .events-title {
+      font-size: 2rem;
+      font-weight: 600;
+      color: #fff;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .e32-events-block .events-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+    .e32-events-block .event-card {
+      position: relative;
+      padding: 1.5rem;
+      border-radius: 1rem;
+      background: linear-gradient(135deg, #1f2937 0%, #4b5563 100%);
+      color: #fff;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .e32-events-block .event-card--featured {
+      background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+    }
+    .e32-events-block .event-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+    }
+    .e32-events-block .event-card__name {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+    .e32-events-block .event-card__meta {
+      font-size: 0.875rem;
+      opacity: 0.8;
+      margin-bottom: 1rem;
+    }
+    .e32-events-block .event-card__cta {
+      display: inline-block;
+      background: #ec4899;
+      color: #fff;
+      padding: 0.75rem 1.25rem;
+      border-radius: 9999px;
+      font-weight: 600;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background 0.2s ease;
+    }
+    .e32-events-block .event-card__cta:hover {
+      background: #f472b6;
+    }
+  </style>
+  <div class="wrapper">
+    <h2 class="events-title">Upcoming Events</h2>
+    <div class="events-grid">
+      {% for event in events %}
+        <div class="event-card{% if event.fields.featured.value %} event-card--featured{% endif %}">
+          <div class="event-card__body">
+            <h3 class="event-card__name">{{ event.fields.name.value }}</h3>
+            <p class="event-card__meta">{{ event.fields.date_range.value }} – {{ event.fields.location.value }}</p>
+          </div>
+          <a href="/pages/register-a-team?event_id={{ event.fields.event_id.value | url_encode }}" class="event-card__cta">
+            Register
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% schema %}
+{
+  "name": "E32 Events Grid",
+  "settings": [],
+  "blocks": [],
+  "presets": [
+    {
+      "name": "E32 Events Grid"
+    }
+  ]
+}
+{% endschema %}

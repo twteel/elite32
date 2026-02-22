@@ -1,0 +1,378 @@
+/* E32 SYSTEM: Dark hero + white body (Apparel) */
+:root{
+  --e32-pink:#ee3a68;
+  --e32-max:1200px;
+  --e32-gutter:clamp(16px,4vw,44px);
+}
+
+.e32-shell{
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  width:100vw;
+  margin-left:calc(50% - 50vw);
+  margin-right:calc(50% - 50vw);
+}
+
+.e32-wrap{
+  width:min(var(--e32-max), calc(100% - (var(--e32-gutter) * 2)));
+  margin:0 auto;
+  padding-left:max(0px, env(safe-area-inset-left));
+  padding-right:max(0px, env(safe-area-inset-right));
+}
+
+.e32-hero{
+  position:relative;
+  background:#050607;
+  color:#fff;
+  overflow:hidden;
+  border-bottom:1px solid rgba(255,255,255,.10);
+}
+
+.e32-hero__media{position:absolute;inset:0;background:#000}
+.e32-hero__media img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  transform:scale(1.02);
+  filter: contrast(1.05) saturate(1.05);
+}
+.e32-hero__overlay{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(900px 600px at 26% 38%, rgba(0,0,0,.15), rgba(0,0,0,.88)),
+    linear-gradient(90deg, rgba(0,0,0,.88), rgba(0,0,0,.55), rgba(0,0,0,.18));
+}
+
+.e32-eyebrow{
+  display:inline-block;
+  font-size:11px;
+  letter-spacing:.34em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.72);
+  padding:8px 10px;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:999px;
+  background: rgba(0,0,0,.18);
+  backdrop-filter: blur(6px);
+}
+
+.e32-title{
+  font-family:"Druk Wide Bold","DrukWide","Impact",sans-serif;
+  font-size: clamp(40px, 6vw, 84px);
+  line-height:1.02;
+  margin:16px 0 10px;
+  letter-spacing:-0.01em;
+  text-transform:uppercase;
+}
+
+.e32-lede{
+  margin:0;
+  max-width:75ch;
+  font-size:15px;
+  line-height:1.85;
+  color: rgba(255,255,255,.78);
+}
+
+.e32-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
+.e32-btn{
+  height:44px;
+  padding:0 16px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-size:12px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  border-radius:14px;
+  text-decoration:none;
+  border:1px solid transparent;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease, background-color .18s ease;
+}
+.e32-btn:hover{transform:translateY(-1px);box-shadow:0 14px 30px rgba(0,0,0,.28)}
+.e32-btn--primary{background:var(--e32-pink);color:#fff}
+.e32-btn--secondary{background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.18);color:#fff}
+
+.e32-bodyWhite{
+  background:#fff;
+  color:#0b0c0f;
+  padding: clamp(30px, 4vw, 56px) 0 clamp(70px, 8vw, 110px);
+}
+
+.e32-h2{
+  font-family:"Druk Wide Bold","DrukWide","Impact",sans-serif;
+  font-size:18px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  margin:0 0 10px;
+  color:#0b0c0f;
+}
+.e32-muted{margin:0;color:rgba(11,12,15,.70);font-size:14px;line-height:1.75}
+
+/* Grid cards */
+.e32-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:18px;
+  margin-top:18px;
+}
+@media(max-width:1100px){ .e32-grid{grid-template-columns:repeat(3,1fr)} }
+@media(max-width:820px){ .e32-grid{grid-template-columns:repeat(2,1fr)} }
+@media(max-width:560px){ .e32-grid{grid-template-columns:1fr} }
+
+.e32-card{
+  border:1px solid rgba(11,12,15,.12);
+  border-radius:18px;
+  background:#fff;
+  box-shadow:0 10px 26px rgba(11,12,15,.06);
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  min-height:100%;
+}
+
+.e32-thumb{
+  aspect-ratio: 4 / 5;
+  background:#f6f6f6;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+}
+.e32-thumb img{
+  max-width:100%;
+  max-height:100%;
+  object-fit:contain;
+}
+}
+.e32-thumb img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.e32-cardBody{padding:14px 14px 16px;display:flex;flex-direction:column;gap:10px}
+.e32-name{
+  margin:0;
+  font-size:12px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:#0b0c0f;
+  line-height:1.45;
+}
+.e32-price{margin:0;color:rgba(11,12,15,.70);font-size:13px}
+
+.e32-miniBtn{
+  margin-top:auto;
+  height:38px;
+  padding:0 14px;
+  border-radius:999px;
+  border:1px solid rgba(11,12,15,.14);
+  background:#fff;
+  color:#0b0c0f;
+  font-size:11px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.e32-miniBtn:hover{
+  transform:translateY(-1px);
+  box-shadow:0 14px 24px rgba(11,12,15,.10);
+  border-color: rgba(11,12,15,.22);
+}
+.e32-miniBtn--primary{
+  background: var(--e32-pink);
+  border-color: var(--e32-pink);
+  color:#fff;
+}
+
+/* Product layout */
+.e32-prod{
+  display:grid;
+  grid-template-columns: 1.1fr .9fr;
+  gap:24px;
+  margin-top:18px;
+}
+@media(max-width:980px){ .e32-prod{grid-template-columns:1fr} }
+
+.e32-prodCard{
+  border:1px solid rgba(11,12,15,.12);
+  border-radius:18px;
+  background:#fff;
+  box-shadow:0 10px 26px rgba(11,12,15,.06);
+  padding:20px;
+}
+
+.e32-prodTitle{
+  font-family: "Newsreader", Georgia, serif;
+  font-size: clamp(22px, 2.2vw, 28px);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  font-weight: 400;
+}
+
+.e32-prodPrice{
+  margin: 4px 0 18px;
+  font-size: 14px;
+  color: rgba(11,12,15,.65);
+  letter-spacing: .02em;
+}
+.e32-ctaRow{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+.e32-buyBtn{
+  height:44px;
+  padding:0 16px;
+  border-radius:14px;
+  border:1px solid rgba(11,12,15,.14);
+  background:#fff;
+  color:#0b0c0f;
+  font-size:12px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  cursor:pointer;
+}
+.e32-buyBtn--primary{
+  background:var(--e32-pink);
+  border-color:var(--e32-pink);
+  color:#fff;
+}
+
+/* ===========================
+   E32 PRODUCT POLISH
+   Size picker + CTA area
+=========================== */
+
+/* 1) Shopify pill/radio size buttons (common in most themes) */
+.product-form__input,
+.variant-picker,
+fieldset.product-form__input{
+  border:0;
+  padding:0;
+  margin:0;
+}
+
+.product-form__input .form__label,
+.variant-picker__label,
+fieldset.product-form__input legend{
+  font-size:11px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color: rgba(11,12,15,.65);
+  margin:0 0 10px;
+}
+
+/* Make the option row feel like a clean capsule selector */
+.product-form__input--pill,
+.product-form__input .product-form__input--pill,
+.product-form__input .select,
+.variant-picker__options{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+/* Dawn-like pill labels: input[type=radio] + label */
+.product-form__input input[type="radio"]{
+  position:absolute;
+  opacity:0;
+  pointer-events:none;
+}
+
+.product-form__input input[type="radio"] + label{
+  height:38px;
+  padding:0 14px;
+  border-radius:999px;
+  border:1px solid rgba(11,12,15,.14);
+  background:#fff;
+  color:#0b0c0f;
+  font-size:11px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease, background-color .18s ease, color .18s ease;
+  user-select:none;
+}
+
+/* Hover */
+.product-form__input input[type="radio"] + label:hover{
+  transform: translateY(-1px);
+  border-color: rgba(11,12,15,.22);
+  box-shadow: 0 14px 22px rgba(11,12,15,.10);
+}
+
+/* Active/selected */
+.product-form__input input[type="radio"]:checked + label{
+  border-color: rgba(238,58,104,.55);
+  background: rgba(238,58,104,.10);
+  box-shadow: 0 0 0 4px rgba(238,58,104,.10);
+  color:#0b0c0f;
+}
+
+/* Disabled */
+.product-form__input input[type="radio"][disabled] + label{
+  opacity:.45;
+  cursor:not-allowed;
+  transform:none;
+  box-shadow:none;
+}
+
+/* 2) If your product page uses dropdown selects (our custom e32-product) */
+.e32-prodCard select{
+  height:44px;
+  border-radius:14px;
+  border:1px solid rgba(11,12,15,.16);
+  background:#fff;
+  padding:0 12px;
+  font-size:14px;
+  color:#0b0c0f;
+  outline:none;
+}
+.e32-prodCard select:focus{
+  border-color: rgba(238,58,104,.55);
+  box-shadow: 0 0 0 4px rgba(238,58,104,.10);
+}
+
+/* 3) Buy button treatment, capsule style */
+.product-form__submit,
+.shopify-payment-button__button,
+.e32-buyBtn--primary{
+  border-radius:14px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+}
+
+.shopify-payment-button{
+  margin-top:12px;
+}
+
+/* So the secondary checkout button does not look like a random theme block */
+.shopify-payment-button__button--unbranded{
+  border-radius:14px;
+  border:1px solid rgba(11,12,15,.14);
+  background:#fff;
+  color:#0b0c0f;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+}
+
+/* 4) Tighten spacing around variant + CTA area */
+.product-form{
+  margin-top:16px;
+}
+
+.product__info-container > * + *{
+  margin-top:14px;
+}
+
+/* Mobile: make pills wrap clean */
+@media(max-width:720px){
+  .product-form__input input[type="radio"] + label{
+    flex:1;
+    min-width:110px;
+  }
+}

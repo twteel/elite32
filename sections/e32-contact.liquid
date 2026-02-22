@@ -1,0 +1,316 @@
+{% schema %}
+{
+  "name": "Elite32 Contact",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title", "default": "CONTACT" },
+    {
+      "type": "textarea",
+      "id": "sub",
+      "label": "Subhead",
+      "default": "Tournament inquiries, partnerships, media, and operations. If you're reaching out about a team or event, include the details so we can move quickly."
+    },
+    {
+      "type": "text",
+      "id": "response_time",
+      "label": "Response time note",
+      "default": "We typically respond within 24–48 hours during the season."
+    }
+  ],
+  "presets": [
+    { "name": "Elite32 Contact" }
+  ]
+}
+{% endschema %}
+
+<section class="e32-contact">
+
+  <!-- Minimal white hero -->
+  <header class="e32-contactHero">
+    <div class="e32-wrap">
+      <span class="e32-eyebrow">ELITE32</span>
+      <h1 class="e32-title e32-title--dark">{{ section.settings.title }}</h1>
+      <p class="e32-lede e32-lede--dark">{{ section.settings.sub }}</p>
+    </div>
+  </header>
+
+  <!-- White body -->
+  <main class="e32-contactBody">
+    <div class="e32-wrap e32-contactGrid">
+
+      <!-- Left Info Panel -->
+      <aside class="e32-contactPanel">
+        <h2 class="e32-h2 e32-h2--dark">HOW TO REACH US</h2>
+
+        <p class="e32-bodyDark">
+          Use this form for team registration questions, event logistics, media credentials, and brand or venue partnerships.
+          If you include the specifics, we can move fast.
+        </p>
+
+        <div class="e32-divider"></div>
+
+        <ul class="e32-list">
+          <li><strong>Teams:</strong> registration, divisions, scheduling</li>
+          <li><strong>Media:</strong> credentials, access, distribution</li>
+          <li><strong>Partners:</strong> venues, brands, community programs</li>
+        </ul>
+
+        <div class="e32-divider"></div>
+
+        <p class="e32-bodyMutedDark">
+          {{ section.settings.response_time }}
+        </p>
+      </aside>
+
+      <!-- Form -->
+      <section class="e32-contactFormWrap">
+        {% form 'contact' %}
+
+          {% if form.posted_successfully? %}
+            <div class="e32-alert e32-alert--success">
+              Message received. We will follow up soon.
+            </div>
+          {% endif %}
+
+          {% if form.errors %}
+            <div class="e32-alert e32-alert--error">
+              {{ form.errors | default_errors }}
+            </div>
+          {% endif %}
+
+          <div class="e32-formGrid">
+
+            <div class="e32-field e32-field--full">
+              <label for="e32-inquiry">Inquiry Type</label>
+              <select id="e32-inquiry" name="contact[Inquiry Type]" required>
+                <option value="" selected disabled>Select one</option>
+                <option>Team registration question</option>
+                <option>Event or venue inquiry</option>
+                <option>Media or credentials</option>
+                <option>Brand or sponsorship</option>
+                <option>General</option>
+              </select>
+            </div>
+
+            <div class="e32-field">
+              <label for="e32-name">Name</label>
+              <input id="e32-name" type="text" name="contact[name]" autocomplete="name" required>
+            </div>
+
+            <div class="e32-field">
+              <label for="e32-email">Email</label>
+              <input id="e32-email" type="email" name="contact[email]" autocomplete="email" required>
+            </div>
+
+            <div class="e32-field">
+              <label for="e32-team">Team Name (optional)</label>
+              <input id="e32-team" type="text" name="contact[Team Name]" autocomplete="organization">
+            </div>
+
+            <div class="e32-field">
+              <label for="e32-division">Division / Age Group (optional)</label>
+              <input id="e32-division" type="text" name="contact[Division]" placeholder="Example: 16U, 17U, Varsity">
+            </div>
+
+            <div class="e32-field e32-field--full">
+              <label for="e32-event">Event (optional)</label>
+              <input id="e32-event" type="text" name="contact[Event]" placeholder="Example: Winter Classic, Fall Brawl">
+            </div>
+
+            <div class="e32-field e32-field--full">
+              <label for="e32-message">Message</label>
+              <textarea id="e32-message" name="contact[body]" rows="7" required></textarea>
+            </div>
+
+          </div>
+
+          <button type="submit" class="e32-submit">
+            Send Message
+          </button>
+
+          <p class="e32-footnote">
+            For faster routing, include team, division, and event.
+          </p>
+
+        {% endform %}
+      </section>
+
+    </div>
+  </main>
+
+</section>
+
+<style>
+.e32-contact{
+  --pink:#ee3a68;
+  --ink:#0b0c0f;
+  --max:1200px;
+  --gutter:clamp(16px,4vw,44px);
+  font-family:Inter,system-ui,sans-serif;
+  width:100vw;
+  margin-left:calc(50% - 50vw);
+  margin-right:calc(50% - 50vw);
+}
+
+/* Wrap */
+.e32-wrap{
+  width:min(var(--max),calc(100% - (var(--gutter)*2)));
+  margin:0 auto;
+}
+
+/* Hero */
+.e32-contactHero{
+  background:#fff;
+  padding:80px 0 32px;
+  border-bottom:1px solid rgba(11,12,15,.10);
+}
+
+.e32-eyebrow{
+  font-size:11px;
+  letter-spacing:.34em;
+  text-transform:uppercase;
+  color:rgba(11,12,15,.55);
+}
+
+.e32-title{
+  font-family:"Druk Wide Bold",Impact,sans-serif;
+  font-size:clamp(44px,6vw,84px);
+  text-transform:uppercase;
+  margin:12px 0 8px;
+}
+.e32-title--dark{color:var(--ink);}
+
+.e32-lede{
+  max-width:70ch;
+  line-height:1.7;
+  margin:0;
+}
+.e32-lede--dark{color:rgba(11,12,15,.72);}
+
+/* Body */
+.e32-contactBody{
+  background:#fff;
+  padding:40px 0 100px;
+}
+
+.e32-contactGrid{
+  display:grid;
+  grid-template-columns:1fr 1.2fr;
+  gap:24px;
+}
+
+.e32-contactPanel,
+.e32-contactFormWrap{
+  border:1px solid rgba(11,12,15,.12);
+  border-radius:18px;
+  background:#fff;
+  box-shadow:0 10px 26px rgba(11,12,15,.06);
+  padding:22px;
+}
+
+.e32-divider{
+  height:1px;
+  background:rgba(11,12,15,.10);
+  margin:16px 0;
+}
+
+.e32-h2{
+  font-family:"Druk Wide Bold",Impact,sans-serif;
+  font-size:18px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  margin:0 0 12px;
+}
+
+.e32-bodyDark{color:rgba(11,12,15,.78);line-height:1.8;margin:0;}
+.e32-bodyMutedDark{color:rgba(11,12,15,.6);font-size:13px;margin:0;}
+
+.e32-list{padding-left:18px;margin:0;line-height:1.8;font-size:13px;}
+
+/* Form */
+.e32-formGrid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+.e32-field{display:flex;flex-direction:column;gap:6px;}
+.e32-field--full{grid-column:1/-1;}
+
+.e32-field label{
+  font-size:12px;
+  color:rgba(11,12,15,.72);
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+
+.e32-field input,
+.e32-field textarea,
+.e32-field select{
+  border-radius:14px;
+  border:1px solid rgba(11,12,15,.16);
+  padding:12px 12px;
+  font-size:14px;
+  background:#fff;
+  color:var(--ink);
+  outline:none;
+  transition:border-color .15s ease, box-shadow .15s ease;
+}
+
+.e32-field textarea{resize:vertical; min-height:140px;}
+
+.e32-field input:focus,
+.e32-field textarea:focus,
+.e32-field select:focus{
+  border-color:rgba(238,58,104,.55);
+  box-shadow:0 0 0 4px rgba(238,58,104,.12);
+}
+
+.e32-alert{
+  border-radius:14px;
+  padding:12px 14px;
+  margin-bottom:14px;
+  font-size:14px;
+  line-height:1.5;
+}
+.e32-alert--success{
+  background:rgba(17, 166, 96, .10);
+  border:1px solid rgba(17, 166, 96, .18);
+  color:rgba(11,12,15,.85);
+}
+.e32-alert--error{
+  background:rgba(215, 38, 56, .10);
+  border:1px solid rgba(215, 38, 56, .18);
+  color:rgba(11,12,15,.85);
+}
+
+.e32-submit{
+  margin-top:14px;
+  height:46px;
+  padding:0 18px;
+  border-radius:14px;
+  background:var(--pink);
+  color:#fff;
+  border:none;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  font-size:12px;
+  cursor:pointer;
+  box-shadow:0 10px 20px rgba(238,58,104,.18);
+}
+
+.e32-submit:hover{filter:brightness(.98);}
+.e32-submit:active{transform:translateY(1px);}
+
+.e32-footnote{
+  margin:10px 0 0;
+  font-size:12px;
+  color:rgba(11,12,15,.55);
+}
+
+/* Mobile */
+@media(max-width:980px){
+  .e32-contactGrid{grid-template-columns:1fr;}
+  .e32-formGrid{grid-template-columns:1fr;}
+  .e32-contactHero{padding:64px 0 26px;}
+}
+</style>

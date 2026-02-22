@@ -1,0 +1,85 @@
+{% schema %}
+{
+  "name": "Elite32 Product",
+  "settings": [
+    { "type": "image_picker", "id": "hero_image", "label": "Hero image (optional)" },
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "ELITE32 APPAREL" }
+  ],
+  "presets": [{ "name": "Elite32 Product" }]
+}
+{% endschema %}
+
+<section class="e32-shell" aria-label="Elite32 Product">
+
+  <header class="e32-hero">
+    <div class="e32-hero__media" aria-hidden="true">
+      {% if section.settings.hero_image != blank %}
+        <img src="{{ section.settings.hero_image | image_url: width: 2400 }}" alt="" loading="eager">
+      {% else %}
+        {% if product.featured_image %}
+          <img src="{{ product.featured_image | image_url: width: 2400 }}" alt="" loading="eager">
+        {% endif %}
+      {% endif %}
+    </div>
+    <div class="e32-hero__overlay" aria-hidden="true"></div>
+
+    <div class="e32-wrap" style="position:relative; padding: clamp(72px, 8vw, 110px) 0 clamp(38px, 5vw, 64px);">
+      <span class="e32-eyebrow">{{ section.settings.kicker }}</span>
+      <h1 class="e32-title">{{ product.title }}</h1>
+      <p class="e32-lede">Clean fit. Premium feel. Built for Elite32 weekends and everyday wear.</p>
+    </div>
+  </header>
+
+  <main class="e32-bodyWhite" aria-label="Product details">
+    <div class="e32-wrap">
+
+      <div class="e32-prod">
+        <div class="e32-prodCard">
+          {% if product.featured_image %}
+            <img
+              src="{{ product.featured_image | image_url: width: 1400 }}"
+              alt="{{ product.title | escape }}"
+              loading="eager"
+              style="width:100%; border-radius:16px; display:block;"
+            >
+          {% endif %}
+        </div>
+
+        <div class="e32-prodCard">
+          <h2 class="e32-prodTitle">{{ product.title }}</h2>
+          <p class="e32-prodPrice">{{ product.price | money }}</p>
+
+          {% if product.description != blank %}
+            <div class="e32-muted">{{ product.description }}</div>
+          {% endif %}
+
+          <form method="post" action="/cart/add" style="margin-top:14px;">
+            <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+
+            {% unless product.has_only_default_variant %}
+              <div style="display:flex; flex-direction:column; gap:10px; margin-top:12px;">
+                {% for option in product.options_with_values %}
+                  <label style="font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:rgba(11,12,15,.70);">
+                    {{ option.name }}
+                  </label>
+                  <select name="options[{{ option.name }}]" style="height:44px; border-radius:14px; border:1px solid rgba(11,12,15,.16); padding:0 12px;">
+                    {% for value in option.values %}
+                      <option value="{{ value | escape }}">{{ value }}</option>
+                    {% endfor %}
+                  </select>
+                {% endfor %}
+              </div>
+            {% endunless %}
+
+            <div class="e32-ctaRow">
+              <button class="e32-buyBtn e32-buyBtn--primary" type="submit">ADD TO CART</button>
+              <a class="e32-buyBtn" href="{{ product.collections.first.url | default: routes.all_products_collection_url }}" style="display:inline-flex;align-items:center;justify-content:center;text-decoration:none;">BACK</a>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+</section>
