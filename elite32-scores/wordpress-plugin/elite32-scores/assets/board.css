@@ -1,0 +1,13 @@
+/* Elite32 Scores — public scoreboard ([elite32_scores]). */
+.e32b { --e32-pink: #ee3a68; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
+.e32b-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+.e32b-game { background: #0b0c0e; color: #fff; border: 1px solid rgba(255,255,255,.1); border-radius: 14px; padding: 14px 16px; }
+.e32b-game header { display: flex; justify-content: space-between; gap: 8px; align-items: center; margin-bottom: 10px; }
+.e32b-badge { font-size: 11px; font-weight: 800; letter-spacing: .12em; padding: 4px 9px; border-radius: 999px; background: rgba(255,255,255,.1); white-space: nowrap; }
+.e32b-game.is-live .e32b-badge { background: var(--e32-pink); }
+.e32b-meta { font-size: 12px; color: rgba(255,255,255,.6); text-align: right; }
+.e32b-team { display: flex; justify-content: space-between; align-items: baseline; padding: 4px 0; font-size: 17px; color: rgba(255,255,255,.75); }
+.e32b-team strong { font-size: 26px; font-variant-numeric: tabular-nums; color: #fff; }
+.e32b-team.is-winner { color: #fff; font-weight: 700; }
+.e32b-game footer { margin-top: 8px; font-size: 12px; color: rgba(255,255,255,.5); }
+.e32b-empty, .e32b-loading { text-align: center; padding: 24px; opacity: .7; }

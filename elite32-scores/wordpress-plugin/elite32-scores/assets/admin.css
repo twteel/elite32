@@ -1,0 +1,49 @@
+/* Elite32 Scores — wp-admin scorekeeper screen (built to be used on a phone courtside). */
+.e32a { --e32-pink: #ee3a68; max-width: 820px; }
+.e32a-title { font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
+.e32a-sub { color: #50575e; margin-top: 0; }
+
+.e32a-toolbar { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; margin: 16px 0; }
+.e32a-status { font-weight: 600; color: #008a20; }
+.e32a-status.is-error { color: #d63638; }
+
+.e32a-games { display: grid; gap: 14px; }
+.e32a-empty { padding: 24px; background: #fff; border: 1px dashed #c3c4c7; border-radius: 10px; text-align: center; }
+
+.e32a-game { background: #fff; border: 1px solid #dcdcde; border-left: 5px solid #8c8f94; border-radius: 10px; padding: 12px 14px; }
+.e32a-game.is-live { border-left-color: var(--e32-pink); }
+.e32a-game.is-final { border-left-color: #1d2327; }
+
+.e32a-game__head { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; margin-bottom: 8px; }
+.e32a-badge { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; padding: 3px 8px; border-radius: 999px; background: #f0f0f1; }
+.e32a-game.is-live .e32a-badge { background: var(--e32-pink); color: #fff; }
+.e32a-game.is-final .e32a-badge { background: #1d2327; color: #fff; }
+.e32a-meta { color: #50575e; font-size: 12px; }
+
+.e32a-row { display: grid; grid-template-columns: 1fr auto; grid-template-areas: "team score" "pts pts"; gap: 6px 10px; align-items: center; padding: 8px 0; border-top: 1px solid #f0f0f1; }
+.e32a-team { grid-area: team; font-size: 16px; font-weight: 700; }
+.e32a-team small { font-weight: 400; color: #8c8f94; text-transform: uppercase; font-size: 10px; letter-spacing: .08em; }
+.e32a-score { grid-area: score; font-size: 30px; font-weight: 800; font-variant-numeric: tabular-nums; min-width: 2.5ch; text-align: right; }
+.e32a-pts { grid-area: pts; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.e32a-pt { min-height: 46px; font-size: 18px; font-weight: 800; border-radius: 8px; border: 0; background: #1d2327; color: #fff; cursor: pointer; touch-action: manipulation; }
+.e32a-pt:active { transform: scale(.97); }
+.e32a-pt.is-minus { background: #f0f0f1; color: #1d2327; }
+.e32a-pt:disabled { opacity: .5; }
+
+@media (min-width: 700px) {
+  .e32a-row { grid-template-columns: 1fr auto 260px; grid-template-areas: "team score pts"; }
+}
+
+.e32a-controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 10px; }
+.e32a-controls input { flex: 1 1 160px; }
+.e32a-del { color: #d63638 !important; margin-left: auto !important; }
+
+.e32a-form[hidden] { display: none; }
+.e32a-form { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; margin-top: 12px; }
+.e32a-form label { display: grid; gap: 4px; font-weight: 600; }
+.e32a-form input { width: 100%; }
+.e32a-form button { align-self: end; justify-self: start; }
+
+.e32a-panel { background: #fff; border: 1px solid #dcdcde; border-radius: 10px; padding: 12px 14px; margin-top: 16px; }
+.e32a-panel summary { font-weight: 700; cursor: pointer; }
+.e32a-panel textarea { width: 100%; font-family: monospace; }
