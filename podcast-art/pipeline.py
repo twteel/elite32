@@ -509,7 +509,7 @@ def cmd_export(eps, dest):
     """Ready-to-post folders: one per episode with every image plus the YouTube + Instagram text."""
     dest = Path(dest) if dest else default_export_dir()
     for ep in eps:
-        names = " & ".join(guest_names(ep)) or "Hosts"
+        names = " & ".join(guest_names(ep)) or (f"{SHOWS_NAME.get(ep['show'], '')} Ep. {ep['ep']}" if ep.get("ep") else "Hosts")
         title = f"{ep.get('recorded', '')} {names} - {ep['hook'].replace('|', ' ')}"
         if ep.get("kind") == "show":
             title = f"{SHOWS_NAME.get(ep['show'], ep['show'])} - Show cover"
