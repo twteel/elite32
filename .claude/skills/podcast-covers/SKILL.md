@@ -27,7 +27,22 @@ Plus `out/review-sheet.jpg`: every episode in every format, for the user to appr
    download with a 403, tell the user to add it under the environment's Network access →
    Allowed domains, and stop.
 
-2. **Find the episodes.** Call the OpusClip MCP tool `opusclip_list_projects`. Ballin' 4 Peace
+2. **Start from YouTube - it is the source of truth.** The user keeps titles, descriptions and the
+   "Ballin' 4 Peace Podcast" playlist up to date there: episode order/numbers, guest real names
+   (often only in the description), and links. Read it before anything else, in this order:
+   - **Browser first** (best): if this session has a browser tool (Claude in Chrome, computer
+     use, or the Claude desktop app on the user's machine), open
+     https://www.youtube.com/@ballin4peacetv/playlists, open the Ballin' 4 Peace Podcast
+     playlist, and read every video's title + full description ("...more").
+   - **Script**: `python youtube.py playlist "Ballin' 4 Peace Podcast"` saves
+     `work/youtube/<playlist>.json` (title, description, date, position per video). It uses
+     `YOUTUBE_API_KEY` if set, otherwise drives Chromium on youtube.com.
+   - In a cloud session youtube.com is blocked unless the environment allows
+     `www.youtube.com` (Network access → Allowed domains). If neither works, say so and ask the
+     user to run the agent in the Claude desktop app or paste the descriptions - don't guess.
+   Match each YouTube video to its OpusClip project by `source_video_id` == YouTube video id.
+
+   **Find the episodes in OpusClip.** Call the OpusClip MCP tool `opusclip_list_projects`. Ballin' 4 Peace
    episodes are the projects titled "B4P Ep. N - Guest" or "Untitled NN". Skip "WW-..."
    (that is Wavy's World, a different show).
 

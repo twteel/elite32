@@ -24,32 +24,33 @@
   "youtube_id": "yIi-6sVwO3k",
   "opus_project": "P3092519e4GU",
   "recorded": "2026-09-25",
-  "confirm": "NOT VERIFIED - \"BG\" runs a long-running NYC tournament (tier 2 list). Need full name / tournament name. Episode number."
+  "confirm": "BG's real name is in the YouTube description (per the user) - read it from YouTube. Episode number."
  },
  {
   "id": "b4p-dj",
   "show": "b4p",
   "ep": null,
-  "guest": "DJ Authorized",
+  "guest": "DJ Authorize",
   "hook": "The Basketball DJ",
   "youtube_id": "kLT4EeDxRVU",
   "opus_project": "P3090417pvP3",
   "recorded": "2026-09-04",
-  "confirm": "NOT VERIFIED - DJ name not found online (transcript: \"DJ Authorized\" / \"Alterice\" / \"Ultrahug\"). Need exact spelling/handle. Episode number. H20 not on this one."
+  "confirm": "Name confirmed by the user. Episode number. H20 not on this one.",
+  "about": "Basketball DJ (born LaQuan N. Castro); NYC to Miami."
  },
  {
   "id": "b4p-wavy-combo",
   "show": "b4p",
   "ep": null,
   "guests": [
-   "Wavey Walker",
+   "Wavy Walker",
    "Combo"
   ],
   "hook": "Finals MVP or MVP?",
   "youtube_id": "YaHZGfePQwc",
   "opus_project": "P3090401iAlK",
   "recorded": "2026-09-04",
-  "confirm": "episode number; Wavey vs Wavy - ballin4peace.org spells the host \"Wavey Walker\"",
+  "confirm": "episode number. Name spelling confirmed by the user: Wavy Walker.",
   "about": "Wavey Walker: host of Wavy World, \"the voice of Strong Island\". Combo: Andrew \"Combo\" Salop, host of Combo's Court, @OneTwoCombo, played 10 years overseas.",
   "sources": [
    "https://ballin4peace.org/pages/wavy-world",
