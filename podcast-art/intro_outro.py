@@ -1,7 +1,8 @@
 """Put the show's intro on the front and the outro on the back of every episode that's missing them.
 
 The intro plays first and FADES OUT into the episode; at the end the episode FADES INTO the outro
-(video crossfade + audio crossfade). By default the same clip is used for both ends.
+(video crossfade + audio crossfade). By default the outro is the intro played in reverse, so the
+episode dissolves into the empty court and the lockup fades IN and holds as the last frame.
 
 Episodes that already have it are left alone: the script compares frames from the intro clip with
 the first / last minute of each episode and only adds what's missing.
@@ -89,22 +90,35 @@ def build(episode, intro, outro, info, add_intro, add_outro, fade, out):
     subprocess.run(cmd, check=True)
 
 
+def reversed_copy(clip, size, cache_dir):
+    """The intro played backwards (picture only; the sound plays forward), scaled to the episode size."""
+    W, H = size
+    out = Path(cache_dir) / f"{clip.stem}.reversed.{W}x{H}.mp4"
+    if not out.exists():
+        out.parent.mkdir(parents=True, exist_ok=True)
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(clip), "-vf",
+                        f"scale={W}:{H}:force_original_aspect_ratio=decrease,pad={W}:{H}:(ow-iw)/2:(oh-ih)/2,reverse",
+                        "-c:v", "libx264", "-crf", "16", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k", str(out)], check=True)
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("episodes", nargs="+")
     ap.add_argument("--intro", required=True)
-    ap.add_argument("--outro", help="defaults to the intro clip")
+    ap.add_argument("--outro", help="a separate outro clip (default: the intro played in reverse)")
     ap.add_argument("--fade", type=float, default=1.0, help="crossfade seconds (default 1.0)")
     ap.add_argument("--out", help="output folder (default: next to each episode)")
     ap.add_argument("--check", action="store_true", help="only report which episodes need it")
     ap.add_argument("--force", action="store_true", help="add both even if they seem to be there")
     a = ap.parse_args()
     intro = Path(a.intro).expanduser()
-    outro = Path(a.outro).expanduser() if a.outro else intro
-    ii, oi = probe(intro), probe(outro)
+    ii = probe(intro)
     for e in a.episodes:
         ep = Path(e).expanduser()
         info = probe(ep)
+        outro = Path(a.outro).expanduser() if a.outro else reversed_copy(intro, (info["w"], info["h"]), Path(__file__).parent / "work" / "intro")
+        oi = probe(outro)
         need_in = a.force or not has_clip(ep, intro, info, ii, "start")
         need_out = a.force or not has_clip(ep, outro, info, oi, "end")
         status = ", ".join(x for x, n in (("intro", need_in), ("outro", need_out)) if n) or "nothing (already has both)"
