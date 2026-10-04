@@ -182,6 +182,8 @@ Every cover shows **everyone on the episode**: the guest(s) in the front row, th
   (`"yt"`, `"post"`, `"story"`, `"square"`) instead of `"all"` to change one format only.
   Leave an entry `null` to keep that person's automatic spot.
 - **No guest**: the hosts take the front row. No people at all: a type-only layout.
+- **Hosts behind a guest** are deliberately dim, slightly soft and fade out from the chest
+  down (user feedback: bright hosts competed with the guest). Don't brighten them.
 - **YouTube thumbnail**: guests only. At 1280x720 there's no room for a back row, so hosts
   are left off (they stay on the Instagram and podcast covers). Hosts-only episodes still
   show the hosts.

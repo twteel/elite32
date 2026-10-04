@@ -35,6 +35,10 @@
   .person { position:absolute; bottom:0; transform:translateX(-50%); max-width:none;
     filter:drop-shadow(0 0 38px rgba(0,0,0,.85)) drop-shadow(0 0 2px rgba(0,0,0,.6)); }
   .person.host { filter:brightness(.8) contrast(1.05) drop-shadow(0 0 30px rgba(0,0,0,.9)); }
+  /* behind a guest the hosts are the room, not the subject: dimmer, a touch out of focus,
+     dissolving into the dark from the chest down so only the guest reads as lit */
+  .card:not(.hostsonly) .person.host { filter:brightness(.52) contrast(1.1) blur(1.2px);
+    -webkit-mask-image:linear-gradient(to top, transparent 4%, rgba(0,0,0,.55) 30%, #000 55%); }
 
   /* ---- title blocks ---- */
   .hook { position:absolute; display:flex; flex-direction:column; align-items:flex-start; gap:.09em;
@@ -159,7 +163,7 @@ const placed = [];
 // default: everyone in the front row is equal (same size, same line). "ranked" shrinks each next person a step.
 const ranked = D.castStyle === "ranked";
 front.forEach((c, i) => placed.push({ c, x: 50 + offsets[i] * spread, h: (back.length ? 100 : 96) - (ranked ? Math.min(i, 2) * 7 : 0), z: 10 - i }));
-back.forEach((c, i) => placed.push({ c, x: back.length === 1 ? 14 : (i ? 87 : 13), h: 72, z: 1 }));
+back.forEach((c, i) => placed.push({ c, x: back.length === 1 ? 14 : (i ? 89 : 11), h: 66, z: 1 }));
 // manual override per episode / format: castLayout = [{x, h, z}, ...] in the order guests (by rank) then hosts
 const manual = (D.castLayout && (D.castLayout[fmt] || D.castLayout.all)) || [];
 manual.forEach((m, i) => { if (placed[i] && m) Object.assign(placed[i], m); });
