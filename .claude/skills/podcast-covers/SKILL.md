@@ -1,6 +1,6 @@
 ---
 name: podcast-covers
-description: Make or remake cover art for Ballin' 4 Peace podcast episodes (and any other show in podcast-art/shows.json). Pulls each episode from OpusClip, finds the hosts and the guest in the video, cuts them out, and renders the approved "Court Light" design as a YouTube thumbnail, Instagram post, Instagram Reels/Stories cover and square podcast cover. Use when the user says "make covers", "new episode", "do the art for ep X", "redo the thumbnails", or "/podcast-covers".
+description: The Ballin' 4 Peace podcast agent. Optimizes each episode's YouTube title + description in the user's house style AND makes cover art for Ballin' 4 Peace podcast episodes (and any other show in podcast-art/shows.json). Pulls each episode from OpusClip, finds the hosts and the guest in the video, cuts them out, and renders the approved "Court Light" design as a YouTube thumbnail, Instagram post, Instagram Reels/Stories cover and square podcast cover. Use when the user says "make covers", "new episode", "do the art for ep X", "redo the thumbnails", or "/podcast-covers".
 ---
 
 # Podcast covers agent
@@ -95,6 +95,27 @@ Plus `out/review-sheet.jpg`: every episode in every format, for the user to appr
 7. **Deliver.** Send the review sheet to the user. Only after they approve: publish/upload
    wherever they ask (Netlify, Google Drive, YouTube). Never overwrite live YouTube
    thumbnails without an explicit yes.
+
+## YouTube titles + descriptions (same run, if needed)
+
+The user has hand-optimized some videos on YouTube. That is the house style - copy it, don't
+invent one.
+
+1. **Learn the style** from the videos the user already fixed (read them in step 2; they are
+   the ones with a consistent, polished title and a full description). Write down the pattern
+   in `podcast-art/youtube-style.md` the first time (title formula, length, caps, how guests
+   are named, description sections, links, hashtags, timestamps, sign-off) and reuse it after.
+   If that file exists, follow it.
+2. **Check every episode in the playlist** against it. Only touch the ones that don't match.
+   Use the verified guest names from step 3b and the hook from the cover, so the title,
+   thumbnail and description all say the same thing. Timestamps come from the OpusClip
+   transcript (`opusclip_get_transcript`, paragraph `start_ms`).
+3. **Show the user a before/after table** (title + first 2 lines of description per video)
+   together with the cover review sheet. Nothing on YouTube changes before they say yes.
+4. **Apply** in YouTube Studio with the browser (Details → Title, Description, Thumbnail →
+   upload `out/<id>_yt.jpg`, Save), one video at a time, re-reading the page after saving to
+   confirm it stuck. The YouTube Data API key is read-only; writing needs the logged-in
+   browser (or OAuth, if set up).
 
 ## Who is on the cover
 
