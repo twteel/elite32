@@ -1,0 +1,144 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face { font-family:Anton; src:url("__TPL__/fonts/Anton.woff2"); font-display:block; }
+  @font-face { font-family:"Permanent Marker"; src:url("__TPL__/fonts/PermanentMarker.woff2"); font-display:block; }
+  @font-face { font-family:"Space Mono"; font-weight:700; src:url("__TPL__/fonts/SpaceMono-Bold.woff2"); font-display:block; }
+  :root { --base:#F05A22; --paper:#F2EADB; --ink:#151312; --accent:#1E3FD8; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { width:100%; height:100%; overflow:hidden; background:var(--base); }
+  .card { position:relative; width:100vw; height:100vh; overflow:hidden; background:var(--base); }
+
+  /* print-shop background: dot screen fading across the card + basketball seams */
+  .dots { position:absolute; inset:0; opacity:.22;
+    background-image:radial-gradient(var(--ink) 30%, transparent 32%); background-size:14px 14px;
+    -webkit-mask-image:linear-gradient(115deg, #000 0%, transparent 65%); }
+  .ball { position:absolute; opacity:.9; }
+  .ball circle, .ball path { fill:none; stroke:var(--ink); stroke-width:6; }
+
+  /* torn paper slab the type sits on */
+  .slab { position:absolute; background:var(--paper); box-shadow:10px 10px 0 var(--ink); }
+  .slab::after { content:""; position:absolute; inset:0; opacity:.35; mix-blend-mode:multiply;
+    background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/><feColorMatrix values='0 0 0 0 .55  0 0 0 0 .48  0 0 0 0 .38  0 0 0 .55 0'/></filter><rect width='300' height='300' filter='url(%23p)'/></svg>"); }
+
+  .guest { position:absolute; bottom:-2%; transform-origin:bottom center; filter:url(#rough-soft); }
+  .hook { position:absolute; font-family:Anton, sans-serif; text-transform:uppercase; color:var(--ink);
+    line-height:.9; letter-spacing:.005em; filter:url(#rough); }
+  .hook .l { display:block; white-space:nowrap; }
+  .hook .l.hi { color:var(--base); -webkit-text-stroke:0; }
+  .tape { position:absolute; background:var(--ink); color:var(--paper); font-family:"Space Mono", monospace;
+    font-weight:700; text-transform:uppercase; letter-spacing:.12em; padding:.35em .9em .3em; white-space:nowrap;
+    clip-path:polygon(1% 4%, 99% 0, 100% 52%, 98.5% 100%, 0 96%, 1.5% 50%); }
+  .tape small { color:var(--base); margin-right:.6em; }
+  .stamp { position:absolute; filter:url(#rough); mix-blend-mode:multiply; }
+  .stamp text { font-family:"Space Mono", monospace; font-weight:700; fill:var(--accent); }
+  .stamp .num { font-family:Anton, sans-serif; }
+  .stamp circle { fill:none; stroke:var(--accent); }
+  .mark { position:absolute; font-family:Anton, sans-serif; color:var(--paper); text-transform:uppercase;
+    letter-spacing:.02em; text-shadow:3px 3px 0 var(--ink); white-space:nowrap; }
+  .mark i { font-style:normal; font-family:"Permanent Marker", cursive; color:var(--ink); text-shadow:none;
+    font-size:.7em; margin-left:.4em; letter-spacing:0; }
+  .grain { position:absolute; inset:0; pointer-events:none; opacity:.28; mix-blend-mode:multiply;
+    background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .7 0'/></filter><rect width='240' height='240' filter='url(%23g)'/></svg>"); }
+
+  /* ---------- YouTube 16:9 ---------- */
+  .yt .slab  { left:52%; top:9%; width:52%; height:70%; transform:rotate(-2deg);
+    clip-path:polygon(3% 2%, 6% 0, 100% 0, 100% 100%, 4% 100%, 1% 92%, 3.5% 80%, 0 66%, 2.5% 52%, 0.5% 38%, 3% 24%, 0 12%); }
+  .yt .hook  { left:57%; top:15%; width:39%; height:56%; transform:rotate(-2deg); }
+  .yt .guest { left:2%; height:104%; }
+  .yt .tape  { left:30%; top:82%; font-size:30px; transform:rotate(-3deg); }
+  .yt .stamp { right:2.5%; bottom:3%; width:190px; transform:rotate(12deg); }
+  .yt .mark  { left:56%; top:1.5%; font-size:40px; }
+  .yt.noguest .mark { left:6%; }
+  .yt .ball  { left:-6%; top:-10%; width:62%; }
+  .yt.noguest .slab { left:6%; width:88%; top:14%; height:62%; }
+  .yt.noguest .hook { left:12%; width:76%; top:19%; height:50%; }
+  .yt.noguest .tape { left:12%; top:80%; }
+  .yt.noguest .ball { left:58%; top:30%; width:55%; }
+
+  /* ---------- square + vertical ---------- */
+  .square .slab, .vertical .slab { left:-3%; top:-3%; width:106%; transform:rotate(-1.5deg);
+    clip-path:polygon(0 0, 100% 0, 100% 90%, 94% 97%, 85% 92%, 74% 100%, 60% 94%, 47% 99%, 33% 92%, 20% 98%, 9% 93%, 0 98%); }
+  .square .slab { height:44%; }    .vertical .slab { height:36%; }
+  .square .hook { left:6%; top:8%; width:88%; height:28%; }
+  .vertical .hook { left:6%; top:11%; width:88%; height:20%; }
+  .square .guest { left:50%; transform:translateX(-50%); height:64%; }
+  .vertical .guest { left:50%; transform:translateX(-50%); height:62%; }
+  .square .tape, .vertical .tape { left:5%; font-size:34px; transform:rotate(-3deg); }
+  .square .tape { top:86%; }   .vertical .tape { top:89%; }
+  .square .stamp, .vertical .stamp { right:3%; width:190px; transform:rotate(12deg); }
+  .square .stamp { top:38%; }  .vertical .stamp { top:33%; }
+  .square .mark, .vertical .mark { left:6%; font-size:38px; }
+  .square .mark { top:2.5%; }  .vertical .mark { top:5%; }
+  .square .ball, .vertical .ball { left:-25%; width:150%; }
+  .square .ball { top:30%; }   .vertical .ball { top:38%; }
+  .noguest.square .hook { top:8%; height:30%; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <filter id="rough"><feTurbulence type="fractalNoise" baseFrequency=".045" numOctaves="2" seed="3"/><feDisplacementMap in="SourceGraphic" scale="3.2"/></filter>
+  <filter id="rough-soft"><feTurbulence type="fractalNoise" baseFrequency=".03" numOctaves="2" seed="9"/><feDisplacementMap in="SourceGraphic" scale="2"/></filter>
+</svg>
+<div class="card" id="card">
+  <div class="dots"></div>
+  <svg class="ball" viewBox="0 0 400 400"><circle cx="200" cy="200" r="190"/><path d="M10 200 H390 M200 10 V390"/><path d="M68 64 C150 140 150 260 68 336"/><path d="M332 64 C250 140 250 260 332 336"/></svg>
+  <div class="slab"></div>
+  <img class="guest" id="guest" alt="">
+  <div class="hook" id="hook"></div>
+  <div class="tape" id="tape"></div>
+  <svg class="stamp" id="stamp" viewBox="0 0 200 200">
+    <defs><path id="ring" d="M100 100 m-74 0 a74 74 0 1 1 148 0 a74 74 0 1 1 -148 0"/></defs>
+    <circle cx="100" cy="100" r="94" stroke-width="5"/><circle cx="100" cy="100" r="58" stroke-width="3"/>
+    <text font-size="15"><textPath href="#ring" id="ringtext" textLength="462" lengthAdjust="spacing"></textPath></text>
+    <text x="100" y="82" text-anchor="middle" font-size="16" letter-spacing="4">EP.</text>
+    <text class="num" id="epnum" x="100" y="138" text-anchor="middle" font-size="62"></text>
+  </svg>
+  <div class="mark" id="mark"></div>
+  <div class="grain"></div>
+</div>
+<script>
+const D = __DATA__;
+const fmt = (location.hash || "#yt").slice(1);
+const card = document.getElementById("card");
+card.classList.add(fmt);
+if (!D.img) card.classList.add("noguest");
+for (const [k, v] of Object.entries(D.show.colors)) document.documentElement.style.setProperty("--" + k, v);
+
+document.getElementById("mark").innerHTML = D.show.wordmark + (D.show.tagline ? "<i>" + D.show.tagline.toLowerCase() + "</i>" : "");
+document.getElementById("tape").innerHTML = D.guest ? "<small>w/</small>" + D.guest : (D.show.tagline || "");
+document.getElementById("epnum").textContent = D.ep != null ? String(D.ep).padStart(2, "0") : "";
+document.getElementById("ringtext").textContent = D.show.wordmark + " • " + (D.show.tagline || "") + " • ";
+if (D.ep == null) document.getElementById("stamp").style.display = "none";
+const g = document.getElementById("guest");
+if (D.img) g.src = D.img; else g.remove();
+
+// hook: break into balanced lines, then grow the type until the box is full
+function lines(text, n) {
+  const w = text.toUpperCase().split(/\s+/), out = []; let i = 0;
+  for (let k = 0; k < n; k++) { const take = Math.ceil((w.length - i) / (n - k)); out.push(w.slice(i, i + take).join(" ")); i += take; }
+  return out.filter(Boolean);
+}
+function fitHook() {
+  const box = document.getElementById("hook"), W = box.clientWidth, H = box.clientHeight;
+  const words = D.hook.split(/\s+/).length, tries = [...new Set([1, 2, 3, 4].map(n => Math.min(n, words)))];
+  let best = null;
+  for (const n of tries) {
+    const ls = lines(D.hook, n);
+    box.innerHTML = ls.map((l, i) => `<span class="l${i === ls.length - 1 && ls.length > 1 ? " hi" : ""}">${l}</span>`).join("");
+    let lo = 10, hi = 400;
+    while (hi - lo > 1) { const m = (lo + hi) >> 1; box.style.fontSize = m + "px";
+      const fits = [...box.children].every(c => c.scrollWidth <= W) && box.scrollHeight <= H; fits ? lo = m : hi = m; }
+    if (!best || lo > best.size) best = { size: lo, html: box.innerHTML };
+  }
+  box.innerHTML = best.html; box.style.fontSize = best.size + "px";
+}
+Promise.all([document.fonts.ready, D.img ? g.decode().catch(() => {}) : 0]).then(() => {
+  fitHook();
+  requestAnimationFrame(() => { window.READY = true; });
+});
+</script>
+</body>
+</html>
