@@ -46,3 +46,11 @@ vector from the site icon - swap in the original vector file when you have it.
 The display font is **Druk Wide Bold** (paid licence). Put `DrukWide-Bold.woff2`
 or `.otf` in `template/fonts/` and every cover switches to it; until then
 Archivo Expanded Black stands in.
+
+## Intro + outro on episode videos
+    python intro_outro.py --intro brand/b4p/intro.mp4 --check ~/Videos/B4P/*.mp4   # who's missing it
+    python intro_outro.py --intro brand/b4p/intro.mp4 ~/Videos/B4P/*.mp4           # add what's missing
+The intro fades out into the episode; the episode fades into the outro (same clip unless
+`--outro` is given; `--fade 1.5` for a longer crossfade). Episodes that already have it
+(frames matched against the intro) are skipped. Writes `<name> (intro+outro).mp4` next to
+the original; originals are never changed. Needs ffmpeg.
