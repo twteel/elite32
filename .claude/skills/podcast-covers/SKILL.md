@@ -23,6 +23,9 @@ Plus `out/review-sheet.jpg`: every episode in every format, for the user to appr
 
 1. **Setup** (once per session):
    `cd podcast-art && pip install -r requirements.txt`
+   On the user's Mac also make sure of: `ffmpeg` (`brew install ffmpeg` if missing) and a
+   browser for rendering (`python -m playwright install chromium`, once). The OpusClip
+   connector must be on in this chat. For YouTube, use Claude in Chrome if it's available.
    The network must allow `signed-ext.cdn.opus.pro` (OpusClip video). If frames fail to
    download with a 403, tell the user to add it under the environment's Network access →
    Allowed domains, and stop.
