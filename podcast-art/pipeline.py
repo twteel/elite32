@@ -36,6 +36,8 @@ MODEL_URLS = {
 }
 # yt = YouTube thumbnail, post = Instagram feed (4:5), story = Instagram Reels + Stories cover (9:16), square = podcast apps
 FORMATS = {"yt": (1280, 720), "post": (1080, 1350), "story": (1080, 1920), "square": (1080, 1080)}
+# show art: the square layout rendered at 3000x3000 (Apple Podcasts / Spotify show cover)
+EXTRA_FORMATS = {"cover3000": ("square", 1080, 1080, 3000 / 1080)}
 MAX_HOSTS = 2
 SAME_PERSON = 0.40      # SFace cosine similarity; OpenCV's own threshold is 0.363
 HOST_SHARE = 0.35       # a face seen in this share of episodes is a host
@@ -200,8 +202,14 @@ def cluster(faces):
 
 
 def cmd_pick(eps):
+    """Hosts are learned per show (a guest on one show can be the host of another)."""
+    for show in sorted({e["show"] for e in eps}):
+        pick_show([e for e in eps if e["show"] == show], [e for e in episodes() if e["show"] == show])
+
+
+def pick_show(eps, show_eps):
     faces = []
-    for ep in episodes():
+    for ep in show_eps:
         for f in load_json(WORK / ep["id"] / "faces.json", []):
             faces.append({**f, "ep": ep["id"]})
     if not faces:
@@ -265,12 +273,34 @@ def remove_bg(img):
 def keep_subject(rgba, cx, cy):
     """Drop other people in the shot: keep the alpha blob that contains the face centre."""
     a = np.array(rgba.split()[-1])
-    n, labels = cv2.connectedComponents((a > 40).astype(np.uint8))
+    # open the mask first so a backdrop letter or a neighbour touching the hair by a thin bridge
+    # becomes its own blob; then grow the kept blob back so fingers and hair keep their edges
+    k = max(3, a.shape[1] // 60) | 1
+    ker = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (k, k))
+    opened = cv2.morphologyEx((a > 40).astype(np.uint8), cv2.MORPH_OPEN, ker)
+    n, labels = cv2.connectedComponents(opened)
     lab = labels[min(int(cy), a.shape[0] - 1), min(int(cx), a.shape[1] - 1)]
     if n > 1 and lab:
-        a = np.where(labels == lab, a, 0).astype(np.uint8)
+        keep = cv2.dilate((labels == lab).astype(np.uint8), ker, iterations=2)
+        a = np.where(keep > 0, a, 0).astype(np.uint8)
     rgba.putalpha(Image.fromarray(a))
     return rgba
+
+
+def drop_backdrop_signage(rgba, fx, fy, fw, fh):
+    """Studio sign letters behind a guest (e.g. a white 'WAVY WORLD' backdrop) often stick to the
+    hair in the matte. Erase flat, near-white pixels above the shoulders that sit outside the head."""
+    arr = np.array(rgba)
+    rgb = arr[..., :3].astype(int)
+    bright = (rgb.min(axis=2) > 180) & (rgb.max(axis=2) - rgb.min(axis=2) < 40)
+    H, W = bright.shape
+    yy, xx = np.mgrid[0:H, 0:W]
+    above_shoulders = yy < fy + fh * 0.95
+    outside_head = (xx < fx - fw * 0.3) | (xx > fx + fw * 1.3) | (yy < fy - fh * 0.7)
+    zone = bright & above_shoulders & outside_head
+    zone = cv2.dilate(zone.astype(np.uint8), np.ones((5, 5), np.uint8)) > 0
+    arr[..., 3] = np.where(zone, 0, arr[..., 3])
+    return Image.fromarray(arr, "RGBA")
 
 
 def fade_clipped_sides(rgba, share=0.12):
@@ -371,7 +401,9 @@ def cut_person(frame, box, show):
     s = 900 / crop.height if crop.height < 900 else 1.0  # upscale small frames before effects
     if s != 1.0:
         crop = crop.resize((int(crop.width * s), 900), Image.LANCZOS)
-    cut = fade_clipped_sides(keep_subject(remove_bg(crop), (x + w / 2 - l) * s, (y + h / 2 - t) * s))
+    fx, fy, fw, fh = (x - l) * s, (y - t) * s, w * s, h * s
+    cut = fade_clipped_sides(keep_subject(drop_backdrop_signage(remove_bg(crop), fx, fy, fw, fh),
+                                          fx + fw / 2, fy + fh / 2))
     cut = cut.crop(cut.getbbox())
     return treat_bw(cut) if show.get("treatment") == "bw" else treat(cut, show["colors"])
 
@@ -419,20 +451,21 @@ def cmd_render(eps, shows, formats):
             mark_path = re.search(r' d="([^"]+)"', mark.read_text()).group(1) if mark and mark.exists() else ""
             assets = {k: (ROOT / v).resolve().as_uri() for k, v in show.get("assets", {}).items()}
             data = {"show": show, "assets": assets, "markPath": mark_path, "ep": ep.get("ep"), "guest": " & ".join(guest_names(ep)) or None,
+                    "label": ep.get("label"), "noLockup": ep.get("no_lockup", False),
                     "hook": ep["hook"], "cast": cast_for(ep, show),
                     "castStyle": ep.get("cast_style", "equal"), "castLayout": ep.get("cast_layout")}
             html = WORK / ep["id"] / "cover.html"
             html.parent.mkdir(parents=True, exist_ok=True)
             html.write_text(tpl.replace("__DATA__", json.dumps(data)).replace("__TPL__", (ROOT / "template").as_uri()))
-            for fmt in formats:
-                W, H = FORMATS[fmt]
-                page = browser.new_page(viewport={"width": W, "height": H})
-                page.goto(f"{html.resolve().as_uri()}#{fmt}")
+            for fmt in ep.get("formats") or formats:
+                layout, W, H, scale = EXTRA_FORMATS.get(fmt) or (fmt, *FORMATS[fmt], 1)
+                page = browser.new_page(viewport={"width": W, "height": H}, device_scale_factor=scale)
+                page.goto(f"{html.resolve().as_uri()}#{layout}")
                 page.wait_for_function("window.READY === true", timeout=30000)
                 OUT.mkdir(exist_ok=True)
                 page.screenshot(path=str(OUT / f"{ep['id']}_{fmt}.jpg"), type="jpeg", quality=92)
                 page.close()
-            print(f"{ep['id']}: rendered {', '.join(formats)}")
+            print(f"{ep['id']}: rendered {', '.join(ep.get('formats') or formats)}")
         browser.close()
 
 
@@ -460,6 +493,8 @@ def cmd_sheet(eps):
 
 EXPORT_NAMES = {"yt": "YouTube thumbnail", "post": "Instagram post", "story": "Instagram Reels + Stories cover",
                 "square": "Podcast cover (Spotify, Apple)"}
+EXPORT_NAMES["cover3000"] = "Show cover 3000x3000 (Apple Podcasts, Spotify)"
+SHOWS_NAME = {k: v["name"] for k, v in (load_json(ROOT / "shows.json") or {}).items()}
 
 
 def default_export_dir():
@@ -475,12 +510,18 @@ def cmd_export(eps, dest):
     dest = Path(dest) if dest else default_export_dir()
     for ep in eps:
         names = " & ".join(guest_names(ep)) or "Hosts"
-        folder = dest / re.sub(r'[\\/:*?"<>|]', "", f"{ep.get('recorded', '')} {names} - {ep['hook']}".strip())
+        title = f"{ep.get('recorded', '')} {names} - {ep['hook'].replace('|', ' ')}"
+        if ep.get("kind") == "show":
+            title = f"{SHOWS_NAME.get(ep['show'], ep['show'])} - Show cover"
+        folder = dest / re.sub(r'[\\/:*?"<>|]', "", " ".join(title.split()))
         folder.mkdir(parents=True, exist_ok=True)
         for fmt, label in EXPORT_NAMES.items():
             src = OUT / f"{ep['id']}_{fmt}.jpg"
             if src.exists():
                 (folder / f"{label}.jpg").write_bytes(src.read_bytes())
+        if ep.get("kind") == "show":
+            print(f"{ep['id']}: exported -> {folder}")
+            continue
         yt, ig = ep.get("youtube") or {}, ep.get("instagram") or {}
         text = [f"YOUTUBE TITLE\n{yt.get('title', '')}", f"YOUTUBE DESCRIPTION\n{yt.get('description', '')}",
                 f"INSTAGRAM CAPTION\n{ig.get('caption', '')}", f"TAG / COLLAB\n{' '.join(ig.get('tags', []))}",

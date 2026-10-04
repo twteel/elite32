@@ -24,5 +24,27 @@
       "Slim the Announcer",
       "H20"
     ]
+  },
+  "wavy": {
+    "name": "Wavy World",
+    "wordmark": "WAVY WORLD",
+    "tagline": "THE VOICE OF STRONG ISLAND",
+    "colors": {
+      "base": "#2a0a6b",
+      "paper": "#FFFFFF",
+      "ink": "#24085e",
+      "accent": "#EC3767"
+    },
+    "brand_source": "Wavy World title card (user supplied): purple wave background, white extended type, Elite 32 pink '32'",
+    "treatment": "bw",
+    "room": "raw",
+    "assets": {
+      "background": "brand/wavy/waves-background.jpg",
+      "lockup": "brand/wavy/lockup.png",
+      "powered_by": "brand/wavy/powered-by.png"
+    },
+    "hosts": [
+      "Wavy Walker"
+    ]
   }
 }

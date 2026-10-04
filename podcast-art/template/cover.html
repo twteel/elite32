@@ -64,6 +64,11 @@
   .crop.br { right:18px; bottom:18px; border-right-width:1px; border-bottom-width:1px; }
   .lockup { position:absolute; opacity:.96; }
 
+  /* ---- "raw" room (e.g. Wavy World): the show's own background, kept in full colour ---- */
+  .raw .room { inset:0; filter:none; }
+  .raw .grunge, .raw .dust, .raw .scratch { display:none; }
+  .raw .grain { opacity:.12; }
+
   /* ---------- YouTube 16:9 ---------- */
   .yt .shade { background:
       linear-gradient(90deg, rgba(0,0,0,.25) 0%, rgba(0,0,0,.15) 30%, rgba(0,0,0,.7) 55%, rgba(0,0,0,.88) 100%),
@@ -77,6 +82,9 @@
   .yt .lockup { right:var(--m); bottom:calc(var(--m) * .8); width:208px; }
   .yt.noguest .hook  { left:var(--m); top:31%; width:64%; height:38%; }
   .yt.noguest .label { left:var(--m); top:calc(31% - 40px); }
+  .raw.yt .shade { background:
+      linear-gradient(90deg, transparent 0%, transparent 45%, rgba(18,4,52,.45) 70%, rgba(18,4,52,.6) 100%),
+      linear-gradient(0deg, rgba(18,4,52,.55) 0%, transparent 30%); }
   .yt.noguest .shade { background:linear-gradient(90deg, rgba(0,0,0,.8) 0%, rgba(0,0,0,.45) 70%, rgba(0,0,0,.7) 100%),
       linear-gradient(0deg, rgba(0,0,0,.7) 0%, transparent 40%); }
 
@@ -87,6 +95,8 @@
       radial-gradient(110% 80% at 60% 70%, transparent 35%, rgba(0,0,0,.65) 100%); }
   .square .hook { left:var(--m); top:17%; width:calc(100% - 2 * var(--m)); height:27%; }
   .square .label { left:var(--m); top:calc(17% - 44px); font-size:20px; }
+  .raw.square .shade, .raw.story .shade, .raw.post .shade { background:
+      linear-gradient(180deg, rgba(18,4,52,.55) 0%, rgba(18,4,52,.2) 40%, transparent 60%, rgba(18,4,52,.55) 100%); }
   .square .cast { left:0; right:0; top:44%; bottom:7%; -webkit-mask-image:linear-gradient(to top, transparent 0%, #000 24%); }
   .square .lockup { left:50%; transform:translateX(-50%); bottom:40px; width:230px; }
   .square.noguest .hook { top:30%; height:38%; } .square.noguest .label { top:calc(30% - 44px); }
@@ -141,15 +151,17 @@ const cast = D.cast || [];
 if (!cast.length) card.classList.add("noguest");
 for (const [k, v] of Object.entries(D.show.colors)) document.documentElement.style.setProperty("--" + k, v);
 document.querySelector("#lotus path").setAttribute("d", D.markPath || "");
+if (!D.markPath) document.querySelector(".meta svg").remove();
+if (D.show.room === "raw") card.classList.add("raw");
 const A = D.assets || {};
 if (A.background) document.getElementById("room").style.backgroundImage = `url("${A.background}")`;
 const lock = document.getElementById("lockup");
-if (A.lockup) lock.src = A.lockup; else lock.remove();
+if (A.lockup && !D.noLockup) lock.src = A.lockup; else lock.remove();
 
 document.getElementById("show").textContent = D.show.wordmark + (D.show.tagline ? " — " + D.show.tagline : "");
 document.getElementById("ep").innerHTML = D.ep != null ? "EP. <b>" + String(D.ep).padStart(2, "0") + "</b>" : "";
 const label = document.getElementById("label");
-if (D.guest) document.getElementById("labeltext").textContent = "With " + D.guest; else label.remove();
+if (D.label || D.guest) document.getElementById("labeltext").textContent = D.label || "With " + D.guest; else label.remove();
 // cast placement. Guests are the front row, ranked from the centre out (rank 0 = biggest,
 // most central, on top). Hosts stand behind them on the outside edges, a step smaller and darker.
 const guests = cast.filter(c => c.role === "guest").sort((a, b) => a.rank - b.rank);
@@ -176,6 +188,7 @@ placed.forEach(({ c, x, h, z }) => {
 
 // hook: balanced lines; setup lines on white blocks, the last line on the one pink block
 function lines(text, n) {
+  if (text.includes("|")) return text.toUpperCase().split("|").map(t => t.trim()).filter(Boolean);  // hand-set line breaks
   const w = text.toUpperCase().split(/\s+/), out = []; let i = 0;
   for (let k = 0; k < n; k++) { const take = Math.ceil((w.length - i) / (n - k)); out.push(w.slice(i, i + take).join(" ")); i += take; }
   // never end a line on a joining word ("FATHER &" / "SON"): push it down to the next line
@@ -188,7 +201,7 @@ function lines(text, n) {
 }
 function fitHook() {
   const box = document.getElementById("hook"), W = box.clientWidth, H = box.clientHeight;
-  const words = D.hook.split(/\s+/).length, tries = [...new Set([1, 2, 3, 4].map(n => Math.min(n, words)))];
+  const words = D.hook.split(/\s+/).length, tries = D.hook.includes("|") ? [1] : [...new Set([1, 2, 3, 4].map(n => Math.min(n, words)))];
   let best = null;
   for (const n of tries) {
     const ls = lines(D.hook, n);
@@ -218,7 +231,7 @@ function fitCast() {
     im.style.height = h + "px"; im.style.left = cx + "px";
   }
 }
-Promise.all([fontsLoaded, ...imgs, A.lockup ? lock.decode().catch(() => {}) : 0]).then(() => {
+Promise.all([fontsLoaded, ...imgs, A.lockup && !D.noLockup ? lock.decode().catch(() => {}) : 0]).then(() => {
   fitCast();
   fitHook();
   requestAnimationFrame(() => { window.READY = true; });

@@ -162,6 +162,26 @@ Reels cover + Stories 9:16). Write the caption too:
   files to the user (SendUserFile) or upload them where they ask (Google Drive / Netlify).
 - `--to <folder>` saves anywhere else.
 
+## Shows
+
+- **Ballin' 4 Peace** (`b4p`): hosts Slim the Announcer & H20. Dark "Court Light" room.
+- **Wavy World** (`wavy`): host Wavy Walker, "the voice of Strong Island", powered by NYC
+  Elite 32 x Ballin' 4 Peace. OpusClip projects titled "WW-..." or whose intro says
+  "Wavy World" / "One Take Cult". Its covers use the user's purple wave background in full
+  colour (`"room": "raw"` in shows.json, `brand/wavy/`), the same B&W cut-outs and hook
+  blocks, and the Wavy World lockup. Episode ids start with `ww-`. Instagram: @wavyworldpod.
+  Many guests are high school players: never tag a minor's personal handle unless the user
+  gives it; tag the show accounts.
+- Hosts are detected per show, so a guest on one show (Wavy on Ballin' 4 Peace) can be the
+  host of another.
+- **Show art** (the podcast's own cover, not an episode): an entry with `"kind": "show"`,
+  `"formats": ["square", "cover3000"]`, `"no_lockup": true`, a `label`, and a hook with a
+  hand-set line break (`"Ballin'|4 Peace"`). Hosts come from `brand/<show>/hosts/*.png`.
+  `cover3000` is the square layout at 3000x3000 for Apple Podcasts / Spotify.
+- Names on covers follow the user's spelling over anything found online (e.g. "Unsung Yutes").
+- Studio sign letters stuck to a guest's hair are erased automatically
+  (`drop_backdrop_signage`); if a chunk of backdrop still shows, pin another frame.
+
 ## Who is on the cover
 
 Every cover shows **everyone on the episode**: the guest(s) in the front row, the two hosts
