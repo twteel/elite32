@@ -161,7 +161,7 @@ if (A.lockup && !D.noLockup) lock.src = A.lockup; else lock.remove();
 document.getElementById("show").textContent = D.show.wordmark + (D.show.tagline ? " — " + D.show.tagline : "");
 document.getElementById("ep").innerHTML = D.ep != null ? "EP. <b>" + String(D.ep).padStart(2, "0") + "</b>" : "";
 const label = document.getElementById("label");
-if (D.label || D.guest) document.getElementById("labeltext").textContent = D.label || "With " + D.guest; else label.remove();
+if (!D.hideLabel && (D.label || D.guest)) document.getElementById("labeltext").textContent = D.label || "With " + D.guest; else label.remove();
 // cast placement. Guests are the front row, ranked from the centre out (rank 0 = biggest,
 // most central, on top). Hosts stand behind them on the outside edges, a step smaller and darker.
 const guests = cast.filter(c => c.role === "guest").sort((a, b) => a.rank - b.rank);

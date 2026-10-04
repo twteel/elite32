@@ -242,7 +242,7 @@ def pick_show(eps, show_eps):
         if manual:
             save_json(WORK / ep["id"] / "pick.json", {"guests": manual, "why": "manual", "hosts": host_picks})
             continue
-        n_guests = len(guest_names(ep)) or 1
+        n_guests = ep.get("n_guests") or len(guest_names(ep)) or 1
         cands = []
         for gi, g in enumerate(groups):
             mine = [faces[i] for i in g if faces[i]["ep"] == ep["id"]]
@@ -451,7 +451,7 @@ def cmd_render(eps, shows, formats):
             mark_path = re.search(r' d="([^"]+)"', mark.read_text()).group(1) if mark and mark.exists() else ""
             assets = {k: (ROOT / v).resolve().as_uri() for k, v in show.get("assets", {}).items()}
             data = {"show": show, "assets": assets, "markPath": mark_path, "ep": ep.get("ep"), "guest": " & ".join(guest_names(ep)) or None,
-                    "label": ep.get("label"), "noLockup": ep.get("no_lockup", False),
+                    "label": ep.get("label"), "hideLabel": ep.get("hide_label", False), "noLockup": ep.get("no_lockup", False),
                     "hook": ep["hook"], "cast": cast_for(ep, show),
                     "castStyle": ep.get("cast_style", "equal"), "castLayout": ep.get("cast_layout")}
             html = WORK / ep["id"] / "cover.html"
