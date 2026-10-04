@@ -1,0 +1,103 @@
+---
+name: podcast-covers
+description: Make or remake cover art for Ballin' 4 Peace podcast episodes (and any other show in podcast-art/shows.json). Pulls each episode from OpusClip, finds the hosts and the guest in the video, cuts them out, and renders the approved "Court Light" design as a YouTube thumbnail, Instagram post, Instagram Reels/Stories cover and square podcast cover. Use when the user says "make covers", "new episode", "do the art for ep X", "redo the thumbnails", or "/podcast-covers".
+---
+
+# Podcast covers agent
+
+Everything lives in `podcast-art/`. The look is locked; **do not restyle it** unless the user
+asks. `podcast-art/DESIGN.md` is the brief and `podcast-art/template/cover.html` is the design.
+
+## What you produce, per episode
+
+| file | size | where it goes |
+|---|---|---|
+| `out/<id>_yt.jpg` | 1280x720 | YouTube thumbnail |
+| `out/<id>_post.jpg` | 1080x1350 | Instagram feed post (4:5) |
+| `out/<id>_story.jpg` | 1080x1920 | Instagram Reels cover + Stories (key content kept inside IG's safe zone) |
+| `out/<id>_square.jpg` | 1080x1080 | Spotify / Apple Podcasts |
+
+Plus `out/review-sheet.jpg`: every episode in every format, for the user to approve.
+
+## Steps
+
+1. **Setup** (once per session):
+   `cd podcast-art && pip install -r requirements.txt`
+   The network must allow `signed-ext.cdn.opus.pro` (OpusClip video). If frames fail to
+   download with a 403, tell the user to add it under the environment's Network access →
+   Allowed domains, and stop.
+
+2. **Find the episodes.** Call the OpusClip MCP tool `opusclip_list_projects`. Ballin' 4 Peace
+   episodes are the projects titled "B4P Ep. N - Guest" or "Untitled NN". Skip "WW-..."
+   (that is Wavy's World, a different show).
+
+3. **Update `podcast-art/episodes.json`.** One row per episode: `id` (`b4p-NN`), `show`,
+   `ep`, `guest` (name, or null if it's just the hosts), `hook`, `youtube_id`
+   (= the project's `source_video_id`), `opus_project`.
+   - **Hook**: 2-5 words, the most clickable idea in the episode. Get it from the
+     top-scoring clip titles (`opusclip_list_clips`). Never a full sentence.
+   - **Guest name**: from clip titles/descriptions or the transcript (`opusclip_get_transcript`).
+     If unsure, put your best guess and a note in `confirm`, and ask the user.
+   - Hosts are **Slim the Announcer** and **H20** - never list them as the guest.
+   - More than one guest: use `guests` (a list, most important first). See "Who is on the cover".
+
+4. **Get frames.** For each episode, call `opusclip_list_clips` and save the JSON result
+   to `podcast-art/work/opus/<project_id>.json` (the tool output is large; if it lands in a
+   tool-results file, copy that file). Then:
+   `python pipeline.py import-opus work/opus/*.json`
+   Clip URLs expire after about a day, so fetch and run in the same session.
+
+5. **Run it:** `python pipeline.py all` (or `python pipeline.py all b4p-17` for one episode).
+   This grabs frames, finds every face, works out who the hosts are (faces seen across many
+   episodes) and who the guest is (the most-seen face that isn't a host), cuts them out in
+   black and white and renders all four formats plus the review sheet.
+
+6. **Check the review sheet yourself before showing it.** Look at
+   `out/review-sheet.jpg`. Things to catch:
+   - wrong person as guest (a host, or a crowd face) → set `guest_frame` (path to a frame in
+     `work/<id>/frames/`) and optionally `guest_box` [x, y, w, h] on that episode and rerun
+     `python pipeline.py pick <id>` then `cutout` and `render`
+   - a cut-out with missing hair/shoulders or a leftover background chunk → pick another frame
+   - title text that reads awkwardly → shorten the hook
+   If there are fewer than 3 episodes processed, host detection can't work; put host
+   cut-outs (transparent PNGs) in `brand/b4p/hosts/` instead.
+
+7. **Deliver.** Send the review sheet to the user. Only after they approve: publish/upload
+   wherever they ask (Netlify, Google Drive, YouTube). Never overwrite live YouTube
+   thumbnails without an explicit yes.
+
+## Who is on the cover
+
+Every cover shows **everyone on the episode**: the guest(s) in the front row, the two hosts
+(Slim the Announcer, H20) behind them on the outer edges, a step smaller and darker.
+
+- **One guest**: set `"guest": "Name"`.
+- **Several guests** (e.g. a father and son): set `"guests": ["Son Name", "Father Name"]`.
+  The order is the importance order: the first name goes nearest the centre. The pipeline
+  finds that many non-host faces and ranks them by screen time, so for anything sensitive pin
+  the frames yourself with `"guest_frames": [{"frame": "work/<id>/frames/....jpg"}, ...]` in
+  the same order (the face is found automatically; add `"box": [x, y, w, h]` only if the
+  frame has several people).
+- **Size**: people standing next to each other are equals, so the front row is the same size
+  by default. `"cast_style": "ranked"` makes each next guest a step smaller.
+- **Moving people by hand**: `"cast_layout": {"all": [{"x": 40, "h": 100, "z": 3}, ...]}`
+  overrides position (x = centre, % of the photo area), height (% of the photo area) and
+  stacking (z) per person, in the order guests (by rank) then hosts. Use a format key
+  (`"yt"`, `"post"`, `"story"`, `"square"`) instead of `"all"` to change one format only.
+  Leave an entry `null` to keep that person's automatic spot.
+- **No guest**: the hosts take the front row. No people at all: a type-only layout.
+
+## Changing things
+
+- Edit names/hooks → `episodes.json`, then `python pipeline.py render` (no re-cut needed).
+- Brand colours, logo, background, lockup → `shows.json` and `brand/b4p/`.
+- Font: the design font is Druk Wide Bold. If `template/fonts/DrukWide-Bold.woff2` (or `.otf`)
+  exists it is used; otherwise Archivo Expanded Black stands in.
+- A new show: add it to `shows.json` with its own colours/assets and give its episodes
+  that `show` key.
+
+## Rules
+
+- Commit `episodes.json` and any brand/template changes; `work/` and `out/` are not committed.
+- Don't put the user's email or any credentials in files.
+- Report honestly: which episodes rendered, which need a human check, and why.

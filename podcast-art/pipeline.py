@@ -34,7 +34,9 @@ MODEL_URLS = {
     "face_detection_yunet_2023mar.onnx": "https://media.githubusercontent.com/media/opencv/opencv_zoo/main/models/face_detection_yunet/face_detection_yunet_2023mar.onnx",
     "face_recognition_sface_2021dec.onnx": "https://media.githubusercontent.com/media/opencv/opencv_zoo/main/models/face_recognition_sface/face_recognition_sface_2021dec.onnx",
 }
-FORMATS = {"yt": (1280, 720), "square": (1080, 1080), "vertical": (1080, 1920)}
+# yt = YouTube thumbnail, post = Instagram feed (4:5), story = Instagram Reels + Stories cover (9:16), square = podcast apps
+FORMATS = {"yt": (1280, 720), "post": (1080, 1350), "story": (1080, 1920), "square": (1080, 1080)}
+MAX_HOSTS = 2
 SAME_PERSON = 0.40      # SFace cosine similarity; OpenCV's own threshold is 0.363
 HOST_SHARE = 0.35       # a face seen in this share of episodes is a host
 
@@ -161,23 +163,34 @@ def cmd_pick(eps):
         seen = {faces[i]["ep"] for i in g}
         if n_eps >= 3 and len(seen) >= max(2, HOST_SHARE * n_eps):
             host_groups.add(gi)
+    # the hosts: recurring clusters, most-seen first; one best shot per host per episode
+    hosts = sorted(host_groups, key=lambda gi: -len({faces[i]["ep"] for i in groups[gi]}))[:MAX_HOSTS]
     for ep in eps:
-        if ep.get("guest_frame"):
-            save_json(WORK / ep["id"] / "pick.json", {"frame": ep["guest_frame"], "box": ep.get("guest_box"), "why": "manual"})
+        host_picks = []
+        for gi in hosts:
+            mine = [faces[i] for i in groups[gi] if faces[i]["ep"] == ep["id"]] or [faces[i] for i in groups[gi]]
+            best = max(mine, key=lambda f: f["quality"])
+            host_picks.append({"frame": best["frame"], "box": best["box"], "cluster": gi})
+        # manual override: guest_frames = [{"frame":..., "box":[x,y,w,h]}, ...] in order of importance
+        manual = ep.get("guest_frames") or ([{"frame": ep["guest_frame"], "box": ep.get("guest_box")}] if ep.get("guest_frame") else None)
+        if manual:
+            save_json(WORK / ep["id"] / "pick.json", {"guests": manual, "why": "manual", "hosts": host_picks})
             continue
+        n_guests = len(guest_names(ep)) or 1
         cands = []
         for gi, g in enumerate(groups):
             mine = [faces[i] for i in g if faces[i]["ep"] == ep["id"]]
             if mine and gi not in host_groups:
                 cands.append((len(mine), gi, max(mine, key=lambda f: f["quality"])))
         cands.sort(key=lambda c: -c[0])
-        if cands and cands[0][0] >= 2:
-            n, gi, best = cands[0]
-            pick = {"frame": best["frame"], "box": best["box"], "why": f"guest cluster {gi}: {n} frames"}
-        else:
-            pick = {"frame": None, "box": None, "why": "no guest face found - using no-guest layout"}
+        # rank guests by screen time (frames seen); the user's order in episodes.json can override
+        chosen = [c for c in cands if c[0] >= 2][:n_guests]
+        pick = {"guests": [{"frame": b["frame"], "box": b["box"], "frames_seen": n} for n, gi, b in chosen],
+                "why": f"{len(chosen)} guest(s) by screen time: " + ", ".join(str(c[0]) for c in chosen) if chosen
+                       else "no guest face found - hosts only"}
+        pick["hosts"] = host_picks
         save_json(WORK / ep["id"] / "pick.json", pick)
-        print(f"{ep['id']}: {pick['why']}")
+        print(f"{ep['id']}: {pick['why']}; {len(host_picks)} host(s)")
 
 
 # ---------------------------------------------------------------- cutout + print treatment
@@ -264,28 +277,61 @@ def treat(cut, colors):
     return Image.alpha_composite(big, body).crop((0, 0, big.width, big.height - pad))
 
 
-def cmd_cutout(ep, shows):
-    pick = load_json(WORK / ep["id"] / "pick.json", {})
-    if not pick.get("frame"):
-        return
-    img = Image.open(ROOT / pick["frame"]).convert("RGB")
-    x, y, w, h = pick["box"] or [img.width * 0.35, img.height * 0.15, img.width * 0.3, img.height * 0.3]
+def biggest_face(path):
+    """Box of the largest face in a still - used when a frame is pinned without a box."""
+    img = cv2.imread(str(path))
+    det = cv2.FaceDetectorYN.create(model("face_detection_yunet_2023mar.onnx"), "", (img.shape[1], img.shape[0]), 0.8)
+    _, faces = det.detect(img)
+    if faces is None:
+        return None
+    f = max(faces, key=lambda f: f[2] * f[3])
+    return [float(v) for v in f[:4]]
+
+
+def cut_person(frame, box, show):
+    """Frame + face box -> treated head-and-shoulders cut-out of that one person."""
+    img = Image.open(ROOT / frame).convert("RGB")
+    x, y, w, h = box or biggest_face(ROOT / frame) or [img.width * 0.35, img.height * 0.15, img.width * 0.3, img.height * 0.3]
     # head + shoulders: generous sides, room above the hair, down to the chest
     l, t = max(0, x - w * 1.35), max(0, y - h * 0.75)
     r, b = min(img.width, x + w * 2.35), min(img.height, y + h * 3.1)
     crop = img.crop((int(l), int(t), int(r), int(b)))
-    if crop.height < 900:  # upscale small frames before effects so dots stay crisp
-        s = 900 / crop.height
+    s = 900 / crop.height if crop.height < 900 else 1.0  # upscale small frames before effects
+    if s != 1.0:
         crop = crop.resize((int(crop.width * s), 900), Image.LANCZOS)
-    else:
-        s = 1.0
     cut = keep_subject(remove_bg(crop), (x + w / 2 - l) * s, (y + h / 2 - t) * s)
     cut = cut.crop(cut.getbbox())
-    cut.save(WORK / ep["id"] / "guest_cut.png")
+    return treat_bw(cut) if show.get("treatment") == "bw" else treat(cut, show["colors"])
+
+
+def guest_names(ep):
+    g = ep.get("guests") or ep.get("guest") or []
+    return [g] if isinstance(g, str) else list(g)
+
+
+def cmd_cutout(ep, shows):
+    pick = load_json(WORK / ep["id"] / "pick.json", {})
     show = shows[ep["show"]]
-    art = treat_bw(cut) if show.get("treatment") == "bw" else treat(cut, show["colors"])
-    art.save(WORK / ep["id"] / "guest.png")
-    print(f"{ep['id']}: cut-out done")
+    for old in (WORK / ep["id"]).glob("guest_*.png"):
+        old.unlink()
+    for i, gp in enumerate(pick.get("guests", [])):
+        cut_person(gp["frame"], gp.get("box"), show).save(WORK / ep["id"] / f"guest_{i}.png")
+    for i, hp in enumerate(pick.get("hosts", [])):
+        cut_person(hp["frame"], hp.get("box"), show).save(WORK / ep["id"] / f"host_{i}.png")
+    print(f"{ep['id']}: cut-outs done")
+
+
+def cast_for(ep, show):
+    """Who is on the cover: hosts (episode shots, else fixed photos in brand/<show>/hosts/) + the guest."""
+    d = WORK / ep["id"]
+    pick = load_json(d / "pick.json", {})
+    hosts = sorted(d.glob("host_*.png")) or sorted((ROOT / "brand" / ep["show"] / "hosts").glob("*.png"))
+    cast = [{"img": h.resolve().as_uri(), "role": "host"} for h in hosts[:MAX_HOSTS]]
+    for i in range(len(pick.get("guests", []))):
+        f = d / f"guest_{i}.png"
+        if f.exists():
+            cast.append({"img": f.resolve().as_uri(), "role": "guest", "rank": i})
+    return cast
 
 
 # ---------------------------------------------------------------- render
@@ -297,12 +343,12 @@ def cmd_render(eps, shows, formats):
         browser = p.chromium.launch(executable_path=exe) if exe else p.chromium.launch()
         for ep in eps:
             show = shows[ep["show"]]
-            guest = WORK / ep["id"] / "guest.png"
             mark = ROOT / show["mark"] if show.get("mark") else None
             mark_path = re.search(r' d="([^"]+)"', mark.read_text()).group(1) if mark and mark.exists() else ""
             assets = {k: (ROOT / v).resolve().as_uri() for k, v in show.get("assets", {}).items()}
-            data = {"show": show, "assets": assets, "markPath": mark_path, "ep": ep.get("ep"), "guest": ep.get("guest"), "hook": ep["hook"],
-                    "img": guest.resolve().as_uri() if guest.exists() and load_json(WORK / ep["id"] / "pick.json", {}).get("frame") else None}
+            data = {"show": show, "assets": assets, "markPath": mark_path, "ep": ep.get("ep"), "guest": " & ".join(guest_names(ep)) or None,
+                    "hook": ep["hook"], "cast": cast_for(ep, show),
+                    "castStyle": ep.get("cast_style", "equal"), "castLayout": ep.get("cast_layout")}
             html = WORK / ep["id"] / "cover.html"
             html.parent.mkdir(parents=True, exist_ok=True)
             html.write_text(tpl.replace("__DATA__", json.dumps(data)).replace("__TPL__", (ROOT / "template").as_uri()))
@@ -318,11 +364,33 @@ def cmd_render(eps, shows, formats):
         browser.close()
 
 
+def cmd_sheet(eps):
+    """One review image per run: every episode in every format, side by side."""
+    rows = []
+    for ep in eps:
+        tiles = [Image.open(f) for f in (OUT / f"{ep['id']}_{fmt}.jpg" for fmt in FORMATS) if f.exists()]
+        if tiles:
+            h = 540
+            tiles = [t.resize((int(t.width * h / t.height), h)) for t in tiles]
+            rows.append(tiles)
+    if not rows:
+        return
+    W = max(sum(t.width for t in r) + 20 * (len(r) - 1) for r in rows)
+    sheet = Image.new("RGB", (W + 40, len(rows) * 560 + 20), "#141414")
+    for j, r in enumerate(rows):
+        x = 20
+        for t in r:
+            sheet.paste(t, (x, 20 + j * 560))
+            x += t.width + 20
+    sheet.save(OUT / "review-sheet.jpg", quality=85)
+    print(f"review sheet: {OUT / 'review-sheet.jpg'}")
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("step", choices=["import-opus", "frames", "faces", "pick", "cutout", "render", "all"])
+    ap.add_argument("step", choices=["import-opus", "frames", "faces", "pick", "cutout", "render", "sheet", "all"])
     ap.add_argument("ids", nargs="*", help="episode ids (default: all) or files for import-opus")
-    ap.add_argument("--formats", default="yt,square,vertical")
+    ap.add_argument("--formats", default=",".join(FORMATS))
     a = ap.parse_args()
     if a.step == "import-opus":
         return cmd_import_opus(a.ids)
@@ -341,6 +409,8 @@ def main():
             cmd_cutout(ep, shows)
     if a.step in ("render", "all"):
         cmd_render(eps, shows, a.formats.split(","))
+    if a.step in ("sheet", "all", "render"):
+        cmd_sheet(eps)
 
 
 if __name__ == "__main__":

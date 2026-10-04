@@ -5,6 +5,18 @@ For every episode it finds the guest's face in the episode video, cuts them out,
 gives the photo a halftone print treatment and renders three sizes:
 YouTube 1280x720, square 1080x1080 and vertical 1080x1920.
 
+## Run it as an agent
+In Claude Code on this repo, type `/podcast-covers` (or just ask "make covers for the new
+episode"). The steps it follows are in `.claude/skills/podcast-covers/SKILL.md`.
+
+## Formats
+| file | size | use |
+|---|---|---|
+| `<id>_yt.jpg` | 1280x720 | YouTube thumbnail |
+| `<id>_post.jpg` | 1080x1350 | Instagram feed post |
+| `<id>_story.jpg` | 1080x1920 | Instagram Reels cover + Stories (kept inside IG's safe zone) |
+| `<id>_square.jpg` | 1080x1080 | Spotify / Apple Podcasts |
+
 ## How it finds the guest
 Faces are pulled from every episode and grouped by person. Faces that show up in
 lots of episodes are the hosts; the most-seen face that isn't a host is the guest.

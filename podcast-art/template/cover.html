@@ -30,8 +30,11 @@
   .grain { opacity:.2; mix-blend-mode:overlay;
     background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='256' height='256'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='.95' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='256' height='256' filter='url(%23g)'/></svg>"); background-size:256px; }
 
-  /* ---- the guest: pure B&W, lit from the front ---- */
-  .guest { position:absolute; bottom:0; filter:drop-shadow(0 0 38px rgba(0,0,0,.85)) drop-shadow(0 0 2px rgba(0,0,0,.6)); }
+  /* ---- the cast: pure B&W, guest lit from the front, hosts a step back ---- */
+  .cast { position:absolute; }
+  .person { position:absolute; bottom:0; transform:translateX(-50%); max-width:none;
+    filter:drop-shadow(0 0 38px rgba(0,0,0,.85)) drop-shadow(0 0 2px rgba(0,0,0,.6)); }
+  .person.host { filter:brightness(.8) contrast(1.05) drop-shadow(0 0 30px rgba(0,0,0,.9)); }
 
   /* ---- title blocks ---- */
   .hook { position:absolute; display:flex; flex-direction:column; align-items:flex-start; gap:.09em;
@@ -62,7 +65,7 @@
       linear-gradient(90deg, rgba(0,0,0,.25) 0%, rgba(0,0,0,.15) 30%, rgba(0,0,0,.7) 55%, rgba(0,0,0,.88) 100%),
       linear-gradient(0deg, rgba(0,0,0,.75) 0%, transparent 35%),
       radial-gradient(120% 90% at 28% 45%, transparent 40%, rgba(0,0,0,.6) 100%); }
-  .yt .guest { right:47%; height:91%; max-width:none; }
+  .yt .cast { left:0; width:52%; top:9%; bottom:0; }
   .yt .hook  { left:54.5%; top:30%; width:calc(45.5% - var(--m)); height:40%; justify-content:center; }
   .yt .label { left:54.5%; top:calc(30% - 40px); font-size:16px; }
   .yt .lockup { right:var(--m); bottom:calc(var(--m) * .8); width:208px; }
@@ -73,24 +76,36 @@
 
   /* ---------- square ---------- */
   .square { --m:64px; }
-  .square .shade, .vertical .shade { background:
+  .square .shade, .story .shade { background:
       linear-gradient(180deg, rgba(0,0,0,.9) 0%, rgba(0,0,0,.55) 42%, rgba(0,0,0,.15) 65%, rgba(0,0,0,.8) 100%),
       radial-gradient(110% 80% at 60% 70%, transparent 35%, rgba(0,0,0,.65) 100%); }
   .square .hook { left:var(--m); top:17%; width:calc(100% - 2 * var(--m)); height:27%; }
   .square .label { left:var(--m); top:calc(17% - 44px); font-size:20px; }
-  .square .guest { right:2%; height:58%; }
-  .square .lockup { left:var(--m); bottom:var(--m); width:250px; }
+  .square .cast { left:0; right:0; top:44%; bottom:7%; -webkit-mask-image:linear-gradient(to top, transparent 0%, #000 24%); }
+  .square .lockup { left:50%; transform:translateX(-50%); bottom:40px; width:230px; }
   .square.noguest .hook { top:30%; height:38%; } .square.noguest .label { top:calc(30% - 44px); }
 
+  /* ---------- Instagram post 4:5 ---------- */
+  .post { --m:64px; }
+  .post .shade { background:
+      linear-gradient(180deg, rgba(0,0,0,.9) 0%, rgba(0,0,0,.55) 40%, rgba(0,0,0,.15) 62%, rgba(0,0,0,.8) 100%),
+      radial-gradient(110% 80% at 60% 70%, transparent 35%, rgba(0,0,0,.65) 100%); }
+  .post .hook { left:var(--m); top:15%; width:calc(100% - 2 * var(--m)); height:24%; }
+  .post .label { left:var(--m); top:calc(15% - 44px); font-size:20px; }
+  .post .cast { left:0; right:0; top:41%; bottom:8%; -webkit-mask-image:linear-gradient(to top, transparent 0%, #000 24%); }
+  .post .lockup { left:50%; transform:translateX(-50%); bottom:44px; width:250px; }
+  .post.noguest .hook { top:30%; height:34%; } .post.noguest .label { top:calc(30% - 44px); }
+
   /* ---------- vertical ---------- */
-  .vertical { --m:72px; }
-  .vertical .meta { top:96px; font-size:18px; }
-  .vertical .hook { left:var(--m); top:14%; width:calc(100% - 2 * var(--m)); height:25%; }
-  .vertical .label { left:var(--m); top:calc(14% - 52px); font-size:24px; }
-  .vertical .guest { left:50%; transform:translateX(-46%); height:56%; bottom:9%;
-    -webkit-mask-image:linear-gradient(to top, transparent 0%, #000 22%); }
-  .vertical .lockup { left:50%; transform:translateX(-50%); bottom:84px; width:300px; }
-  .vertical.noguest .hook { top:30%; height:32%; } .vertical.noguest .label { top:calc(30% - 50px); }
+  .story { --m:72px; }
+  /* IG safe zone: profile header covers the top ~250px, reply bar / captions the bottom ~340px.
+     Everything that matters sits in the centre 3:4 band, which is also the profile-grid crop. */
+  .story .meta { top:268px; font-size:18px; }
+  .story .hook { left:var(--m); top:21%; width:calc(100% - 2 * var(--m)); height:20%; }
+  .story .label { left:var(--m); top:calc(21% - 52px); font-size:24px; }
+  .story .cast { left:0; right:0; top:43%; bottom:23%; -webkit-mask-image:linear-gradient(to top, transparent 0%, #000 22%); }
+  .story .lockup { left:50%; transform:translateX(-50%); bottom:372px; width:280px; }
+  .story.noguest .hook { top:32%; height:28%; } .story.noguest .label { top:calc(32% - 50px); }
 </style>
 </head>
 <body>
@@ -102,7 +117,7 @@
   <div class="grunge"></div>
   <div class="shade"></div>
   <div class="scratch"></div>
-  <img class="guest" id="guest" alt="">
+  <div class="cast" id="cast"></div>
   <div class="dust"></div>
   <div class="meta"><svg viewBox="0 0 224 224"><use href="#lotus"/></svg><span id="show"></span><span class="rule"></span><span class="ep" id="ep"></span></div>
   <div class="label" id="label"><span class="sq"></span><span id="labeltext"></span></div>
@@ -116,7 +131,8 @@ const D = __DATA__;
 const fmt = (location.hash || "#yt").slice(1);
 const card = document.getElementById("card");
 card.classList.add(fmt);
-if (!D.img) card.classList.add("noguest");
+const cast = D.cast || [];
+if (!cast.length) card.classList.add("noguest");
 for (const [k, v] of Object.entries(D.show.colors)) document.documentElement.style.setProperty("--" + k, v);
 document.querySelector("#lotus path").setAttribute("d", D.markPath || "");
 const A = D.assets || {};
@@ -128,13 +144,39 @@ document.getElementById("show").textContent = D.show.wordmark + (D.show.tagline 
 document.getElementById("ep").innerHTML = D.ep != null ? "EP. <b>" + String(D.ep).padStart(2, "0") + "</b>" : "";
 const label = document.getElementById("label");
 if (D.guest) document.getElementById("labeltext").textContent = "With " + D.guest; else label.remove();
-const g = document.getElementById("guest");
-if (D.img) g.src = D.img; else g.remove();
+// cast placement. Guests are the front row, ranked from the centre out (rank 0 = biggest,
+// most central, on top). Hosts stand behind them on the outside edges, a step smaller and darker.
+const guests = cast.filter(c => c.role === "guest").sort((a, b) => a.rank - b.rank);
+const hosts = cast.filter(c => c.role === "host");
+const front = guests.length ? guests : hosts, back = guests.length ? hosts : [];
+const n = front.length, spread = n > 1 ? Math.min(34, 70 / n) : 0;
+// slot offsets from the centre, nearest first (left before right): n=2 -> [-.5, .5], n=3 -> [0, -1, 1]
+const offsets = [...Array(n).keys()].map(k => k - (n - 1) / 2).sort((a, b) => Math.abs(a) - Math.abs(b) || a - b);
+const placed = [];
+// default: everyone in the front row is equal (same size, same line). "ranked" shrinks each next person a step.
+const ranked = D.castStyle === "ranked";
+front.forEach((c, i) => placed.push({ c, x: 50 + offsets[i] * spread, h: (back.length ? 100 : 96) - (ranked ? Math.min(i, 2) * 7 : 0), z: 10 - i }));
+back.forEach((c, i) => placed.push({ c, x: back.length === 1 ? 14 : (i ? 87 : 13), h: 72, z: 1 }));
+// manual override per episode / format: castLayout = [{x, h, z}, ...] in the order guests (by rank) then hosts
+const manual = (D.castLayout && (D.castLayout[fmt] || D.castLayout.all)) || [];
+manual.forEach((m, i) => { if (placed[i] && m) Object.assign(placed[i], m); });
+const castEl = document.getElementById("cast"), imgs = [];
+placed.forEach(({ c, x, h, z }) => {
+  const im = new Image(); im.src = c.img; im.className = "person " + c.role;
+  im.style.left = x + "%"; im.style.height = h + "%"; im.style.zIndex = z;
+  castEl.appendChild(im); imgs.push(im.decode().catch(() => {}));
+});
 
 // hook: balanced lines; setup lines on white blocks, the last line on the one pink block
 function lines(text, n) {
   const w = text.toUpperCase().split(/\s+/), out = []; let i = 0;
   for (let k = 0; k < n; k++) { const take = Math.ceil((w.length - i) / (n - k)); out.push(w.slice(i, i + take).join(" ")); i += take; }
+  // never end a line on a joining word ("FATHER &" / "SON"): push it down to the next line
+  const weak = /^(&|AND|OR|THE|A|AN|OF|FOR|TO|IN|ON|VS\.?|X)$/;
+  for (let k = 0; k < out.length - 1; k++) {
+    const ws = out[k].split(" ");
+    if (ws.length > 1 && weak.test(ws[ws.length - 1])) { out[k + 1] = ws.pop() + " " + out[k + 1]; out[k] = ws.join(" "); }
+  }
   return out.filter(Boolean);
 }
 function fitHook() {
@@ -156,7 +198,7 @@ function fitHook() {
 }
 const fontsLoaded = Promise.all(['900 40px "Druk Wide"', '900 40px "Archivo Expanded"', '700 16px "Geist Mono"', '400 16px "Geist Mono"']
   .map(f => document.fonts.load(f, "AB").catch(() => []))).then(() => document.fonts.ready);
-Promise.all([fontsLoaded, D.img ? g.decode().catch(() => {}) : 0, A.lockup ? lock.decode().catch(() => {}) : 0]).then(() => {
+Promise.all([fontsLoaded, ...imgs, A.lockup ? lock.decode().catch(() => {}) : 0]).then(() => {
   fitHook();
   requestAnimationFrame(() => { window.READY = true; });
 });
