@@ -41,6 +41,21 @@ Plus `out/review-sheet.jpg`: every episode in every format, for the user to appr
    - Hosts are **Slim the Announcer** and **H20** - never list them as the guest.
    - More than one guest: use `guests` (a list, most important first). See "Who is on the cover".
 
+3b. **Research every guest before anything renders. Names on a cover must be exactly right.**
+   Transcripts mishear names (an earlier run heard "Mike Lowrey" for **Mic Larry**, "Combo On 2"
+   for **Combo**, @OneTwoCombo). For each guest:
+   - Take the name from the intro in the transcript ("we got ___ in the building"), then
+     WebSearch it with context from the episode (their tournament, league, show, film, school).
+   - Use the spelling the person uses themselves: their own site, podcast page, IG handle,
+     press about them, or ballin4peace.org. Keep their styling (e.g. "PoLo Jose").
+   - Record what makes them relevant in `about` (1 line) and the links in `sources`.
+     Use that to sharpen the hook (e.g. PoLo Jose -> his Tubi film "Dissection of the Dollar").
+   - If you can't verify a name, write `NOT VERIFIED` in `confirm`, keep your best guess,
+     and ask the user before publishing that episode. Never invent a full name.
+   - Also confirm the episode is actually Ballin' 4 Peace: the intro says "Ballin' 4 Peace
+     Podcast" with Slim. Wavy World episodes ("Wavy World", "One Take Cult", host Wavey
+     Walker) belong to a different show; don't mix them in.
+
 4. **Get frames.** For each episode, call `opusclip_list_clips` and save the JSON result
    to `podcast-art/work/opus/<project_id>.json` (the tool output is large; if it lands in a
    tool-results file, copy that file). Then:

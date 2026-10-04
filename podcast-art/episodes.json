@@ -1,14 +1,97 @@
 [
-  {"id": "b4p-03", "show": "b4p", "ep": 3,  "guest": null,          "hook": "Back to Back?",        "youtube_id": "1VHOwVIx9S4", "opus_project": "P3073116tKjz", "confirm": "episode number; host-only episode?"},
-  {"id": "b4p-04", "show": "b4p", "ep": 4,  "guest": "Brisy Obama", "hook": "Comedy Is My Drug",    "youtube_id": "Ko3eZ1dsTi8", "opus_project": "P3080314Q3ct", "confirm": "episode number; guest spelling (H20 also on)"},
-  {"id": "b4p-05", "show": "b4p", "ep": 5,  "guest": "Polo Jose",   "hook": "Story of Redemption",  "youtube_id": "SOfs1H8bIuU", "opus_project": "P3080716vtaf", "confirm": "episode number"},
-  {"id": "b4p-06", "show": "b4p", "ep": 6,  "guest": "Jay",         "hook": "From Belly to Ballin'", "youtube_id": "5O7gTI9WVp4", "opus_project": "P3081212ZDjv", "confirm": "episode number; guest full name (also Jase Paris)"},
-  {"id": "b4p-07", "show": "b4p", "ep": 7,  "guest": "Marvin",      "hook": "For the Kids",         "youtube_id": "WTpjdVxlDXo", "opus_project": "P3081213qtTj", "confirm": "episode number; guest full name"},
-  {"id": "b4p-08", "show": "b4p", "ep": 8,  "guest": null,          "hook": "Heart Over Height",    "youtube_id": "uLroM7XJ55U", "opus_project": "P3081204j4ci", "confirm": "episode number; guest name unknown"},
-  {"id": "b4p-10", "show": "b4p", "ep": 10, "guest": "DJ Alterice", "hook": "The Basketball DJ",    "youtube_id": "kLT4EeDxRVU", "opus_project": "P3090417pvP3", "confirm": "episode number; guest spelling"},
-  {"id": "b4p-12", "show": "b4p", "ep": 12, "guest": "Julian",      "hook": "Unsung Youths",        "youtube_id": "kbR2u2USaFs", "opus_project": "P3082714jXcg", "confirm": "episode number; guest full name"},
-  {"id": "b4p-13", "show": "b4p", "ep": 13, "guest": null,          "hook": "Finals MVP or MVP?",   "youtube_id": "YaHZGfePQwc", "opus_project": "P3090401iAlK", "confirm": "episode number; host-only episode?"},
-  {"id": "b4p-14", "show": "b4p", "ep": 14, "guest": "Mike Larry",  "hook": "Turned Down HBO",      "youtube_id": "OWo3uLkOLjQ", "opus_project": "P3100409gXMN", "confirm": null},
-  {"id": "b4p-15", "show": "b4p", "ep": 15, "guest": "Mike Lowrey", "hook": "Same Energy for 5 or 5,000", "youtube_id": "_d7wfIh_ipI", "opus_project": "P3091214f3Zr", "confirm": "episode number; guest name (OpusClip project was 'Untitled design')"},
-  {"id": "b4p-16", "show": "b4p", "ep": 16, "guest": null,          "hook": "The NIL Lie",          "youtube_id": "yIi-6sVwO3k", "opus_project": "P3092519e4GU", "confirm": "episode number; guest name unknown"}
+ {
+  "id": "b4p-mic-larry",
+  "show": "b4p",
+  "ep": 14,
+  "guest": "Mic Larry",
+  "hook": "Turned Down HBO",
+  "youtube_id": "OWo3uLkOLjQ",
+  "opus_project": "P3100409gXMN",
+  "recorded": "2026-10-04",
+  "confirm": "Verified: Mic Larry (transcript hears \"Mike Lowrey\"). Same episode also on YouTube as _d7wfIh_ipI.",
+  "about": "\"The voice of Rucker Park\" (Entertainers 155); started announcing at the Tri-State Classic.",
+  "sources": [
+   "https://www.villagevoice.com/how-this-man-became-the-voice-of-rucker-park/",
+   "https://www.allthingshoops.com/mic-larry-the-humble-one/"
+  ]
+ },
+ {
+  "id": "b4p-bg",
+  "show": "b4p",
+  "ep": null,
+  "guest": "BG",
+  "hook": "The NIL Lie",
+  "youtube_id": "yIi-6sVwO3k",
+  "opus_project": "P3092519e4GU",
+  "recorded": "2026-09-25",
+  "confirm": "NOT VERIFIED - \"BG\" runs a long-running NYC tournament (tier 2 list). Need full name / tournament name. Episode number."
+ },
+ {
+  "id": "b4p-dj",
+  "show": "b4p",
+  "ep": null,
+  "guest": "DJ Authorized",
+  "hook": "The Basketball DJ",
+  "youtube_id": "kLT4EeDxRVU",
+  "opus_project": "P3090417pvP3",
+  "recorded": "2026-09-04",
+  "confirm": "NOT VERIFIED - DJ name not found online (transcript: \"DJ Authorized\" / \"Alterice\" / \"Ultrahug\"). Need exact spelling/handle. Episode number. H20 not on this one."
+ },
+ {
+  "id": "b4p-wavy-combo",
+  "show": "b4p",
+  "ep": null,
+  "guests": [
+   "Wavey Walker",
+   "Combo"
+  ],
+  "hook": "Finals MVP or MVP?",
+  "youtube_id": "YaHZGfePQwc",
+  "opus_project": "P3090401iAlK",
+  "recorded": "2026-09-04",
+  "confirm": "episode number; Wavey vs Wavy - ballin4peace.org spells the host \"Wavey Walker\"",
+  "about": "Wavey Walker: host of Wavy World, \"the voice of Strong Island\". Combo: Andrew \"Combo\" Salop, host of Combo's Court, @OneTwoCombo, played 10 years overseas.",
+  "sources": [
+   "https://ballin4peace.org/pages/wavy-world",
+   "https://podcasts.apple.com/us/podcast/combos-court/id1323624192"
+  ]
+ },
+ {
+  "id": "b4p-polo-jose",
+  "show": "b4p",
+  "ep": null,
+  "guest": "PoLo Jose",
+  "hook": "Dissection of the Dollar",
+  "youtube_id": "SOfs1H8bIuU",
+  "opus_project": "P3080716vtaf",
+  "recorded": "2026-08-07",
+  "confirm": "episode number",
+  "about": "Independent filmmaker; crime drama \"Dissection of the Dollar\" streaming on Tubi, #1 on indie true-crime charts.",
+  "sources": [
+   "https://sheenmagazine.com/polo-jose-brings-a-story-of-redemption-to-the-screen-with-dissection-of-the-dollar-now-streaming-on-tubi/",
+   "https://lemonwire.com/2026/08/05/polo-jose-dissection-of-the-dollar-interview/"
+  ]
+ },
+ {
+  "id": "b4p-brisy-obama",
+  "show": "b4p",
+  "ep": null,
+  "guest": "Brisy Obama",
+  "hook": "Comedy Is My Drug",
+  "youtube_id": "Ko3eZ1dsTi8",
+  "opus_project": "P3080314Q3ct",
+  "recorded": "2026-08-03",
+  "confirm": "older - not in the first batch; episode number; guest spelling"
+ },
+ {
+  "id": "b4p-03",
+  "show": "b4p",
+  "ep": null,
+  "guest": null,
+  "hook": "Back to Back?",
+  "youtube_id": "1VHOwVIx9S4",
+  "opus_project": "P3073116tKjz",
+  "recorded": "2026-07-31",
+  "confirm": "older - not in the first batch; check if there's a guest"
+ }
 ]
