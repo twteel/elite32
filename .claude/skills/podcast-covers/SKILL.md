@@ -75,7 +75,13 @@ Plus `out/review-sheet.jpg`: every episode in every format, for the user to appr
      Podcast" with Slim. Wavy World episodes ("Wavy World", "One Take Cult", host Wavey
      Walker) belong to a different show; don't mix them in.
 
-4. **Get frames from the YouTube video, never from OpusClip clips.** OpusClip reframes its
+4. **Default: YouTube's free stills (user's choice, no OpusClip credits).** With only a
+   `youtube_id`, the frames step grabs the full video where YouTube allows it and otherwise
+   YouTube's 4 free 1280x720 stills (thumbnail + frames at 25/50/75%). Don't submit new
+   OpusClip projects for footage unless the user asks: each one costs at least 10 credits.
+   Use OpusClip footage only when a project already exists (Premiere export, below).
+   If the stills don't show the guest, pin the best still with `guest_frames` and say so.
+   Get frames from the YouTube video, never from OpusClip clips. OpusClip reframes its
    clips to vertical 9:16, which crops people's arms and shoulders off; the cutouts come out
    chopped. The `frames` step reads each episode's `youtube_id` and pulls a still every 10s
    from the full-width episode (up to 1080p). Nothing to do here beyond making sure
@@ -151,6 +157,10 @@ Reels cover + Stories 9:16). Write the caption too:
   (`opusclip_schedule_publish`). Default is to hand them the files.
 
 ## Save it for the user
+
+Folders are grouped by show (`Ballin 4 Peace Covers/<Show>/<episode>/`), and every export
+also writes one zip of everything next to it (`... - all covers <date>.zip`) for the team's
+Google Drive. `python pipeline.py archive` rebuilds just the zip. Send the zip to the user.
 
 `python pipeline.py export` makes one ready-to-post folder per episode:
 `<date> <Guest> - <Hook>/` with `YouTube thumbnail.jpg`, `Instagram post.jpg`,

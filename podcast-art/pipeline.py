@@ -88,6 +88,20 @@ def cmd_import_opus(files):
 YT_EVERY = 10          # seconds between stills from the full YouTube episode
 
 
+def youtube_stills(video_id, d):
+    """The free default: YouTube's own 1280x720 stills (thumbnail + 3 auto frames at 25/50/75%).
+    No download, no OpusClip credits. Wide shots come out a little softer than real footage."""
+    got = 0
+    for n in ("maxresdefault", "maxres1", "maxres2", "maxres3"):
+        out = d / f"yt_{n}.jpg"
+        try:
+            urllib.request.urlretrieve(f"https://i.ytimg.com/vi/{video_id}/{n}.jpg", out)
+            got += 1
+        except Exception:
+            out.unlink(missing_ok=True)
+    return got
+
+
 def youtube_frames(video_id, d):
     """Stills straight from the full-width YouTube episode (not OpusClip's 9:16 reframes, which crop
     people's arms). Seeks the stream with ffmpeg so the whole video never has to download."""
@@ -137,7 +151,13 @@ def cmd_frames(ep):
     if not sources and ep.get("youtube_id"):
         for old in d.glob("s*.jpg"):  # stills left over from OpusClip clips
             old.unlink()
-        youtube_frames(ep["youtube_id"], d)
+        # the full video (a still every 10s) where YouTube allows it, else YouTube's 4 free stills
+        try:
+            if os.environ.get("YT_STILLS_ONLY"):
+                raise RuntimeError("stills only")
+            youtube_frames(ep["youtube_id"], d)
+        except Exception:
+            print(f"{ep['id']}: using YouTube's stills ({youtube_stills(ep['youtube_id'], d)})")
     for i, s in enumerate(sources):
         src = s if isinstance(s, str) else s["url"]
         if Path(src).suffix.lower() in (".jpg", ".jpeg", ".png"):
@@ -502,18 +522,20 @@ def default_export_dir():
     desk = Path.home() / "Desktop"
     if desk.is_dir() and not Path("/home/user").exists():
         return desk / "Ballin 4 Peace Covers"
-    return ROOT / "export"
+    return ROOT / "export" / "Ballin 4 Peace Covers"
 
 
 def cmd_export(eps, dest):
     """Ready-to-post folders: one per episode with every image plus the YouTube + Instagram text."""
     dest = Path(dest) if dest else default_export_dir()
     for ep in eps:
+        if not any(OUT.glob(f"{ep['id']}_*.jpg")):
+            continue  # nothing rendered for this one yet
         names = " & ".join(guest_names(ep)) or (f"{SHOWS_NAME.get(ep['show'], '')} Ep. {ep['ep']}" if ep.get("ep") else "Hosts")
         title = f"{ep.get('recorded', '')} {names} - {ep['hook'].replace('|', ' ')}"
         if ep.get("kind") == "show":
             title = f"{SHOWS_NAME.get(ep['show'], ep['show'])} - Show cover"
-        folder = dest / re.sub(r'[\\/:*?"<>|]', "", " ".join(title.split()))
+        folder = dest / SHOWS_NAME.get(ep["show"], ep["show"]) / re.sub(r'[\\/:*?"<>|]', "", " ".join(title.split()))
         folder.mkdir(parents=True, exist_ok=True)
         for fmt, label in EXPORT_NAMES.items():
             src = OUT / f"{ep['id']}_{fmt}.jpg"
@@ -530,9 +552,23 @@ def cmd_export(eps, dest):
         print(f"{ep['id']}: exported -> {folder}")
 
 
+def cmd_archive(dest):
+    """One zip of every export folder (all sizes + captions), grouped by show, for the team's Drive."""
+    import zipfile
+    from datetime import date
+    src = Path(dest) if dest else default_export_dir()
+    out = src.parent / f"{src.name} - all covers {date.today().isoformat()}.zip"
+    with zipfile.ZipFile(out, "w", zipfile.ZIP_STORED) as z:  # JPEGs are already compressed
+        for f in sorted(src.rglob("*")):
+            if f.is_file():
+                z.write(f, Path(src.name) / f.relative_to(src))
+    print(f"archive: {out} ({out.stat().st_size // 1_000_000} MB)")
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("step", choices=["import-opus", "import-premiere", "frames", "faces", "pick", "cutout", "render", "sheet", "export", "all"])
+    ap.add_argument("step", choices=["import-opus", "import-premiere", "frames", "faces", "pick", "cutout", "render", "sheet", "export", "archive", "all"])
     ap.add_argument("ids", nargs="*", help="episode ids (default: all) or files for import-opus")
     ap.add_argument("--formats", default=",".join(FORMATS))
     ap.add_argument("--to", help="export folder (default: ~/Desktop/Ballin 4 Peace Covers on your own computer)")
@@ -560,6 +596,8 @@ def main():
         cmd_sheet(eps)
     if a.step == "export":
         cmd_export(eps, a.to)
+    if a.step in ("export", "archive"):
+        cmd_archive(a.to)
 
 
 if __name__ == "__main__":
