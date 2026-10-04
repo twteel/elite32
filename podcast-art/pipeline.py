@@ -386,11 +386,43 @@ def cmd_sheet(eps):
     print(f"review sheet: {OUT / 'review-sheet.jpg'}")
 
 
+EXPORT_NAMES = {"yt": "YouTube thumbnail", "post": "Instagram post", "story": "Instagram Reels + Stories cover",
+                "square": "Podcast cover (Spotify, Apple)"}
+
+
+def default_export_dir():
+    """On the user's own computer: a folder on the Desktop. In a cloud session: podcast-art/export."""
+    desk = Path.home() / "Desktop"
+    if desk.is_dir() and not Path("/home/user").exists():
+        return desk / "Ballin 4 Peace Covers"
+    return ROOT / "export"
+
+
+def cmd_export(eps, dest):
+    """Ready-to-post folders: one per episode with every image plus the YouTube + Instagram text."""
+    dest = Path(dest) if dest else default_export_dir()
+    for ep in eps:
+        names = " & ".join(guest_names(ep)) or "Hosts"
+        folder = dest / re.sub(r'[\\/:*?"<>|]', "", f"{ep.get('recorded', '')} {names} - {ep['hook']}".strip())
+        folder.mkdir(parents=True, exist_ok=True)
+        for fmt, label in EXPORT_NAMES.items():
+            src = OUT / f"{ep['id']}_{fmt}.jpg"
+            if src.exists():
+                (folder / f"{label}.jpg").write_bytes(src.read_bytes())
+        yt, ig = ep.get("youtube") or {}, ep.get("instagram") or {}
+        text = [f"YOUTUBE TITLE\n{yt.get('title', '')}", f"YOUTUBE DESCRIPTION\n{yt.get('description', '')}",
+                f"INSTAGRAM CAPTION\n{ig.get('caption', '')}", f"TAG / COLLAB\n{' '.join(ig.get('tags', []))}",
+                f"LINKS\nhttps://youtu.be/{ep.get('youtube_id', '')}"]
+        (folder / "captions.txt").write_text("\n\n".join(text) + "\n")
+        print(f"{ep['id']}: exported -> {folder}")
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("step", choices=["import-opus", "frames", "faces", "pick", "cutout", "render", "sheet", "all"])
+    ap.add_argument("step", choices=["import-opus", "frames", "faces", "pick", "cutout", "render", "sheet", "export", "all"])
     ap.add_argument("ids", nargs="*", help="episode ids (default: all) or files for import-opus")
     ap.add_argument("--formats", default=",".join(FORMATS))
+    ap.add_argument("--to", help="export folder (default: ~/Desktop/Ballin 4 Peace Covers on your own computer)")
     a = ap.parse_args()
     if a.step == "import-opus":
         return cmd_import_opus(a.ids)
@@ -411,6 +443,8 @@ def main():
         cmd_render(eps, shows, a.formats.split(","))
     if a.step in ("sheet", "all", "render"):
         cmd_sheet(eps)
+    if a.step == "export":
+        cmd_export(eps, a.to)
 
 
 if __name__ == "__main__":

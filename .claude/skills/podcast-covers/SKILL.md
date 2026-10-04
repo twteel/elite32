@@ -1,6 +1,6 @@
 ---
 name: podcast-covers
-description: The Ballin' 4 Peace podcast agent. Optimizes each episode's YouTube title + description in the user's house style AND makes cover art for Ballin' 4 Peace podcast episodes (and any other show in podcast-art/shows.json). Pulls each episode from OpusClip, finds the hosts and the guest in the video, cuts them out, and renders the approved "Court Light" design as a YouTube thumbnail, Instagram post, Instagram Reels/Stories cover and square podcast cover. Use when the user says "make covers", "new episode", "do the art for ep X", "redo the thumbnails", or "/podcast-covers".
+description: The Ballin' 4 Peace podcast agent. Optimizes each episode's YouTube title + description and Instagram caption in the user's house style, makes cover art, and saves ready-to-post folders for Ballin' 4 Peace podcast episodes (and any other show in podcast-art/shows.json). Pulls each episode from OpusClip, finds the hosts and the guest in the video, cuts them out, and renders the approved "Court Light" design as a YouTube thumbnail, Instagram post, Instagram Reels/Stories cover and square podcast cover. Use when the user says "make covers", "new episode", "do the art for ep X", "redo the thumbnails", or "/podcast-covers".
 ---
 
 # Podcast covers agent
@@ -92,7 +92,7 @@ Plus `out/review-sheet.jpg`: every episode in every format, for the user to appr
    If there are fewer than 3 episodes processed, host detection can't work; put host
    cut-outs (transparent PNGs) in `brand/b4p/hosts/` instead.
 
-7. **Deliver.** Send the review sheet to the user. Only after they approve: publish/upload
+7. **Deliver.** Run `python pipeline.py export` (see "Save it for the user"). Send the review sheet to the user. Only after they approve: publish/upload
    wherever they ask (Netlify, Google Drive, YouTube). Never overwrite live YouTube
    thumbnails without an explicit yes.
 
@@ -116,6 +116,35 @@ invent one.
    upload `out/<id>_yt.jpg`, Save), one video at a time, re-reading the page after saving to
    confirm it stuck. The YouTube Data API key is read-only; writing needs the logged-in
    browser (or OAuth, if set up).
+
+## Instagram (same run)
+
+Every episode also gets Instagram: the covers are already made (`post` = feed 4:5, `story` =
+Reels cover + Stories 9:16). Write the caption too:
+
+- Put it in `episodes.json` as `"instagram": {"caption": "...", "tags": ["@handle", ...]}`
+  (and the final YouTube text as `"youtube": {"title": "...", "description": "..."}`).
+- Caption: same hook and voice as the YouTube title, 2-4 short lines, the guest's real
+  @handle (find it in step 3b, e.g. Combo = @onetwocombo), where to watch (link in bio /
+  YouTube), and the same hashtags the user's YouTube style uses. Brand accounts:
+  @ballin4peace (Ballin' 4 Peace) - check the account list with OpusClip
+  `opusclip_list_social_accounts`.
+- Suggest a collab tag with the guest so it lands on their profile too.
+- Posting happens only after the user approves, and only if they ask: from the browser
+  (instagram.com / Meta Business Suite) or by scheduling clips through OpusClip
+  (`opusclip_schedule_publish`). Default is to hand them the files.
+
+## Save it for the user
+
+`python pipeline.py export` makes one ready-to-post folder per episode:
+`<date> <Guest> - <Hook>/` with `YouTube thumbnail.jpg`, `Instagram post.jpg`,
+`Instagram Reels + Stories cover.jpg`, `Podcast cover (Spotify, Apple).jpg` and
+`captions.txt` (YouTube title + description, Instagram caption, tags, link).
+- Run from the user's own computer (Claude desktop app), it saves to
+  `~/Desktop/Ballin 4 Peace Covers/` automatically. Tell them the path.
+- In a cloud session it saves to `podcast-art/export/` (not committed): send the folder's
+  files to the user (SendUserFile) or upload them where they ask (Google Drive / Netlify).
+- `--to <folder>` saves anywhere else.
 
 ## Who is on the cover
 
