@@ -215,6 +215,20 @@ def keep_subject(rgba, cx, cy):
     return rgba
 
 
+def fade_clipped_sides(rgba, share=0.12):
+    """An arm sliced by the crop edge reads as a hard vertical line: fade it out instead."""
+    a = np.array(rgba.split()[-1]).astype(float)
+    W = a.shape[1]
+    n = max(2, int(W * share))
+    ramp = np.linspace(0, 1, n)
+    if (a[:, :2] > 128).mean() > 0.02:
+        a[:, :n] *= ramp
+    if (a[:, -2:] > 128).mean() > 0.02:
+        a[:, -n:] *= ramp[::-1]
+    rgba.putalpha(Image.fromarray(a.astype(np.uint8)))
+    return rgba
+
+
 def duotone(gray, ink, paper):
     ink, paper = np.array(ink, float), np.array(paper, float)
     t = (np.asarray(gray, float) / 255)[..., None]
@@ -292,14 +306,14 @@ def cut_person(frame, box, show):
     """Frame + face box -> treated head-and-shoulders cut-out of that one person."""
     img = Image.open(ROOT / frame).convert("RGB")
     x, y, w, h = box or biggest_face(ROOT / frame) or [img.width * 0.35, img.height * 0.15, img.width * 0.3, img.height * 0.3]
-    # head + shoulders: generous sides, room above the hair, down to the chest
-    l, t = max(0, x - w * 1.35), max(0, y - h * 0.75)
-    r, b = min(img.width, x + w * 2.35), min(img.height, y + h * 3.1)
+    # head + shoulders: equal room either side of the face (both arms), room above the hair, down to the chest
+    l, t = max(0, x - w * 1.6), max(0, y - h * 0.75)
+    r, b = min(img.width, x + w * 2.6), min(img.height, y + h * 3.1)
     crop = img.crop((int(l), int(t), int(r), int(b)))
     s = 900 / crop.height if crop.height < 900 else 1.0  # upscale small frames before effects
     if s != 1.0:
         crop = crop.resize((int(crop.width * s), 900), Image.LANCZOS)
-    cut = keep_subject(remove_bg(crop), (x + w / 2 - l) * s, (y + h / 2 - t) * s)
+    cut = fade_clipped_sides(keep_subject(remove_bg(crop), (x + w / 2 - l) * s, (y + h / 2 - t) * s))
     cut = cut.crop(cut.getbbox())
     return treat_bw(cut) if show.get("treatment") == "bw" else treat(cut, show["colors"])
 

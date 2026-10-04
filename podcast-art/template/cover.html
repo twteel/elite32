@@ -198,7 +198,21 @@ function fitHook() {
 }
 const fontsLoaded = Promise.all(['900 40px "Druk Wide"', '900 40px "Archivo Expanded"', '700 16px "Geist Mono"', '400 16px "Geist Mono"']
   .map(f => document.fonts.load(f, "AB").catch(() => []))).then(() => document.fonts.ready);
+// keep every person whole and inside the cast area: wide cut-outs (arms out) are scaled down
+// instead of running off the canvas or over the title
+function fitCast() {
+  const W = castEl.clientWidth, H = castEl.clientHeight;
+  for (const im of castEl.children) {
+    const ar = im.naturalWidth / im.naturalHeight || 1, host = im.classList.contains("host");
+    const maxW = W * (host ? 0.42 : n > 1 ? Math.min(0.62, 1.3 / n) : 0.96);
+    let h = parseFloat(im.style.height) / 100 * H;
+    if (h * ar > maxW) h = maxW / ar;
+    const w = h * ar, cx = Math.min(Math.max(parseFloat(im.style.left) / 100 * W, w / 2), W - w / 2);
+    im.style.height = h + "px"; im.style.left = cx + "px";
+  }
+}
 Promise.all([fontsLoaded, ...imgs, A.lockup ? lock.decode().catch(() => {}) : 0]).then(() => {
+  fitCast();
   fitHook();
   requestAnimationFrame(() => { window.READY = true; });
 });
