@@ -16,6 +16,7 @@ import argparse
 import glob
 import json
 import os
+import re
 import subprocess
 import sys
 import urllib.request
@@ -243,7 +244,7 @@ def treat(cut, colors):
     a = Image.new("L", big.size, 0)
     a.paste(alpha, (pad * 2, pad))
     border = a.filter(ImageFilter.MaxFilter(pad * 2 + 1)).point(lambda v: 255 if v > 60 else 0)
-    shadow = Image.new("RGBA", big.size, hex_rgb(colors["ink"]) + (255,))
+    shadow = Image.new("RGBA", big.size, hex_rgb(colors.get("accent", colors["ink"])) + (255,))
     big.paste(shadow, (pad // 2 + 4, pad // 2 + 4), border)
     big.paste(Image.new("RGBA", big.size, (255, 255, 255, 255)), (0, 0), border)
     body = Image.new("RGBA", big.size, (0, 0, 0, 0))
@@ -283,7 +284,9 @@ def cmd_render(eps, shows, formats):
         for ep in eps:
             show = shows[ep["show"]]
             guest = WORK / ep["id"] / "guest.png"
-            data = {"show": show, "ep": ep.get("ep"), "guest": ep.get("guest"), "hook": ep["hook"],
+            mark = ROOT / show["mark"] if show.get("mark") else None
+            mark_path = re.search(r' d="([^"]+)"', mark.read_text()).group(1) if mark and mark.exists() else ""
+            data = {"show": show, "markPath": mark_path, "ep": ep.get("ep"), "guest": ep.get("guest"), "hook": ep["hook"],
                     "img": guest.resolve().as_uri() if guest.exists() and load_json(WORK / ep["id"] / "pick.json", {}).get("frame") else None}
             html = WORK / ep["id"] / "cover.html"
             html.parent.mkdir(parents=True, exist_ok=True)

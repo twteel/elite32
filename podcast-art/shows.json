@@ -2,14 +2,15 @@
   "b4p": {
     "name": "Ballin' 4 Peace",
     "wordmark": "BALLIN' 4 PEACE",
+    "wordmark_lines": ["BALLIN'", "4 PEACE"],
     "tagline": "THE PODCAST",
     "colors": {
-      "base": "#F05A22",
-      "paper": "#F2EADB",
-      "ink": "#151312",
-      "accent": "#1E3FD8"
+      "base": "#1E0E5C",
+      "paper": "#FFFFFF",
+      "ink": "#140A3D",
+      "accent": "#EC3767"
     },
-    "logo": null,
-    "mascot": null
+    "mark": "brand/b4p/mark.svg",
+    "brand_source": "ballin4peace.org via Brandfetch: accent #EC3767, dark #1E0E5C, light #FFFFFF; display font Druk Wide Bold"
   }
 }

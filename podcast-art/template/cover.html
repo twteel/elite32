@@ -3,100 +3,111 @@
 <head>
 <meta charset="utf-8">
 <style>
-  @font-face { font-family:Anton; src:url("__TPL__/fonts/Anton.woff2"); font-display:block; }
-  @font-face { font-family:"Permanent Marker"; src:url("__TPL__/fonts/PermanentMarker.woff2"); font-display:block; }
-  @font-face { font-family:"Space Mono"; font-weight:700; src:url("__TPL__/fonts/SpaceMono-Bold.woff2"); font-display:block; }
-  :root { --base:#F05A22; --paper:#F2EADB; --ink:#151312; --accent:#1E3FD8; }
+  /* Brand display face is Druk Wide Bold (licensed, Commercial Type). Drop DrukWide-Bold.woff2/.otf
+     into template/fonts/ and it is picked up automatically; until then Archivo Expanded Black stands in. */
+  @font-face { font-family:"Druk Wide"; font-weight:700 900;
+    src:local("Druk Wide Bold"), local("DrukWide-Bold"), url("__TPL__/fonts/DrukWide-Bold.woff2"), url("__TPL__/fonts/DrukWide-Bold.otf"); }
+  @font-face { font-family:"Archivo Expanded"; font-weight:900; src:url("__TPL__/fonts/ArchivoExpanded-Black.woff2"); }
+  @font-face { font-family:Montserrat; font-weight:900; src:url("__TPL__/fonts/Montserrat-Black.woff2"); }
+  @font-face { font-family:"Space Mono"; font-weight:700; src:url("__TPL__/fonts/SpaceMono-Bold.woff2"); }
+  :root { --base:#1E0E5C; --paper:#FFFFFF; --ink:#140A3D; --accent:#EC3767;
+    --display:"Druk Wide", "Archivo Expanded", sans-serif; }
   * { margin:0; padding:0; box-sizing:border-box; }
   html, body { width:100%; height:100%; overflow:hidden; background:var(--base); }
   .card { position:relative; width:100vw; height:100vh; overflow:hidden; background:var(--base); }
 
-  /* print-shop background: dot screen fading across the card + basketball seams */
-  .dots { position:absolute; inset:0; opacity:.22;
-    background-image:radial-gradient(var(--ink) 30%, transparent 32%); background-size:14px 14px;
-    -webkit-mask-image:linear-gradient(115deg, #000 0%, transparent 65%); }
-  .ball { position:absolute; opacity:.9; }
-  .ball circle, .ball path { fill:none; stroke:var(--ink); stroke-width:6; }
+  /* print-shop background: pink dot screen fading across the card + the lotus mark, oversized */
+  .dots { position:absolute; inset:0; opacity:.35;
+    background-image:radial-gradient(var(--accent) 28%, transparent 30%); background-size:13px 13px;
+    -webkit-mask-image:linear-gradient(120deg, #000 0%, transparent 60%); }
+  .lotus-bg { position:absolute; color:var(--accent); opacity:.85; }
 
   /* torn paper slab the type sits on */
-  .slab { position:absolute; background:var(--paper); box-shadow:10px 10px 0 var(--ink); }
-  .slab::after { content:""; position:absolute; inset:0; opacity:.35; mix-blend-mode:multiply;
-    background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/><feColorMatrix values='0 0 0 0 .55  0 0 0 0 .48  0 0 0 0 .38  0 0 0 .55 0'/></filter><rect width='300' height='300' filter='url(%23p)'/></svg>"); }
+  .slab { position:absolute; background:var(--paper); box-shadow:12px 12px 0 var(--accent); }
+  .slab::after { content:""; position:absolute; inset:0; opacity:.22; mix-blend-mode:multiply;
+    background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/><feColorMatrix values='0 0 0 0 .3  0 0 0 0 .25  0 0 0 0 .4  0 0 0 .55 0'/></filter><rect width='300' height='300' filter='url(%23p)'/></svg>"); }
 
   .guest { position:absolute; bottom:-2%; transform-origin:bottom center; filter:url(#rough-soft); }
-  .hook { position:absolute; font-family:Anton, sans-serif; text-transform:uppercase; color:var(--ink);
-    line-height:.9; letter-spacing:.005em; filter:url(#rough); }
+  .hook { position:absolute; font-family:var(--display); font-weight:900; text-transform:uppercase; color:var(--ink);
+    line-height:.92; letter-spacing:-.01em; filter:url(#rough); }
   .hook .l { display:block; white-space:nowrap; }
-  .hook .l.hi { color:var(--base); -webkit-text-stroke:0; }
-  .tape { position:absolute; background:var(--ink); color:var(--paper); font-family:"Space Mono", monospace;
-    font-weight:700; text-transform:uppercase; letter-spacing:.12em; padding:.35em .9em .3em; white-space:nowrap;
+  .hook .l.hi { color:var(--accent); }
+  .tape { position:absolute; background:var(--accent); color:var(--paper); font-family:Montserrat, sans-serif;
+    font-weight:900; text-transform:uppercase; letter-spacing:.1em; padding:.4em 1em .35em; white-space:nowrap;
+    box-shadow:6px 6px 0 var(--ink);
     clip-path:polygon(1% 4%, 99% 0, 100% 52%, 98.5% 100%, 0 96%, 1.5% 50%); }
-  .tape small { color:var(--base); margin-right:.6em; }
-  .stamp { position:absolute; filter:url(#rough); mix-blend-mode:multiply; }
-  .stamp text { font-family:"Space Mono", monospace; font-weight:700; fill:var(--accent); }
-  .stamp .num { font-family:Anton, sans-serif; }
-  .stamp circle { fill:none; stroke:var(--accent); }
-  .mark { position:absolute; font-family:Anton, sans-serif; color:var(--paper); text-transform:uppercase;
-    letter-spacing:.02em; text-shadow:3px 3px 0 var(--ink); white-space:nowrap; }
-  .mark i { font-style:normal; font-family:"Permanent Marker", cursive; color:var(--ink); text-shadow:none;
-    font-size:.7em; margin-left:.4em; letter-spacing:0; }
-  .grain { position:absolute; inset:0; pointer-events:none; opacity:.28; mix-blend-mode:multiply;
+  .tape small { color:var(--ink); margin-right:.5em; }
+  .stamp { position:absolute; filter:url(#rough); }
+  .stamp text { font-family:Montserrat, sans-serif; font-weight:900; fill:var(--paper); }
+  .stamp .num { font-family:var(--display); }
+  .stamp circle { fill:none; stroke:var(--paper); }
+  .stamp .lotus { color:var(--accent); }
+  .brand { position:absolute; display:flex; align-items:center; gap:.35em; }
+  .brand svg { width:1.9em; height:1.9em; color:var(--accent); flex:none; }
+  .brand b { font-family:var(--display); font-weight:900; color:var(--accent); text-transform:uppercase;
+    line-height:.88; letter-spacing:-.01em; font-size:.82em; white-space:nowrap; }
+  .brand b span { display:block; }
+  .brand i { font-style:normal; font-family:Montserrat, sans-serif; font-weight:900; color:var(--paper);
+    font-size:.34em; letter-spacing:.32em; align-self:flex-end; margin-left:.6em; margin-bottom:.25em; white-space:nowrap; }
+  .grain { position:absolute; inset:0; pointer-events:none; opacity:.22; mix-blend-mode:multiply;
     background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .7 0'/></filter><rect width='240' height='240' filter='url(%23g)'/></svg>"); }
 
   /* ---------- YouTube 16:9 ---------- */
-  .yt .slab  { left:52%; top:9%; width:52%; height:70%; transform:rotate(-2deg);
+  .yt .slab  { left:51%; top:17%; width:53%; height:62%; transform:rotate(-2deg);
     clip-path:polygon(3% 2%, 6% 0, 100% 0, 100% 100%, 4% 100%, 1% 92%, 3.5% 80%, 0 66%, 2.5% 52%, 0.5% 38%, 3% 24%, 0 12%); }
-  .yt .hook  { left:57%; top:15%; width:39%; height:56%; transform:rotate(-2deg); }
-  .yt .guest { left:2%; height:104%; }
-  .yt .tape  { left:30%; top:82%; font-size:30px; transform:rotate(-3deg); }
-  .yt .stamp { right:2.5%; bottom:3%; width:190px; transform:rotate(12deg); }
-  .yt .mark  { left:56%; top:1.5%; font-size:40px; }
-  .yt.noguest .mark { left:6%; }
-  .yt .ball  { left:-6%; top:-10%; width:62%; }
-  .yt.noguest .slab { left:6%; width:88%; top:14%; height:62%; }
-  .yt.noguest .hook { left:12%; width:76%; top:19%; height:50%; }
-  .yt.noguest .tape { left:12%; top:80%; }
-  .yt.noguest .ball { left:58%; top:30%; width:55%; }
+  .yt .hook  { left:56%; top:23%; width:40%; height:49%; transform:rotate(-2deg); }
+  .yt .guest { left:1%; height:104%; }
+  .yt .tape  { left:29%; top:83%; font-size:28px; transform:rotate(-3deg); }
+  .yt .stamp { right:2.5%; bottom:2.5%; width:150px; transform:rotate(10deg); }
+  .yt .brand { left:56%; top:3.5%; font-size:44px; }
+  .yt .lotus-bg { left:-9%; top:-14%; width:66%; }
+  .yt.noguest .slab { left:5%; width:90%; top:22%; height:56%; }
+  .yt.noguest .hook { left:10%; width:72%; top:27%; height:44%; }
+  .yt.noguest .tape { left:10%; top:84%; }
+  .yt.noguest .brand { left:5%; }
+  .yt.noguest .lotus-bg { left:60%; top:28%; width:52%; }
 
   /* ---------- square + vertical ---------- */
   .square .slab, .vertical .slab { left:-3%; top:-3%; width:106%; transform:rotate(-1.5deg);
     clip-path:polygon(0 0, 100% 0, 100% 90%, 94% 97%, 85% 92%, 74% 100%, 60% 94%, 47% 99%, 33% 92%, 20% 98%, 9% 93%, 0 98%); }
-  .square .slab { height:44%; }    .vertical .slab { height:36%; }
-  .square .hook { left:6%; top:8%; width:88%; height:28%; }
-  .vertical .hook { left:6%; top:11%; width:88%; height:20%; }
-  .square .guest { left:50%; transform:translateX(-50%); height:64%; }
+  .square .slab { height:46%; }    .vertical .slab { height:37%; }
+  .square .hook { left:6%; top:15%; width:88%; height:24%; }
+  .vertical .hook { left:6%; top:13%; width:88%; height:18%; }
+  .square .guest { left:50%; transform:translateX(-50%); height:62%; }
   .vertical .guest { left:50%; transform:translateX(-50%); height:62%; }
-  .square .tape, .vertical .tape { left:5%; font-size:34px; transform:rotate(-3deg); }
-  .square .tape { top:86%; }   .vertical .tape { top:89%; }
-  .square .stamp, .vertical .stamp { right:3%; width:190px; transform:rotate(12deg); }
-  .square .stamp { top:38%; }  .vertical .stamp { top:33%; }
-  .square .mark, .vertical .mark { left:6%; font-size:38px; }
-  .square .mark { top:2.5%; }  .vertical .mark { top:5%; }
-  .square .ball, .vertical .ball { left:-25%; width:150%; }
-  .square .ball { top:30%; }   .vertical .ball { top:38%; }
-  .noguest.square .hook { top:8%; height:30%; }
+  .square .tape, .vertical .tape { left:5%; font-size:32px; transform:rotate(-3deg); }
+  .square .tape { top:87%; }   .vertical .tape { top:90%; }
+  .square .stamp, .vertical .stamp { right:3.5%; width:160px; transform:rotate(10deg); }
+  .square .stamp { top:50%; }  .vertical .stamp { top:41%; }
+  .square .brand, .vertical .brand { left:6%; font-size:44px; }
+  .square .brand { top:3%; }   .vertical .brand { top:4.5%; }
+  .square .brand b, .vertical .brand b { color:var(--ink); }
+  .square .brand i, .vertical .brand i { color:var(--accent); }
+  .square .lotus-bg, .vertical .lotus-bg { left:-20%; width:140%; }
+  .square .lotus-bg { top:34%; }   .vertical .lotus-bg { top:42%; }
 </style>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute">
-  <filter id="rough"><feTurbulence type="fractalNoise" baseFrequency=".045" numOctaves="2" seed="3"/><feDisplacementMap in="SourceGraphic" scale="3.2"/></filter>
+  <filter id="rough"><feTurbulence type="fractalNoise" baseFrequency=".045" numOctaves="2" seed="3"/><feDisplacementMap in="SourceGraphic" scale="2.6"/></filter>
   <filter id="rough-soft"><feTurbulence type="fractalNoise" baseFrequency=".03" numOctaves="2" seed="9"/><feDisplacementMap in="SourceGraphic" scale="2"/></filter>
+  <symbol id="lotus" viewBox="0 0 224 224"><path fill="currentColor" fill-rule="evenodd" d=""/></symbol>
 </svg>
 <div class="card" id="card">
   <div class="dots"></div>
-  <svg class="ball" viewBox="0 0 400 400"><circle cx="200" cy="200" r="190"/><path d="M10 200 H390 M200 10 V390"/><path d="M68 64 C150 140 150 260 68 336"/><path d="M332 64 C250 140 250 260 332 336"/></svg>
+  <svg class="lotus-bg" viewBox="0 0 224 224"><use href="#lotus"/></svg>
   <div class="slab"></div>
   <img class="guest" id="guest" alt="">
   <div class="hook" id="hook"></div>
   <div class="tape" id="tape"></div>
   <svg class="stamp" id="stamp" viewBox="0 0 200 200">
-    <defs><path id="ring" d="M100 100 m-74 0 a74 74 0 1 1 148 0 a74 74 0 1 1 -148 0"/></defs>
-    <circle cx="100" cy="100" r="94" stroke-width="5"/><circle cx="100" cy="100" r="58" stroke-width="3"/>
-    <text font-size="15"><textPath href="#ring" id="ringtext" textLength="462" lengthAdjust="spacing"></textPath></text>
-    <text x="100" y="82" text-anchor="middle" font-size="16" letter-spacing="4">EP.</text>
-    <text class="num" id="epnum" x="100" y="138" text-anchor="middle" font-size="62"></text>
+    <defs><path id="ring" d="M100 100 m-76 0 a76 76 0 1 1 152 0 a76 76 0 1 1 -152 0"/></defs>
+    <circle cx="100" cy="100" r="95" stroke-width="5"/><circle cx="100" cy="100" r="60" stroke-width="3"/>
+    <text font-size="14"><textPath href="#ring" id="ringtext" textLength="474" lengthAdjust="spacing"></textPath></text>
+    <svg class="lotus" x="78" y="52" width="44" height="44" viewBox="34 34 156 120"><use href="#lotus"/></svg>
+    <text class="num" id="epnum" x="100" y="134" text-anchor="middle" font-size="27"></text>
   </svg>
-  <div class="mark" id="mark"></div>
+  <div class="brand" id="brand"><svg viewBox="0 0 224 224"><use href="#lotus"/></svg><b id="wordmark"></b><i id="tagline"></i></div>
   <div class="grain"></div>
 </div>
 <script>
@@ -106,10 +117,13 @@ const card = document.getElementById("card");
 card.classList.add(fmt);
 if (!D.img) card.classList.add("noguest");
 for (const [k, v] of Object.entries(D.show.colors)) document.documentElement.style.setProperty("--" + k, v);
+document.querySelector("#lotus path").setAttribute("d", D.markPath || "");
 
-document.getElementById("mark").innerHTML = D.show.wordmark + (D.show.tagline ? "<i>" + D.show.tagline.toLowerCase() + "</i>" : "");
+const wm = D.show.wordmark_lines || [D.show.wordmark];
+document.getElementById("wordmark").innerHTML = wm.map(l => `<span>${l}</span>`).join("");
+document.getElementById("tagline").textContent = D.show.tagline || "";
 document.getElementById("tape").innerHTML = D.guest ? "<small>w/</small>" + D.guest : (D.show.tagline || "");
-document.getElementById("epnum").textContent = D.ep != null ? String(D.ep).padStart(2, "0") : "";
+document.getElementById("epnum").textContent = D.ep != null ? "EP " + String(D.ep).padStart(2, "0") : "";
 document.getElementById("ringtext").textContent = D.show.wordmark + " • " + (D.show.tagline || "") + " • ";
 if (D.ep == null) document.getElementById("stamp").style.display = "none";
 const g = document.getElementById("guest");

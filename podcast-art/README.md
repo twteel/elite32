@@ -25,3 +25,11 @@ An episode can also list its own `sources` (local video files, URLs or stills).
   `confirm` notes what still needs checking.
 - `shows.json` - show name, colours, logo.
 - `template/cover.html` - the layout for all three sizes. Edit it to change the look.
+
+## Brand (Ballin' 4 Peace)
+Colours and logo come from ballin4peace.org (via Brandfetch): pink `#EC3767`,
+deep purple `#1E0E5C`, white. `brand/b4p/mark.svg` is the lotus mark redrawn as a
+vector from the site icon - swap in the original vector file when you have it.
+The display font is **Druk Wide Bold** (paid licence). Put `DrukWide-Bold.woff2`
+or `.otf` in `template/fonts/` and every cover switches to it; until then
+Archivo Expanded Black stands in.
