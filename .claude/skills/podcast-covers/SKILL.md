@@ -81,6 +81,16 @@ Plus `out/review-sheet.jpg`: every episode in every format, for the user to appr
    from the full-width episode (up to 1080p). Nothing to do here beyond making sure
    `youtube_id` is right. To use a local file instead, set `frame_sources` (video files or
    stills). `sources` is only for research links.
+   **In a cloud session YouTube blocks video downloads** ("Sign in to confirm you're not a
+   bot"). Use OpusClip's Premiere export instead: it carries the ORIGINAL 1920x1080 footage,
+   uncropped. For 3+ top clips per episode (pick clips where the guest talks; check the
+   `thumbnail_url`s if a guest is barely in them): `opusclip_export_clip` with
+   `target: "xml"`, poll until `ready`, `curl` the `export_url` zip to
+   `work/premiere/<id>/<clip_id>.zip`, then
+   `python pipeline.py import-premiere <id> work/premiere/<id>/*.zip`. The frames step uses
+   those videos automatically. Some shows have only one wide camera on the guest; if the
+   guest's face is under ~120px tall, pin their sharpest frontal frame with `guest_frames`
+   and tell the user the cut-out will be softer.
 
 5. **Run it:** `python pipeline.py all` (or `python pipeline.py all b4p-17` for one episode).
    This grabs frames, finds every face, works out who the hosts are (faces seen across many
@@ -172,6 +182,10 @@ Every cover shows **everyone on the episode**: the guest(s) in the front row, th
   (`"yt"`, `"post"`, `"story"`, `"square"`) instead of `"all"` to change one format only.
   Leave an entry `null` to keep that person's automatic spot.
 - **No guest**: the hosts take the front row. No people at all: a type-only layout.
+- **YouTube thumbnail**: guests only. At 1280x720 there's no room for a back row, so hosts
+  are left off (they stay on the Instagram and podcast covers). Hosts-only episodes still
+  show the hosts.
+- A host only appears on the episodes they're actually in (seen in 5+ frames).
 
 ## Changing things
 

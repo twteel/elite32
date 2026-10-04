@@ -66,6 +66,8 @@
       linear-gradient(0deg, rgba(0,0,0,.75) 0%, transparent 35%),
       radial-gradient(120% 90% at 28% 45%, transparent 40%, rgba(0,0,0,.6) 100%); }
   .yt .cast { left:0; width:52%; top:9%; bottom:0; }
+  /* no room for a back row at thumbnail size: the guest(s) fill the frame, hosts only peek out as scraps */
+  .yt:not(.hostsonly) .person.host { display:none; }
   .yt .hook  { left:54.5%; top:30%; width:calc(45.5% - var(--m)); height:40%; justify-content:center; }
   .yt .label { left:54.5%; top:calc(30% - 40px); font-size:16px; }
   .yt .lockup { right:var(--m); bottom:calc(var(--m) * .8); width:208px; }
@@ -149,6 +151,7 @@ if (D.guest) document.getElementById("labeltext").textContent = "With " + D.gues
 const guests = cast.filter(c => c.role === "guest").sort((a, b) => a.rank - b.rank);
 const hosts = cast.filter(c => c.role === "host");
 const front = guests.length ? guests : hosts, back = guests.length ? hosts : [];
+if (!guests.length) card.classList.add("hostsonly");
 const n = front.length, spread = n > 1 ? Math.min(34, 70 / n) : 0;
 // slot offsets from the centre, nearest first (left before right): n=2 -> [-.5, .5], n=3 -> [0, -1, 1]
 const offsets = [...Array(n).keys()].map(k => k - (n - 1) / 2).sort((a, b) => Math.abs(a) - Math.abs(b) || a - b);

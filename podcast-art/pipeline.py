@@ -8,6 +8,7 @@ cutout  -> crop around the guest, remove background (rembg), print treatment
 render  -> fill the HTML template and screenshot every format (Playwright)
 
 Usage:
+  python pipeline.py import-premiere b4p-bg work/premiere/b4p-bg/*.zip   # full-width OpusClip source
   python pipeline.py all            # every episode (frames come from its youtube_id)
   python pipeline.py all b4p-14     # one episode
 """
@@ -38,6 +39,7 @@ FORMATS = {"yt": (1280, 720), "post": (1080, 1350), "story": (1080, 1920), "squa
 MAX_HOSTS = 2
 SAME_PERSON = 0.40      # SFace cosine similarity; OpenCV's own threshold is 0.363
 HOST_SHARE = 0.35       # a face seen in this share of episodes is a host
+MIN_FACES_PER_EP = 5    # fewer sightings than this in an episode = a look-alike, not that person
 
 
 def load_json(p, default=None):
@@ -105,11 +107,31 @@ def youtube_frames(video_id, d):
         list(pool.map(grab, times))
 
 
+def cmd_import_premiere(ep_id, zips):
+    """OpusClip 'Adobe Premiere' exports carry the ORIGINAL full-width 16:9 footage behind a clip
+    (not the 9:16 reframe). Pull that video out as a frame source: work/<id>/source/*.mp4."""
+    import zipfile
+    d = WORK / ep_id / "source"
+    d.mkdir(parents=True, exist_ok=True)
+    for z in zips:
+        with zipfile.ZipFile(z) as zf:
+            vids = [i for i in zf.infolist() if i.filename.lower().endswith((".mp4", ".mov"))]
+            if vids:
+                big = max(vids, key=lambda i: i.file_size)
+                (d / f"{Path(z).stem}.mp4").write_bytes(zf.read(big))
+    print(f"{ep_id}: {len(list(d.glob('*.mp4')))} full-width source videos")
+
+
 def cmd_frames(ep):
     d = WORK / ep["id"] / "frames"
     d.mkdir(parents=True, exist_ok=True)
-    # frame_sources (local videos / stills) win; otherwise the YouTube episode; OpusClip clips only if imported
-    sources = ep.get("frame_sources") or ([] if ep.get("youtube_id") else load_json(WORK / ep["id"] / "sources.json", []))
+    # frame_sources (local videos / stills) win, then full-width footage from import-premiere,
+    # then the YouTube episode; OpusClip 9:16 clips never
+    local = sorted(str(p) for p in (WORK / ep["id"] / "source").glob("*.mp4"))
+    sources = ep.get("frame_sources") or local
+    if sources:
+        for old in d.glob("*.jpg"):
+            old.unlink()
     if not sources and ep.get("youtube_id"):
         for old in d.glob("s*.jpg"):  # stills left over from OpusClip clips
             old.unlink()
@@ -187,16 +209,24 @@ def cmd_pick(eps):
     groups = cluster(faces)
     n_eps = len({f["ep"] for f in faces})
     host_groups = set()
+    def present(g):
+        """Episodes this person is really in: a few stray look-alike frames don't count."""
+        per = {}
+        for i in g:
+            per[faces[i]["ep"]] = per.get(faces[i]["ep"], 0) + 1
+        return {e for e, n in per.items() if n >= MIN_FACES_PER_EP}
     for gi, g in enumerate(groups):
-        seen = {faces[i]["ep"] for i in g}
-        if n_eps >= 3 and len(seen) >= max(2, HOST_SHARE * n_eps):
+        if n_eps >= 3 and len(present(g)) >= max(2, HOST_SHARE * n_eps):
             host_groups.add(gi)
     # the hosts: recurring clusters, most-seen first; one best shot per host per episode
-    hosts = sorted(host_groups, key=lambda gi: -len({faces[i]["ep"] for i in groups[gi]}))[:MAX_HOSTS]
+    hosts = sorted(host_groups, key=lambda gi: -len(present(groups[gi])))[:MAX_HOSTS]
     for ep in eps:
         host_picks = []
         for gi in hosts:
-            mine = [faces[i] for i in groups[gi] if faces[i]["ep"] == ep["id"]] or [faces[i] for i in groups[gi]]
+            # only hosts who are actually on this episode
+            if ep["id"] not in present(groups[gi]):
+                continue
+            mine = [faces[i] for i in groups[gi] if faces[i]["ep"] == ep["id"]]
             best = max(mine, key=lambda f: f["quality"])
             host_picks.append({"frame": best["frame"], "box": best["box"], "cluster": gi})
         # manual override: guest_frames = [{"frame":..., "box":[x,y,w,h]}, ...] in order of importance
@@ -461,13 +491,15 @@ def cmd_export(eps, dest):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("step", choices=["import-opus", "frames", "faces", "pick", "cutout", "render", "sheet", "export", "all"])
+    ap.add_argument("step", choices=["import-opus", "import-premiere", "frames", "faces", "pick", "cutout", "render", "sheet", "export", "all"])
     ap.add_argument("ids", nargs="*", help="episode ids (default: all) or files for import-opus")
     ap.add_argument("--formats", default=",".join(FORMATS))
     ap.add_argument("--to", help="export folder (default: ~/Desktop/Ballin 4 Peace Covers on your own computer)")
     a = ap.parse_args()
     if a.step == "import-opus":
         return cmd_import_opus(a.ids)
+    if a.step == "import-premiere":
+        return cmd_import_premiere(a.ids[0], a.ids[1:])
     shows = load_json(ROOT / "shows.json")
     eps = episodes(a.ids)
     if a.step in ("frames", "all"):
