@@ -1,6 +1,6 @@
 """Podcast cover-art pipeline.
 
-frames  -> pull stills from each episode's video sources (ffmpeg)
+frames  -> pull stills from each episode's full YouTube video (yt-dlp + ffmpeg)
 faces   -> detect + embed every face (OpenCV YuNet / SFace)
 pick    -> cluster faces across ALL episodes; recurring faces are the hosts,
            the biggest non-host cluster in an episode is the guest
@@ -8,8 +8,7 @@ cutout  -> crop around the guest, remove background (rembg), print treatment
 render  -> fill the HTML template and screenshot every format (Playwright)
 
 Usage:
-  python pipeline.py import-opus clips1.json clips2.json ...
-  python pipeline.py all            # every episode
+  python pipeline.py all            # every episode (frames come from its youtube_id)
   python pipeline.py all b4p-14     # one episode
 """
 import argparse
@@ -82,10 +81,39 @@ def cmd_import_opus(files):
 
 
 # ---------------------------------------------------------------- frames
+YT_EVERY = 10          # seconds between stills from the full YouTube episode
+
+
+def youtube_frames(video_id, d):
+    """Stills straight from the full-width YouTube episode (not OpusClip's 9:16 reframes, which crop
+    people's arms). Seeks the stream with ffmpeg so the whole video never has to download."""
+    from concurrent.futures import ThreadPoolExecutor
+    url = f"https://www.youtube.com/watch?v={video_id}"
+    yt = [sys.executable, "-m", "yt_dlp", "-q", "--no-warnings", "-f", "bv*[height<=1080][vcodec^=avc1]/bv*[height<=1080]/b"]
+    stream = subprocess.run(yt + ["-g", url], capture_output=True, text=True, check=True).stdout.split()[0]
+    dur = float(subprocess.run(yt + ["--print", "duration", url], capture_output=True, text=True, check=True).stdout.split()[0])
+    # skip the first/last 20s (intro cards, end screen)
+    times = list(range(20, max(21, int(dur) - 20), YT_EVERY))
+
+    def grab(t):
+        out = d / f"yt_{t:05d}.jpg"
+        if not out.exists():
+            subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-ss", str(t), "-i", stream,
+                            "-frames:v", "1", "-q:v", "2", str(out)], check=False)
+
+    with ThreadPoolExecutor(8) as pool:
+        list(pool.map(grab, times))
+
+
 def cmd_frames(ep):
     d = WORK / ep["id"] / "frames"
     d.mkdir(parents=True, exist_ok=True)
-    sources = ep.get("sources") or load_json(WORK / ep["id"] / "sources.json", [])
+    # frame_sources (local videos / stills) win; otherwise the YouTube episode; OpusClip clips only if imported
+    sources = ep.get("frame_sources") or ([] if ep.get("youtube_id") else load_json(WORK / ep["id"] / "sources.json", []))
+    if not sources and ep.get("youtube_id"):
+        for old in d.glob("s*.jpg"):  # stills left over from OpusClip clips
+            old.unlink()
+        youtube_frames(ep["youtube_id"], d)
     for i, s in enumerate(sources):
         src = s if isinstance(s, str) else s["url"]
         if Path(src).suffix.lower() in (".jpg", ".jpeg", ".png"):

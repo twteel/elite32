@@ -1,7 +1,7 @@
 # Podcast cover art
 
 Automatic cover art for Ballin' 4 Peace (and any other show added to `shows.json`).
-For every episode it finds the guest's face in the episode video, cuts them out,
+For every episode it finds the guest's face in the full YouTube video, cuts them out,
 gives the photo a halftone print treatment and renders three sizes:
 YouTube 1280x720, square 1080x1080 and vertical 1080x1920.
 
@@ -25,12 +25,13 @@ To force a frame, set `guest_frame` (and optionally `guest_box`) on the episode.
 
 ## Run
     pip install -r requirements.txt
-    python pipeline.py import-opus clips/*.json   # OpusClip list_clips dumps -> frame sources
-    python pipeline.py all                        # every episode -> out/
+    python pipeline.py all                        # every episode -> out/ (stills from its YouTube video)
     python pipeline.py all b4p-14                 # one episode
     python pipeline.py render                     # re-render after editing hooks/names
 
-An episode can also list its own `sources` (local video files, URLs or stills).
+Stills come from the full-width YouTube episode (`youtube_id`), one every 10s. Not from
+OpusClip: its clips are reframed to 9:16 and crop people's arms off. An episode can instead
+list `frame_sources` (local video files or stills). `sources` is for research links only.
 
 ## Files
 - `episodes.json` - one row per episode: number, guest name, hook (2-5 words), YouTube id.

@@ -1,6 +1,6 @@
 ---
 name: podcast-covers
-description: The Ballin' 4 Peace podcast agent. Optimizes each episode's YouTube title + description and Instagram caption in the user's house style, makes cover art, and saves ready-to-post folders for Ballin' 4 Peace podcast episodes (and any other show in podcast-art/shows.json). Pulls each episode from OpusClip, finds the hosts and the guest in the video, cuts them out, and renders the approved "Court Light" design as a YouTube thumbnail, Instagram post, Instagram Reels/Stories cover and square podcast cover. Use when the user says "make covers", "new episode", "do the art for ep X", "redo the thumbnails", or "/podcast-covers".
+description: The Ballin' 4 Peace podcast agent. Optimizes each episode's YouTube title + description and Instagram caption in the user's house style, makes cover art, and saves ready-to-post folders for Ballin' 4 Peace podcast episodes (and any other show in podcast-art/shows.json). Pulls stills from each episode's full YouTube video, finds the hosts and the guest, cuts them out, and renders the approved "Court Light" design as a YouTube thumbnail, Instagram post, Instagram Reels/Stories cover and square podcast cover. Use when the user says "make covers", "new episode", "do the art for ep X", "redo the thumbnails", or "/podcast-covers".
 ---
 
 # Podcast covers agent
@@ -24,11 +24,12 @@ Plus `out/review-sheet.jpg`: every episode in every format, for the user to appr
 1. **Setup** (once per session):
    `cd podcast-art && pip install -r requirements.txt`
    On the user's Mac also make sure of: `ffmpeg` (`brew install ffmpeg` if missing) and a
-   browser for rendering (`python -m playwright install chromium`, once). The OpusClip
-   connector must be on in this chat. For YouTube, use Claude in Chrome if it's available.
-   The network must allow `signed-ext.cdn.opus.pro` (OpusClip video). If frames fail to
-   download with a 403, tell the user to add it under the environment's Network access →
-   Allowed domains, and stop.
+   browser for rendering (`python -m playwright install chromium`, once). For YouTube, use
+   Claude in Chrome if it's available. Frames come from the YouTube video itself (yt-dlp), so
+   the network must allow `www.youtube.com` and `*.googlevideo.com`. If frames fail to
+   download, tell the user to add them under the environment's Network access → Allowed
+   domains (or run the agent on their Mac), and stop. The OpusClip connector is optional:
+   only for clip titles and transcripts.
 
 2. **Start from YouTube - it is the source of truth.** The user keeps titles, descriptions and the
    "Ballin' 4 Peace Podcast" playlist up to date there: episode order/numbers, guest real names
@@ -74,11 +75,12 @@ Plus `out/review-sheet.jpg`: every episode in every format, for the user to appr
      Podcast" with Slim. Wavy World episodes ("Wavy World", "One Take Cult", host Wavey
      Walker) belong to a different show; don't mix them in.
 
-4. **Get frames.** For each episode, call `opusclip_list_clips` and save the JSON result
-   to `podcast-art/work/opus/<project_id>.json` (the tool output is large; if it lands in a
-   tool-results file, copy that file). Then:
-   `python pipeline.py import-opus work/opus/*.json`
-   Clip URLs expire after about a day, so fetch and run in the same session.
+4. **Get frames from the YouTube video, never from OpusClip clips.** OpusClip reframes its
+   clips to vertical 9:16, which crops people's arms and shoulders off; the cutouts come out
+   chopped. The `frames` step reads each episode's `youtube_id` and pulls a still every 10s
+   from the full-width episode (up to 1080p). Nothing to do here beyond making sure
+   `youtube_id` is right. To use a local file instead, set `frame_sources` (video files or
+   stills). `sources` is only for research links.
 
 5. **Run it:** `python pipeline.py all` (or `python pipeline.py all b4p-17` for one episode).
    This grabs frames, finds every face, works out who the hosts are (faces seen across many
@@ -90,7 +92,8 @@ Plus `out/review-sheet.jpg`: every episode in every format, for the user to appr
    - wrong person as guest (a host, or a crowd face) → set `guest_frame` (path to a frame in
      `work/<id>/frames/`) and optionally `guest_box` [x, y, w, h] on that episode and rerun
      `python pipeline.py pick <id>` then `cutout` and `render`
-   - a cut-out with missing hair/shoulders or a leftover background chunk → pick another frame
+   - a cut-out with missing hair/shoulders/arms or a leftover background chunk → pick another
+     frame (one where the person isn't touching the edge of the shot)
    - title text that reads awkwardly → shorten the hook
    If there are fewer than 3 episodes processed, host detection can't work; put host
    cut-outs (transparent PNGs) in `brand/b4p/hosts/` instead.
