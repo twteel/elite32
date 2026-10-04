@@ -181,9 +181,49 @@
   "guest": "Coach Nav",
   "hook": "Building Character",
   "youtube_id": "gQoWCgyy2O8",
-  "opus_project": "P31004218bje",
   "recorded": "2026-06-06",
-  "youtube_title_now": "Coach Nav & ACES Basketball: Building Character On & Off the Court | Wavy World Ep. 30"
+  "youtube_title_now": "Coach Nav & ACES Basketball: Building Character On & Off the Court | Wavy World Ep. 30",
+  "frame_sources": [
+   "work/ww-30-aces/stills/maxresdefault.jpg",
+   "work/ww-30-aces/stills/maxres1.jpg",
+   "work/ww-30-aces/stills/maxres2.jpg",
+   "work/ww-30-aces/stills/maxres3.jpg"
+  ],
+  "n_guests": 2,
+  "label": "With Coach Nav & ACES Basketball",
+  "guest_frames": [
+   {
+    "frame": "work/ww-30-aces/frames/s01_0001.jpg",
+    "box": [
+     191,
+     218,
+     84,
+     106
+    ]
+   },
+   {
+    "frame": "work/ww-30-aces/frames/s01_0001.jpg",
+    "box": [
+     1013,
+     257,
+     81,
+     100
+    ]
+   }
+  ],
+  "youtube": {
+   "title": "Coach Nav & ACES Basketball: Building Character On & Off the Court | Wavy World Ep. 30",
+   "description": "(Keep the current YouTube description. Only the thumbnail changes.)"
+  },
+  "instagram": {
+   "caption": "Building character. ♠️\nCoach Nav and ACES Basketball on winning on and off the court. Wavy World Ep. 30.\nFollow @wavyworldpod for more. Full episode on YouTube (link in bio).\n#WavyWorld #StrongIsland #LongIsland #NYCHoops #Ballin4Peace #Elite32",
+   "tags": [
+    "@wavyworldpod",
+    "@ballin4peace",
+    "@nycelite32"
+   ]
+  },
+  "confirm": "Built from YouTube's free 720p stills."
  },
  {
   "id": "ww-29-all-ball-tv",
@@ -192,9 +232,29 @@
   "guest": "All Ball TV",
   "hook": "Knicks Trade Rumors",
   "youtube_id": "7VmIcyrnkCg",
-  "opus_project": "P31004218Thz",
   "recorded": "2026-06-06",
-  "youtube_title_now": "All Ball TV: Knicks Trade Rumors, Core Players & Coaching | Wavy World Ep. 29"
+  "youtube_title_now": "All Ball TV: Knicks Trade Rumors, Core Players & Coaching | Wavy World Ep. 29",
+  "frame_sources": [
+   "work/ww-29-all-ball-tv/stills/maxresdefault.jpg",
+   "work/ww-29-all-ball-tv/stills/maxres1.jpg",
+   "work/ww-29-all-ball-tv/stills/maxres2.jpg",
+   "work/ww-29-all-ball-tv/stills/maxres3.jpg"
+  ],
+  "n_guests": 2,
+  "label": "With All Ball TV",
+  "youtube": {
+   "title": "All Ball TV: Knicks Trade Rumors, Core Players & Coaching | Wavy World Ep. 29",
+   "description": "(Keep the current YouTube description. Only the thumbnail changes.)"
+  },
+  "instagram": {
+   "caption": "Knicks trade rumors. 🔵🟠\nAll Ball TV on the core, the coaching and what's next. Wavy World Ep. 29.\nFollow @wavyworldpod for more. Full episode on YouTube (link in bio).\n#WavyWorld #StrongIsland #LongIsland #NYCHoops #Ballin4Peace #Elite32",
+   "tags": [
+    "@wavyworldpod",
+    "@ballin4peace",
+    "@nycelite32"
+   ]
+  },
+  "confirm": "Built from YouTube's free 720p stills."
  },
  {
   "id": "ww-28-all-stars",
@@ -202,9 +262,33 @@
   "ep": 28,
   "hook": "The All-Stars Unveiled",
   "youtube_id": "1av45_jw-yQ",
-  "opus_project": "P31004218Ld3",
   "recorded": "2026-06-03",
-  "youtube_title_now": "Ballin' 4 Peace × Elite 32: The All-Stars Unveiled | Wavy World Ep. 28"
+  "youtube_title_now": "Ballin' 4 Peace × Elite 32: The All-Stars Unveiled | Wavy World Ep. 28",
+  "frame_sources": [
+   "work/ww-28-all-stars/stills/maxresdefault.jpg",
+   "work/ww-28-all-stars/stills/maxres1.jpg",
+   "work/ww-28-all-stars/stills/maxres2.jpg",
+   "work/ww-28-all-stars/stills/maxres3.jpg"
+  ],
+  "guest_frames": [
+   {
+    "frame": "work/ww-28-all-stars/frames/s01_0001.jpg"
+   }
+  ],
+  "label": "Ballin' 4 Peace x Elite 32",
+  "youtube": {
+   "title": "Ballin' 4 Peace × Elite 32: The All-Stars Unveiled | Wavy World Ep. 28",
+   "description": "(Keep the current YouTube description. Only the thumbnail changes.)"
+  },
+  "instagram": {
+   "caption": "The All-Stars, unveiled. ⭐\nBallin' 4 Peace x Elite 32 reveal the roster. Wavy World Ep. 28.\nFollow @wavyworldpod for more. Full episode on YouTube (link in bio).\n#WavyWorld #StrongIsland #LongIsland #NYCHoops #Ballin4Peace #Elite32",
+   "tags": [
+    "@wavyworldpod",
+    "@ballin4peace",
+    "@nycelite32"
+   ]
+  },
+  "confirm": "Built from YouTube's free 720p stills."
  },
  {
   "id": "ww-25-nyc-prospects",
@@ -212,9 +296,29 @@
   "ep": 25,
   "hook": "What Prospects Need",
   "youtube_id": "srFk8s3ejDc",
-  "opus_project": "P31004218EQC",
   "recorded": "2026-05-22",
-  "youtube_title_now": "NYC Prospects: What Young Athletes Really Need to Succeed | Wavy World Ep. 25"
+  "youtube_title_now": "NYC Prospects: What Young Athletes Really Need to Succeed | Wavy World Ep. 25",
+  "frame_sources": [
+   "work/ww-25-nyc-prospects/stills/maxresdefault.jpg",
+   "work/ww-25-nyc-prospects/stills/maxres1.jpg",
+   "work/ww-25-nyc-prospects/stills/maxres2.jpg",
+   "work/ww-25-nyc-prospects/stills/maxres3.jpg"
+  ],
+  "n_guests": 2,
+  "hide_label": true,
+  "youtube": {
+   "title": "NYC Prospects: What Young Athletes Really Need to Succeed | Wavy World Ep. 25",
+   "description": "(Keep the current YouTube description. Only the thumbnail changes.)"
+  },
+  "instagram": {
+   "caption": "What prospects really need. 🏀\nNYC's next wave on what it takes to make it. Wavy World Ep. 25.\nFollow @wavyworldpod for more. Full episode on YouTube (link in bio).\n#WavyWorld #StrongIsland #LongIsland #NYCHoops #Ballin4Peace #Elite32",
+   "tags": [
+    "@wavyworldpod",
+    "@ballin4peace",
+    "@nycelite32"
+   ]
+  },
+  "confirm": "Built from YouTube's free 720p stills."
  },
  {
   "id": "ww-24-queens",
@@ -226,9 +330,27 @@
   ],
   "hook": "The Heart of Queens",
   "youtube_id": "hWFKXBGt_5E",
-  "opus_project": "P3100421861N",
   "recorded": "2026-05-01",
-  "youtube_title_now": "Joseph Silvetti & Luka Cavallacci: The Heart of Queens Basketball | Wavy World Ep. 24"
+  "youtube_title_now": "Joseph Silvetti & Luka Cavallacci: The Heart of Queens Basketball | Wavy World Ep. 24",
+  "frame_sources": [
+   "work/ww-24-queens/stills/maxresdefault.jpg",
+   "work/ww-24-queens/stills/maxres1.jpg",
+   "work/ww-24-queens/stills/maxres2.jpg",
+   "work/ww-24-queens/stills/maxres3.jpg"
+  ],
+  "youtube": {
+   "title": "Joseph Silvetti & Luka Cavallacci: The Heart of Queens Basketball | Wavy World Ep. 24",
+   "description": "(Keep the current YouTube description. Only the thumbnail changes.)"
+  },
+  "instagram": {
+   "caption": "The heart of Queens. 👑\nJoseph Silvetti and Luka Cavallacci on Queens basketball. Wavy World Ep. 24.\nFollow @wavyworldpod for more. Full episode on YouTube (link in bio).\n#WavyWorld #StrongIsland #LongIsland #NYCHoops #Ballin4Peace #Elite32",
+   "tags": [
+    "@wavyworldpod",
+    "@ballin4peace",
+    "@nycelite32"
+   ]
+  },
+  "confirm": "Built from YouTube's free 720p stills."
  },
  {
   "id": "ww-23-andre-edwards",
@@ -237,9 +359,49 @@
   "guest": "Coach Andre Edwards",
   "hook": "The Power of Prep",
   "youtube_id": "VVYjKcBs8Lc",
-  "opus_project": "P31004217vww",
   "recorded": "2026-04-04",
-  "youtube_title_now": "Coach Andre Edwards: The Power of Prep | Wavy World Ep. 23"
+  "youtube_title_now": "Coach Andre Edwards: The Power of Prep | Wavy World Ep. 23",
+  "frame_sources": [
+   "work/ww-23-andre-edwards/stills/maxresdefault.jpg",
+   "work/ww-23-andre-edwards/stills/maxres1.jpg",
+   "work/ww-23-andre-edwards/stills/maxres2.jpg",
+   "work/ww-23-andre-edwards/stills/maxres3.jpg"
+  ],
+  "n_guests": 2,
+  "label": "With Coach Andre Edwards",
+  "guest_frames": [
+   {
+    "frame": "work/ww-23-andre-edwards/frames/s02_0001.jpg",
+    "box": [
+     191,
+     264,
+     71,
+     87
+    ]
+   },
+   {
+    "frame": "work/ww-23-andre-edwards/frames/s02_0001.jpg",
+    "box": [
+     967,
+     240,
+     77,
+     89
+    ]
+   }
+  ],
+  "youtube": {
+   "title": "Coach Andre Edwards: The Power of Prep | Wavy World Ep. 23",
+   "description": "(Keep the current YouTube description. Only the thumbnail changes.)"
+  },
+  "instagram": {
+   "caption": "The power of prep. 📚🏀\nCoach Andre Edwards on getting players ready for the next level. Wavy World Ep. 23.\nFollow @wavyworldpod for more. Full episode on YouTube (link in bio).\n#WavyWorld #StrongIsland #LongIsland #NYCHoops #Ballin4Peace #Elite32",
+   "tags": [
+    "@wavyworldpod",
+    "@ballin4peace",
+    "@nycelite32"
+   ]
+  },
+  "confirm": "Built from YouTube's free 720p stills."
  },
  {
   "id": "b4p-show",
