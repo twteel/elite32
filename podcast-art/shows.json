@@ -2,15 +2,27 @@
   "b4p": {
     "name": "Ballin' 4 Peace",
     "wordmark": "BALLIN' 4 PEACE",
-    "wordmark_lines": ["BALLIN'", "4 PEACE"],
+    "wordmark_lines": [
+      "BALLIN'",
+      "4 PEACE"
+    ],
     "tagline": "THE PODCAST",
     "colors": {
-      "base": "#1E0E5C",
+      "base": "#0B0B0C",
       "paper": "#FFFFFF",
-      "ink": "#140A3D",
+      "ink": "#0B0B0C",
       "accent": "#EC3767"
     },
     "mark": "brand/b4p/mark.svg",
-    "brand_source": "ballin4peace.org via Brandfetch: accent #EC3767, dark #1E0E5C, light #FFFFFF; display font Druk Wide Bold"
+    "brand_source": "ballin4peace.org via Brandfetch: accent #EC3767, dark #1E0E5C, light #FFFFFF; display font Druk Wide Bold",
+    "treatment": "bw",
+    "assets": {
+      "background": "brand/b4p/tv-background.png",
+      "lockup": "brand/b4p/podcast-lockup.png"
+    },
+    "hosts": [
+      "Slim the Announcer",
+      "H20"
+    ]
   }
 }

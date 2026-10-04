@@ -230,6 +230,18 @@ def hex_rgb(h):
     return tuple(int(h[i:i + 2], 16) for i in (1, 3, 5))
 
 
+def treat_bw(cut):
+    """Cut-out -> clean, contrasty black and white with a gentle S-curve. No border."""
+    # pull the matte in 1px and soften it: kills the light halo from the old background
+    alpha = cut.split()[-1].filter(ImageFilter.MinFilter(3)).filter(ImageFilter.GaussianBlur(0.8))
+    g = ImageOps.grayscale(cut.convert("RGB"))
+    g = ImageOps.autocontrast(g, cutoff=(1, 0.5))
+    lut = [int(255 * (0.5 - 0.5 * np.cos(np.pi * (v / 255) ** 0.92))) for v in range(256)]
+    g = g.point(lut).filter(ImageFilter.UnsharpMask(radius=2, percent=60, threshold=2))
+    out = Image.merge("RGBA", (g, g, g, alpha))
+    return out
+
+
 def treat(cut, colors):
     """Cut-out -> duotone + halftone + white sticker border + hard drop shadow."""
     alpha = cut.split()[-1]
@@ -270,7 +282,9 @@ def cmd_cutout(ep, shows):
     cut = keep_subject(remove_bg(crop), (x + w / 2 - l) * s, (y + h / 2 - t) * s)
     cut = cut.crop(cut.getbbox())
     cut.save(WORK / ep["id"] / "guest_cut.png")
-    treat(cut, shows[ep["show"]]["colors"]).save(WORK / ep["id"] / "guest.png")
+    show = shows[ep["show"]]
+    art = treat_bw(cut) if show.get("treatment") == "bw" else treat(cut, show["colors"])
+    art.save(WORK / ep["id"] / "guest.png")
     print(f"{ep['id']}: cut-out done")
 
 
@@ -286,7 +300,8 @@ def cmd_render(eps, shows, formats):
             guest = WORK / ep["id"] / "guest.png"
             mark = ROOT / show["mark"] if show.get("mark") else None
             mark_path = re.search(r' d="([^"]+)"', mark.read_text()).group(1) if mark and mark.exists() else ""
-            data = {"show": show, "markPath": mark_path, "ep": ep.get("ep"), "guest": ep.get("guest"), "hook": ep["hook"],
+            assets = {k: (ROOT / v).resolve().as_uri() for k, v in show.get("assets", {}).items()}
+            data = {"show": show, "assets": assets, "markPath": mark_path, "ep": ep.get("ep"), "guest": ep.get("guest"), "hook": ep["hook"],
                     "img": guest.resolve().as_uri() if guest.exists() and load_json(WORK / ep["id"] / "pick.json", {}).get("frame") else None}
             html = WORK / ep["id"] / "cover.html"
             html.parent.mkdir(parents=True, exist_ok=True)
