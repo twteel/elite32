@@ -7,7 +7,8 @@ One-time setup (Google Cloud Console, project of your choice):
   4. Put the client ID and secret in the environment as YT_CLIENT_ID and YT_CLIENT_SECRET.
 
 Then:
-  python youtube_publish.py login      # shows a code: enter it at google.com/device as the channel owner
+  python youtube_publish.py login-web  # on your computer: browser sign-in, pick the brand channel (recommended)
+  python youtube_publish.py login      # code sign-in at google.com/device (personal channels only)
   python youtube_publish.py plan       # what will change (reads current titles from YouTube)
   python youtube_publish.py apply      # update title, description, tags and thumbnail, then verify
 
@@ -83,18 +84,65 @@ def login():
     sys.exit("The code expired. Run login again.")
 
 
+def login_web():
+    """Browser sign-in on YOUR computer: Google shows 'Choose an account or brand account', so you can
+    pick the Ballin' 4 Peace channel. Saves the sign-in to work/.youtube-token.json and prints the
+    line to add to the cloud environment (as the YT_REFRESH_TOKEN variable) - never paste it in chat."""
+    import http.server
+    import webbrowser
+    cid, sec = client()
+    port = 8765
+    redirect = f"http://localhost:{port}/"
+    url = "https://accounts.google.com/o/oauth2/v2/auth?" + urllib.parse.urlencode({
+        "client_id": cid, "redirect_uri": redirect, "response_type": "code", "scope": SCOPE,
+        "access_type": "offline", "prompt": "consent select_account"})
+    got = {}
+
+    class H(http.server.BaseHTTPRequestHandler):
+        def do_GET(self):
+            q = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
+            got.update({k: v[0] for k, v in q.items()})
+            self.send_response(200)
+            self.end_headers()
+            self.wfile.write(b"Signed in. You can close this tab and go back to the terminal.")
+
+        def log_message(self, *a):
+            pass
+
+    srv = http.server.HTTPServer(("localhost", port), H)
+    print("Opening your browser. Pick the Ballin' 4 Peace channel (brand account) when Google asks.")
+    print(f"If it doesn't open, visit:\n{url}")
+    webbrowser.open(url)
+    while "code" not in got and "error" not in got:
+        srv.handle_request()
+    if "error" in got:
+        sys.exit(f"Sign-in cancelled: {got['error']}")
+    t = post_form("https://oauth2.googleapis.com/token", {
+        "client_id": cid, "client_secret": sec, "code": got["code"], "grant_type": "authorization_code",
+        "redirect_uri": redirect})
+    if "refresh_token" not in t:
+        sys.exit(f"Sign-in failed: {t}")
+    TOKEN.parent.mkdir(parents=True, exist_ok=True)
+    TOKEN.write_text(json.dumps({"refresh_token": t["refresh_token"]}))
+    TOKEN.chmod(0o600)
+    ch = api("GET", "channels", {"part": "snippet", "mine": "true"})
+    print(f"Signed in. Channel: {', '.join(c['snippet']['title'] for c in ch.get('items', [])) or '(none - pick the brand account)'}")
+    print("To let a cloud Claude session publish, add this environment variable in its settings (not in chat):")
+    print(f"YT_REFRESH_TOKEN={t['refresh_token']}")
+
+
 _access = {}
 
 
 def access_token():
     if _access.get("exp", 0) > time.time() + 60:
         return _access["tok"]
-    if not TOKEN.exists():
-        sys.exit("Not signed in. Run: python youtube_publish.py login")
+    refresh = os.environ.get("YT_REFRESH_TOKEN") or (json.loads(TOKEN.read_text())["refresh_token"] if TOKEN.exists() else None)
+    if not refresh:
+        sys.exit("Not signed in. Run: python youtube_publish.py login-web (on your computer) or login")
     cid, sec = client()
     t = post_form("https://oauth2.googleapis.com/token", {
-        "client_id": cid, "client_secret": sec, "grant_type": "refresh_token",
-        "refresh_token": json.loads(TOKEN.read_text())["refresh_token"]})
+        "client_id": cid, "client_secret": sec, "grant_type": "refresh_token", "refresh_token": refresh})
     if "access_token" not in t:
         sys.exit(f"Could not refresh the sign-in ({t.get('error')}). Run login again.")
     _access.update(tok=t["access_token"], exp=time.time() + t.get("expires_in", 3600))
@@ -175,6 +223,8 @@ if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "plan"
     if cmd == "login":
         login()
+    elif cmd == "login-web":
+        login_web()
     elif cmd == "plan":
         plan()
     elif cmd == "apply":
