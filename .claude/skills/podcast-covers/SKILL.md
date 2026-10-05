@@ -156,6 +156,18 @@ Reels cover + Stories 9:16). Write the caption too:
   (instagram.com / Meta Business Suite) or by scheduling clips through OpusClip
   (`opusclip_schedule_publish`). Default is to hand them the files.
 
+## Publish to YouTube (from a cloud session, no browser)
+
+`podcast-art/youtube_publish.py` applies `publish/youtube-updates.json` through the YouTube Data API.
+Client file: `podcast-art/work/.youtube-client.json` (git-ignored; the user's Google Cloud OAuth
+client, project roster-setup-477501). Sign-in: `python youtube_publish.py login` gives a code for
+google.com/device. Tell the user to open it in a PRIVATE/INCOGNITO window, sign in as
+info@ballin4peace.org and pick the Ballin' 4 Peace channel; otherwise Google silently uses their
+personal Gmail (no channel -> 403). `whoami` must say `-> CAN EDIT` (the brand account shows up as
+ballin4peace-…@pages.plusgoogle.com; that's correct). Then `plan`, test one video with
+`apply <video_id>`, then `apply`. YouTube re-orders tags alphabetically; a read right after a write
+can lag, so re-check before calling something failed.
+
 ## Save it for the user
 
 Folders are grouped by show (`Ballin 4 Peace Covers/<Show>/<episode>/`), and every export

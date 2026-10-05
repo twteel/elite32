@@ -238,7 +238,7 @@ def apply(only=None):
         t = api("POST", "thumbnails/set", {"videoId": vid}, upload=thumb.read_bytes(), ctype="image/jpeg")
         check = snippet(vid)["snippet"]
         problems = []
-        if check["title"] != body["snippet"]["title"] or check.get("tags", []) != body["snippet"]["tags"]:
+        if check["title"] != body["snippet"]["title"] or sorted(t.lower() for t in check.get("tags", [])) != sorted(t.lower() for t in body["snippet"]["tags"]):
             problems.append("title/tags did not stick")
         if "_error" in t:
             problems.append(f"thumbnail: {t['_error']}")
