@@ -131,8 +131,11 @@ Plus `out/review-sheet.jpg`: every episode in every format, for the user to appr
   line 1, starting `0:00 Intro`, at least 3 entries, each 10s+ apart, labelled by topic. The
   OpusClip transcript (opusclip_get_transcript, read-only) works if the project's length matches the
   live video; YouTube captions can't be read with this sign-in.
+- **Links block** (just above the hashtags): "Watch every <Show> episode: <playlist URL>",
+  "Subscribe: https://www.youtube.com/@ballin4peacetv?sub_confirmation=1",
+  "Ballin' 4 Peace: https://ballin4peace.org".
 - **Tags:** guest names, programs/schools, topics, then the show's standard tags.
-- **Playlist:** every public episode in "Ballin' 4 Peace Podcast" or "Wavy World".
+- **Playlist:** every public episode in "Ballin' 4 Peace Podcast" or "Wavy World", once, newest first.
 - Thumbnail, title, description and Instagram caption always carry the same hook.
 
 ## YouTube titles + descriptions (same run, if needed)
