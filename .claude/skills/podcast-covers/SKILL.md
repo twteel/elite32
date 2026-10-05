@@ -127,7 +127,10 @@ Plus `out/review-sheet.jpg`: every episode in every format, for the user to appr
 - **Description:** line 1 = the hook + who the guest is and why they matter (names, schools,
   programs). Then guests with handles, hosts, follow line, and the same 3 show hashtags first
   (#Ballin4Peace #Basketball #NYCHoops / #WavyWorld #StrongIsland #LongIsland) - YouTube shows the
-  first three above the title. Add chapters when a transcript is available.
+  first three above the title. Add chapters when a transcript is available: a block right after
+  line 1, starting `0:00 Intro`, at least 3 entries, each 10s+ apart, labelled by topic. The
+  OpusClip transcript (opusclip_get_transcript, read-only) works if the project's length matches the
+  live video; YouTube captions can't be read with this sign-in.
 - **Tags:** guest names, programs/schools, topics, then the show's standard tags.
 - **Playlist:** every public episode in "Ballin' 4 Peace Podcast" or "Wavy World".
 - Thumbnail, title, description and Instagram caption always carry the same hook.
