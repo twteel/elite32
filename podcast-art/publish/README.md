@@ -3,7 +3,7 @@
 `youtube-updates.json` lists every video to update. For each one:
 1. Open `studio_url` (YouTube Studio, logged in as Ballin4Peace).
 2. Thumbnail: upload `thumbnail` (1280x720, under 2 MB).
-3. Title: if `new_title` is set, replace the title with it. If it's null, leave the title alone.
+3. Title: replace it with `new_title`.
 4. Description: replace it with `new_description`.
 5. Tags: Show more -> Tags, clear the old tags and paste `tags` (comma separated).
 6. Don't touch visibility, playlists or anything else.

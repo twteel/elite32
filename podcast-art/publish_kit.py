@@ -26,7 +26,7 @@ for i in ids:
     rows.append({"video_id": vid, "show": S[e["show"]]["name"], "episode": i,
                  "studio_url": f"https://studio.youtube.com/video/{vid}/edit",
                  "thumbnail": f"podcast-art/publish/youtube/{vid}.jpg",
-                 "current_title": prev.get("current_title"), "new_title": prev.get("new_title"), "why": prev.get("why", ""),
+                 "current_title": prev.get("current_title"), "new_title": yt.get("title"), "why": "Title matches the thumbnail hook",
                  "new_description": yt.get("description"), "tags": yt.get("tags", [])})
     g = e.get("guests") or e.get("guest") or ""
     names = "The Pinnocks" if i == "ww-26-pinnock" else (" & ".join(g) if isinstance(g, list) else g)
