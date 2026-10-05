@@ -28,7 +28,7 @@ ROOT = Path(__file__).resolve().parent
 REPO = ROOT.parent
 TOKEN = ROOT / "work" / ".youtube-token.json"
 UPDATES = ROOT / "publish" / "youtube-updates.json"
-SCOPE = "https://www.googleapis.com/auth/youtube"
+SCOPE = "openid email https://www.googleapis.com/auth/youtube"  # email: so we can show WHICH account signed in
 API = "https://www.googleapis.com/youtube/v3"
 
 
@@ -44,6 +44,31 @@ def client():
     if not cid or not sec:
         sys.exit("Set YT_CLIENT_ID and YT_CLIENT_SECRET in the environment first (see the top of this file).")
     return cid, sec
+
+
+def jwt_email(id_token):
+    """Read the signed-in email from Google's id_token (display only)."""
+    import base64
+    try:
+        part = id_token.split(".")[1]
+        return json.loads(base64.urlsafe_b64decode(part + "=" * (-len(part) % 4))).get("email")
+    except Exception:
+        return None
+
+
+def whoami():
+    """Which Google account and which YouTube channel(s) this sign-in can edit."""
+    email = json.loads(TOKEN.read_text()).get("email") if TOKEN.exists() else None
+    ch = api("GET", "channels", {"part": "snippet", "mine": "true"})
+    chans = [f"{c['snippet']['title']} ({c['id']})" for c in ch.get("items", [])]
+    print(f"Google account: {email or '(unknown - sign in again)'}")
+    print(f"YouTube channel: {', '.join(chans) or 'NONE - this account has no channel, or the brand channel was not picked'}")
+    v = snippet("OWo3uLkOLjQ")
+    if v:
+        owner = v["snippet"]["channelId"]
+        ok = any(owner in c for c in chans)
+        print(f"Ballin' 4 Peace channel: {v['snippet']['channelTitle']} ({owner}) -> {'CAN EDIT' if ok else 'cannot edit with this sign-in'}")
+    return bool(chans)
 
 
 def post_form(url, data):
@@ -71,11 +96,11 @@ def login():
             "grant_type": "urn:ietf:params:oauth:grant-type:device_code"})
         if "refresh_token" in t:
             TOKEN.parent.mkdir(parents=True, exist_ok=True)
-            TOKEN.write_text(json.dumps({"refresh_token": t["refresh_token"]}))
+            TOKEN.write_text(json.dumps({"refresh_token": t["refresh_token"], "email": jwt_email(t.get("id_token", ""))}))
             TOKEN.chmod(0o600)
-            ch = api("GET", "channels", {"part": "snippet", "mine": "true"})
-            names = [c["snippet"]["title"] for c in ch.get("items", [])]
-            print(f"Signed in. Channel: {', '.join(names) or '(none found on this account)'}")
+            _access.clear()
+            print("Signed in.")
+            whoami()
             return
         if t.get("error") == "slow_down":
             wait += 5
@@ -123,10 +148,11 @@ def login_web():
     if "refresh_token" not in t:
         sys.exit(f"Sign-in failed: {t}")
     TOKEN.parent.mkdir(parents=True, exist_ok=True)
-    TOKEN.write_text(json.dumps({"refresh_token": t["refresh_token"]}))
+    TOKEN.write_text(json.dumps({"refresh_token": t["refresh_token"], "email": jwt_email(t.get("id_token", ""))}))
     TOKEN.chmod(0o600)
-    ch = api("GET", "channels", {"part": "snippet", "mine": "true"})
-    print(f"Signed in. Channel: {', '.join(c['snippet']['title'] for c in ch.get('items', [])) or '(none - pick the brand account)'}")
+    _access.clear()
+    print("Signed in.")
+    whoami()
     print("To let a cloud Claude session publish, add this environment variable in its settings (not in chat):")
     print(f"YT_REFRESH_TOKEN={t['refresh_token']}")
 
@@ -173,6 +199,8 @@ def snippet(video_id):
 
 
 def plan():
+    whoami()
+    print()
     rows = json.loads(UPDATES.read_text())
     for r in rows:
         v = snippet(r["video_id"])
@@ -183,6 +211,8 @@ def plan():
 
 
 def apply(only=None):
+    if not whoami():
+        sys.exit("Stopping: this sign-in can't edit any channel. Sign in again as the channel owner.")
     rows = json.loads(UPDATES.read_text())
     if only:
         rows = [r for r in rows if r["video_id"] in only or r["episode"] in only]
@@ -225,6 +255,8 @@ if __name__ == "__main__":
         login()
     elif cmd == "login-web":
         login_web()
+    elif cmd == "whoami":
+        whoami()
     elif cmd == "plan":
         plan()
     elif cmd == "apply":
