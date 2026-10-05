@@ -231,12 +231,19 @@ def apply(only=None):
             "categoryId": sn["categoryId"],
             **({"defaultLanguage": sn["defaultLanguage"]} if sn.get("defaultLanguage") else {})}}
         u = api("PUT", "videos", {"part": "snippet"}, body)
+        if "quota" in u.get("_error", ""):
+            failed += [(x["video_id"], "daily quota used up - run apply again after midnight Pacific") for x in rows[rows.index(r):]]
+            break
         if "_error" in u:
             failed.append((vid, f"text: {u['_error']}"))
             continue
         thumb = REPO / r["thumbnail"]
         t = api("POST", "thumbnails/set", {"videoId": vid}, upload=thumb.read_bytes(), ctype="image/jpeg")
-        check = snippet(vid)["snippet"]
+        check = snippet(vid)
+        if not check:
+            failed.append((vid, "could not re-read the video (daily quota used up?) - run apply again tomorrow"))
+            continue
+        check = check["snippet"]
         problems = []
         if check["title"] != body["snippet"]["title"] or {t.lower() for t in check.get("tags", [])} != {t.lower() for t in body["snippet"]["tags"]}:
             problems.append("title/tags did not stick")

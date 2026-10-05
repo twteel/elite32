@@ -199,7 +199,7 @@ def cmd_faces(ep):
                 continue
             emb = rec.feature(rec.alignCrop(img, f)).flatten()
             found.append({"frame": str(fp.relative_to(ROOT)), "box": [float(v) for v in f[:4]],
-                          "quality": face_quality(img, f),
+                          "quality": float(face_quality(img, f)),
                           "emb": (emb / np.linalg.norm(emb)).round(5).tolist()})
     save_json(WORK / ep["id"] / "faces.json", found)
     print(f"{ep['id']}: {len(found)} faces")
@@ -270,7 +270,7 @@ def pick_show(eps, show_eps):
                 cands.append((len(mine), gi, max(mine, key=lambda f: f["quality"])))
         cands.sort(key=lambda c: -c[0])
         # rank guests by screen time (frames seen); the user's order in episodes.json can override
-        chosen = [c for c in cands if c[0] >= 2][:n_guests]
+        chosen = [] if ep.get("no_guest_photo") else [c for c in cands if c[0] >= 2][:n_guests]
         pick = {"guests": [{"frame": b["frame"], "box": b["box"], "frames_seen": n} for n, gi, b in chosen],
                 "why": f"{len(chosen)} guest(s) by screen time: " + ", ".join(str(c[0]) for c in chosen) if chosen
                        else "no guest face found - hosts only"}

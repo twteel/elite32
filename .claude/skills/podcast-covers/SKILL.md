@@ -185,7 +185,12 @@ google.com/device. Tell the user to open it in a PRIVATE/INCOGNITO window, sign 
 info@ballin4peace.org and pick the Ballin' 4 Peace channel; otherwise Google silently uses their
 personal Gmail (no channel -> 403). `whoami` must say `-> CAN EDIT` (the brand account shows up as
 ballin4peace-…@pages.plusgoogle.com; that's correct). Then `plan`, test one video with
-`apply <video_id>`, then `apply`. YouTube re-orders tags alphabetically; a read right after a write
+`apply <video_id>`, then `apply`. Quota is 10,000 units/day (an update + thumbnail is ~100; every read is 1), resetting at midnight
+Pacific; when it runs out, `apply` stops and lists what's left - run it again the next day.
+YouTube's 4 free stills are often 2-shots: guest in the left chair, H20 on the right; check every
+render and pin `guest_frames` (with `box`) when the auto-pick lands on a host. If no guest is in the
+stills, `"no_guest_photo": true` makes a hosts-only cover with the guests' names.
+YouTube re-orders tags alphabetically; a read right after a write
 can lag, so re-check before calling something failed.
 
 ## Save it for the user
