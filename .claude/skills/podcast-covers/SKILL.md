@@ -118,6 +118,20 @@ Plus `out/review-sheet.jpg`: every episode in every format, for the user to appr
    wherever they ask (Netlify, Google Drive, YouTube). Never overwrite live YouTube
    thumbnails without an explicit yes.
 
+## SEO rules (consistency + visibility) - apply to every episode
+
+- **Title:** `Guest: Hook | Search phrase | Show Podcast` (under 100 characters; the hook from the
+  artwork comes first after the guest, then what people actually search: a place, program, school,
+  team or topic - "The Voice of Rucker Park", "LES Express", "Nazareth Point Guard"). Show suffix is
+  always "Ballin' 4 Peace Podcast" or "Wavy World Podcast". No episode numbers.
+- **Description:** line 1 = the hook + who the guest is and why they matter (names, schools,
+  programs). Then guests with handles, hosts, follow line, and the same 3 show hashtags first
+  (#Ballin4Peace #Basketball #NYCHoops / #WavyWorld #StrongIsland #LongIsland) - YouTube shows the
+  first three above the title. Add chapters when a transcript is available.
+- **Tags:** guest names, programs/schools, topics, then the show's standard tags.
+- **Playlist:** every public episode in "Ballin' 4 Peace Podcast" or "Wavy World".
+- Thumbnail, title, description and Instagram caption always carry the same hook.
+
 ## YouTube titles + descriptions (same run, if needed)
 
 The user has hand-optimized some videos on YouTube. That is the house style - copy it, don't
