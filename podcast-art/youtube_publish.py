@@ -31,8 +31,15 @@ SCOPE = "https://www.googleapis.com/auth/youtube"
 API = "https://www.googleapis.com/youtube/v3"
 
 
+CLIENT_FILE = ROOT / "work" / ".youtube-client.json"
+
+
 def client():
     cid, sec = os.environ.get("YT_CLIENT_ID"), os.environ.get("YT_CLIENT_SECRET")
+    if (not cid or not sec) and CLIENT_FILE.exists():  # the client_secret_*.json downloaded from Google Cloud
+        c = json.loads(CLIENT_FILE.read_text())
+        c = c.get("installed") or c.get("web") or c
+        cid, sec = c["client_id"], c["client_secret"]
     if not cid or not sec:
         sys.exit("Set YT_CLIENT_ID and YT_CLIENT_SECRET in the environment first (see the top of this file).")
     return cid, sec
