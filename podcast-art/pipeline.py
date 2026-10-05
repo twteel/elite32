@@ -428,6 +428,20 @@ def cut_person(frame, box, show):
     return treat_bw(cut) if show.get("treatment") == "bw" else treat(cut, show["colors"])
 
 
+def erase_regions(cut, polygons):
+    """Clear leftover background a person is touching (e.g. a couch). Each polygon is a list of
+    [x, y] points as fractions (0-1) of the cut-out's size; the edge is feathered a little."""
+    from PIL import ImageDraw, ImageFilter
+    w, h = cut.size
+    hole = Image.new("L", cut.size, 0)
+    for poly in polygons:
+        ImageDraw.Draw(hole).polygon([(x * w, y * h) for x, y in poly], fill=255)
+    hole = hole.filter(ImageFilter.GaussianBlur(max(2, w // 150)))
+    alpha = Image.fromarray((np.asarray(cut.getchannel("A"), float) * (1 - np.asarray(hole, float) / 255)).astype(np.uint8))
+    cut.putalpha(alpha)
+    return cut.crop(cut.getbbox())
+
+
 def guest_names(ep):
     g = ep.get("guests") or ep.get("guest") or []
     return [g] if isinstance(g, str) else list(g)
@@ -438,8 +452,12 @@ def cmd_cutout(ep, shows):
     show = shows[ep["show"]]
     for old in (WORK / ep["id"]).glob("guest_*.png"):
         old.unlink()
+    pinned = ep.get("guest_frames") or []
     for i, gp in enumerate(pick.get("guests", [])):
-        cut_person(gp["frame"], gp.get("box"), show).save(WORK / ep["id"] / f"guest_{i}.png")
+        cut = cut_person(gp["frame"], gp.get("box"), show)
+        erase = gp.get("erase") or (pinned[i].get("erase") if i < len(pinned) else None)
+        cut = erase_regions(cut, erase) if erase else cut
+        cut.save(WORK / ep["id"] / f"guest_{i}.png")
     for i, hp in enumerate(pick.get("hosts", [])):
         cut_person(hp["frame"], hp.get("box"), show).save(WORK / ep["id"] / f"host_{i}.png")
     print(f"{ep['id']}: cut-outs done")

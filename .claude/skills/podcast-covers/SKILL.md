@@ -226,6 +226,10 @@ Google Drive. `python pipeline.py archive` rebuilds just the zip. Send the zip t
 - After a batch, run `python publish_kit.py <ids>` to refresh `publish/` (YouTube thumbnails +
   youtube-updates.json for a local Claude-in-Chrome session, and the Instagram pack + zip).
 - Names on covers follow the user's spelling over anything found online (e.g. "Unsung Yutes").
+- Background a guest is touching (e.g. a couch) can be erased: add `"erase": [[[x, y], ...]]` to
+  that `guest_frames` entry (polygons as 0-1 fractions of the cut-out) and rerun `cutout` + `render`.
+- `publish_kit.py <ids>` rewrites youtube-updates.json with only those ids: pass every episode,
+  or merge the new row into the committed file.
 - Studio sign letters stuck to a guest's hair are erased automatically
   (`drop_backdrop_signage`); if a chunk of backdrop still shows, pin another frame.
 

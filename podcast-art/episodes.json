@@ -733,7 +733,7 @@
   "ep": null,
   "guest": "DJ Authorize",
   "hook": "The Basketball DJ",
-  "youtube_id": "kLT4EeDxRVU",
+  "youtube_id": "KgGPCdaPV-Y",
   "opus_project": "P3090417pvP3",
   "recorded": "2026-09-04",
   "confirm": "Name confirmed by the user. Episode number. H20 not on this one. Only a wide camera on DJ Authorize: his cut-out is softer than the others.",
@@ -873,12 +873,74 @@
   "id": "b4p-brisy-obama",
   "show": "b4p",
   "ep": null,
-  "guest": "Brisy Obama",
+  "guest": "Breezy Obama",
   "hook": "Comedy Is My Drug",
   "youtube_id": "Ko3eZ1dsTi8",
   "opus_project": "P3080314Q3ct",
   "recorded": "2026-08-03",
-  "confirm": "older - not in the first batch; episode number; guest spelling"
+  "confirm": "Verified: Breezy Obama (X @breezyobama; transcript and old YouTube title say 'Brisy/Brizzy'). Instagram handle not verified.",
+  "about": "Haitian-American comedian and comedic host from Queens, NY; parody music (Breezyobama on Spotify); indie film 'On Site - Pookie's Revenge Pt. 2'.",
+  "sources": [
+   "https://x.com/breezyobama",
+   "https://brooklynmusickitchen.com/event/silva-lining-productions-breezy-obama-presents-word-to-martin-luther-king-comedy-show/",
+   "https://24hip-hop.com/breezy-obama-invites-you-to-watch-pardoned-pt-2-on-site-respectfully-an-indie-film/",
+   "https://open.spotify.com/artist/29uXLL95iG3XTJwL1VHcgC"
+  ],
+  "hook_check": "Transcript 8:52-9:10: 'I think comedy makes me... It's drugs.'",
+  "youtube": {
+   "title": "Breezy Obama: Comedy Is My Drug | Queens Comedian & Parody Music | Ballin' 4 Peace Podcast",
+   "description": "Comedy is my drug. Queens comedian, comedic host and parody artist Breezy Obama pulls up on the couch: why comedy keeps him going, hosting vs. stand-up, the parody songs he says will win him a Grammy, start-bench-cut with Richard Pryor, Eddie Murphy and Martin Lawrence, and the Ballin' 4 Peace foul he still hasn't let go.\n\n0:00 Intro\n0:57 Meet Breezy Obama\n1:31 Ballin' 4 Peace is like therapy\n4:00 Who he looks up to in comedy and content\n5:47 The pre-game mindset\n7:19 Comedic host or stand-up?\n9:04 Comedy is my drug\n9:21 Start, bench, cut: Pryor, Eddie Murphy, Martin\n11:02 Parody songs and the Grammy plan\n12:40 Staying positive when it's all toxic\n14:37 The Ballin' 4 Peace foul he can't let go\n16:30 No endgame, just growth\n17:03 What is peace?\n\nGuest: Breezy Obama (@breezyobama), comedian from Queens, NY.\n\nHosted by Slim the Announcer & H20.\nFollow @ballin4peace on Instagram. Subscribe and turn on notifications for every new episode.\nSponsorships, brand partnerships & distribution: info@ballin4peace.org\n\nWatch every Ballin' 4 Peace Podcast episode: https://www.youtube.com/playlist?list=PLL6kNIDzQXCtkjFkEJCvwcok8wlTpQ8iO\nSubscribe: https://www.youtube.com/@ballin4peacetv?sub_confirmation=1\nBallin' 4 Peace: https://ballin4peace.org\n\n#Ballin4Peace #Basketball #NYCHoops #Comedy #Podcast",
+   "tags": [
+    "Breezy Obama",
+    "Breezy Obama comedian",
+    "Queens comedian",
+    "NYC comedy",
+    "internet comedy",
+    "parody music",
+    "comedic host",
+    "Martin Lawrence",
+    "Eddie Murphy",
+    "Richard Pryor",
+    "Ballin 4 Peace",
+    "Ballin 4 Peace Podcast",
+    "basketball podcast",
+    "NYC basketball",
+    "Slim the Announcer",
+    "H20",
+    "hoops culture"
+   ]
+  },
+  "instagram": {
+   "caption": "Comedy is his drug. 😂\nQueens comedian Breezy Obama on hosting vs. stand-up, the parody songs he swears will win a Grammy, and start-bench-cut: Pryor, Eddie or Martin?\nFollow @ballin4peace for more. Full episode on YouTube (link in bio).\n#Ballin4Peace #Basketball #NYCHoops #Comedy #Podcast #QueensComedy",
+   "tags": [
+    "@ballin4peace"
+   ]
+  },
+  "guest_frames": [
+   {
+    "frame": "work/b4p-brisy-obama/frames/yt_maxres3.jpg",
+    "erase": [
+     [
+      [
+       0.775,
+       0.44
+      ],
+      [
+       1,
+       0.42
+      ],
+      [
+       1,
+       1
+      ],
+      [
+       0.79,
+       1
+      ]
+     ]
+    ]
+   }
+  ]
  },
  {
   "id": "b4p-03",
