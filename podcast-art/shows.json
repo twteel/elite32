@@ -23,7 +23,8 @@
     "hosts": [
       "Slim the Announcer",
       "H20"
-    ]
+    ],
+    "episode_numbers_on_covers": false
   },
   "wavy": {
     "name": "Wavy World",
@@ -45,6 +46,7 @@
     },
     "hosts": [
       "Wavy Walker"
-    ]
+    ],
+    "episode_numbers_on_covers": false
   }
 }

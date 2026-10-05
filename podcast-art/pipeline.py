@@ -470,7 +470,7 @@ def cmd_render(eps, shows, formats):
             mark = ROOT / show["mark"] if show.get("mark") else None
             mark_path = re.search(r' d="([^"]+)"', mark.read_text()).group(1) if mark and mark.exists() else ""
             assets = {k: (ROOT / v).resolve().as_uri() for k, v in show.get("assets", {}).items()}
-            data = {"show": show, "assets": assets, "markPath": mark_path, "ep": ep.get("ep"), "guest": " & ".join(guest_names(ep)) or None,
+            data = {"show": show, "assets": assets, "markPath": mark_path, "ep": ep.get("ep") if show.get("episode_numbers_on_covers", True) else None, "guest": " & ".join(guest_names(ep)) or None,
                     "label": ep.get("label"), "hideLabel": ep.get("hide_label", False), "noLockup": ep.get("no_lockup", False),
                     "hook": ep["hook"], "cast": cast_for(ep, show),
                     "castStyle": ep.get("cast_style", "equal"), "castLayout": ep.get("cast_layout")}

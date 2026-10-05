@@ -188,6 +188,11 @@ Google Drive. `python pipeline.py archive` rebuilds just the zip. Send the zip t
   `"formats": ["square", "cover3000"]`, `"no_lockup": true`, a `label`, and a hook with a
   hand-set line break (`"Ballin'|4 Peace"`). Hosts come from `brand/<show>/hosts/*.png`.
   `cover3000` is the square layout at 3000x3000 for Apple Podcasts / Spotify.
+- **No episode numbers** anywhere in our creative (covers, captions, descriptions): the user's
+  numbering has gaps, so `episode_numbers_on_covers` is false for both shows. Leave the
+  user's own YouTube titles as they are.
+- After a batch, run `python publish_kit.py <ids>` to refresh `publish/` (YouTube thumbnails +
+  youtube-updates.json for a local Claude-in-Chrome session, and the Instagram pack + zip).
 - Names on covers follow the user's spelling over anything found online (e.g. "Unsung Yutes").
 - Studio sign letters stuck to a guest's hair are erased automatically
   (`drop_backdrop_signage`); if a chunk of backdrop still shows, pin another frame.

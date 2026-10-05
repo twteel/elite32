@@ -1,4 +1,4 @@
 Each folder = one episode.
-1 Feed post (4x5).jpg  -> Instagram feed post (1080x1350)
-2 Reels + Stories cover (9x16).jpg -> cover for the episode's Reel, or post it as a Story (1080x1920)
-caption.txt -> caption, which account to post from, who to invite as collaborator, YouTube link
+1 Feed post (4x5).jpg -> Instagram feed post (1080x1350)
+2 Reels + Stories cover (9x16).jpg -> the episode's Reel cover, or a Story (1080x1920)
+caption.txt -> caption, which account to post from, collaborator invites, YouTube link
