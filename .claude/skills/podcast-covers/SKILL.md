@@ -235,6 +235,13 @@ Google Drive. `python pipeline.py archive` rebuilds just the zip. Send the zip t
   that `guest_frames` entry (polygons as 0-1 fractions of the cut-out) and rerun `cutout` + `render`.
 - `publish_kit.py <ids>` rewrites youtube-updates.json with only those ids: pass every episode,
   or merge the new row into the committed file.
+- **Covers the user already made** (the purple "WW-0xx" Wavy World thumbnails, Ep. 1-22): keep them on
+  YouTube (`"keep_youtube_thumbnail": true`; the publish row gets no thumbnail and `apply` leaves the
+  cover alone). Still render our versions for the Instagram pack.
+- Old Wavy World thumbnails are cast photos (H20, guest(s), Wavy): use their non-host faces as anchors
+  to find each guest's best still, then pin it. In studio two-shots H20 usually sits in the right chair.
+- Brand-new uploads have no stills for a few hours; do the text first and add the cover once
+  i.ytimg.com/vi/<id>/maxres1.jpg exists.
 - Studio sign letters stuck to a guest's hair are erased automatically
   (`drop_backdrop_signage`); if a chunk of backdrop still shows, pin another frame.
 

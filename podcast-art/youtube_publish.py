@@ -237,9 +237,16 @@ def apply(only=None):
         if "_error" in u:
             failed.append((vid, f"text: {u['_error']}"))
             continue
-        thumb = REPO / r["thumbnail"]
-        t = api("POST", "thumbnails/set", {"videoId": vid}, upload=thumb.read_bytes(), ctype="image/jpeg")
-        check = snippet(vid)
+        t = {}
+        if r.get("thumbnail"):  # no thumbnail in the row = keep the one already on YouTube
+            thumb = REPO / r["thumbnail"]
+            t = api("POST", "thumbnails/set", {"videoId": vid}, upload=thumb.read_bytes(), ctype="image/jpeg")
+        for wait in (0, 5, 15):  # YouTube's read-back can lag a few seconds behind the write
+            time.sleep(wait)
+            check = snippet(vid)
+            if not check or (check["snippet"]["title"] == body["snippet"]["title"] and
+                             {x.lower() for x in check["snippet"].get("tags", [])} == {x.lower() for x in body["snippet"]["tags"]}):
+                break
         if not check:
             failed.append((vid, "could not re-read the video (daily quota used up?) - run apply again tomorrow"))
             continue

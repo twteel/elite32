@@ -156,6 +156,8 @@ def cmd_frames(ep):
             if os.environ.get("YT_STILLS_ONLY"):
                 raise RuntimeError("stills only")
             youtube_frames(ep["youtube_id"], d)
+            if not any(d.glob("*.jpg")):  # got a stream link but every frame grab was refused
+                raise RuntimeError("no frames")
         except Exception:
             print(f"{ep['id']}: using YouTube's stills ({youtube_stills(ep['youtube_id'], d)})")
     for i, s in enumerate(sources):
@@ -290,6 +292,22 @@ def remove_bg(img):
     return remove(img, session=_session, post_process_mask=True)
 
 
+def fill_small_holes(rgba, max_share=0.06):
+    """Background removal sometimes punches a hole through a logo or a white patch on a shirt.
+    Fill holes fully enclosed by the person that are small (under 6% of the person's area)."""
+    a = np.array(rgba.split()[-1])
+    solid = (a > 40).astype(np.uint8)
+    n, lab, stats, _ = cv2.connectedComponentsWithStats(1 - solid, connectivity=4)
+    h, w = a.shape
+    area = solid.sum()
+    for i in range(1, n):
+        x, y, bw, bh, ar = stats[i]
+        if x > 0 and y > 0 and x + bw < w and y + bh < h and ar < max_share * area:
+            a[lab == i] = 255
+    rgba.putalpha(Image.fromarray(a))
+    return rgba
+
+
 def keep_subject(rgba, cx, cy):
     """Drop other people in the shot: keep the alpha blob that contains the face centre."""
     a = np.array(rgba.split()[-1])
@@ -422,8 +440,8 @@ def cut_person(frame, box, show):
     if s != 1.0:
         crop = crop.resize((int(crop.width * s), 900), Image.LANCZOS)
     fx, fy, fw, fh = (x - l) * s, (y - t) * s, w * s, h * s
-    cut = fade_clipped_sides(keep_subject(drop_backdrop_signage(remove_bg(crop), fx, fy, fw, fh),
-                                          fx + fw / 2, fy + fh / 2))
+    cut = fade_clipped_sides(fill_small_holes(keep_subject(drop_backdrop_signage(remove_bg(crop), fx, fy, fw, fh),
+                                                           fx + fw / 2, fy + fh / 2)))
     cut = cut.crop(cut.getbbox())
     return treat_bw(cut) if show.get("treatment") == "bw" else treat(cut, show["colors"])
 

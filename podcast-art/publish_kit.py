@@ -21,20 +21,25 @@ rows = []
 for i in ids:
     e, prev = E[i], old.get(i, {})
     vid = prev.get("video_id") or e["youtube_id"]
-    shutil.copy(ROOT / "out" / f"{i}_yt.jpg", PUB / "youtube" / f"{vid}.jpg")
+    art = (ROOT / "out" / f"{i}_yt.jpg").exists()
+    keep = e.get("keep_youtube_thumbnail") or not art  # keep the cover already on YouTube (or none made yet)
+    if not keep:
+        shutil.copy(ROOT / "out" / f"{i}_yt.jpg", PUB / "youtube" / f"{vid}.jpg")
     yt = e.get("youtube") or {}
     rows.append({"video_id": vid, "show": S[e["show"]]["name"], "episode": i,
                  "studio_url": f"https://studio.youtube.com/video/{vid}/edit",
-                 "thumbnail": f"podcast-art/publish/youtube/{vid}.jpg",
-                 "current_title": prev.get("current_title"), "new_title": yt.get("title"), "why": "Title matches the thumbnail hook",
+                 "thumbnail": None if keep else f"podcast-art/publish/youtube/{vid}.jpg",
+                 "current_title": prev.get("current_title"), "new_title": yt.get("title"),
+                 "why": prev.get("why") or "Title matches the thumbnail hook",
                  "new_description": yt.get("description"), "tags": yt.get("tags", [])})
     g = e.get("guests") or e.get("guest") or ""
     names = "The Pinnocks" if i == "ww-26-pinnock" else (" & ".join(g) if isinstance(g, list) else g)
     name = re.sub(r'[\\/:*?"<>|]', "", f"{names + ' - ' if names else ''}{e['hook'].replace('|', ' ')}").strip()
     d = ig / S[e["show"]]["name"] / name
     d.mkdir(parents=True)
-    shutil.copy(ROOT / "out" / f"{i}_post.jpg", d / "1 Feed post (4x5).jpg")
-    shutil.copy(ROOT / "out" / f"{i}_story.jpg", d / "2 Reels + Stories cover (9x16).jpg")
+    if art:
+        shutil.copy(ROOT / "out" / f"{i}_post.jpg", d / "1 Feed post (4x5).jpg")
+        shutil.copy(ROOT / "out" / f"{i}_story.jpg", d / "2 Reels + Stories cover (9x16).jpg")
     c = e.get("instagram") or {}
     account = "@ballin4peace" if e["show"] == "b4p" else "@wavyworldpod"
     collab = [t for t in c.get("tags", []) if t not in SHOW_ACCOUNTS]
