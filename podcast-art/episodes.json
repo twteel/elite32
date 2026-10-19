@@ -3013,7 +3013,7 @@
   "hook": "Father First",
   "youtube_id": "G4uFRHxayHc",
   "recorded": "2026-10-19",
-  "confirm": "Son verified: Markquis Nowell (transcript says 'Marquise Noel'), 2023 Bob Cousy Award, K-State, Raptors (Wikipedia). Father per K-State roster is Marcus Nowell Sr.; the nickname 'Taz' is NOT VERIFIED online.",
+  "confirm": "Son verified: Markquis Nowell (transcript says 'Marquise Noel'), 2023 Bob Cousy Award, K-State, Raptors (Wikipedia). Father per K-State roster is Marcus Nowell Sr.; the nickname 'Taz' is NOT VERIFIED online. YouTube's 4 stills show only Slim, so the cover is hosts-only.",
   "about": "Streetball announcer; father of Markquis Nowell.",
   "youtube": {
    "title": "Taz: Father First | Markquis Nowell's Dad & Rucker Voice | Ballin' 4 Peace Podcast",
@@ -3046,6 +3046,70 @@
     "@ballin4peace"
    ]
   },
-  "guest": "Taz"
+  "guest": "Taz",
+  "no_guest_photo": true
+ },
+ {
+  "id": "b4p-dj-authorize-joe-pope",
+  "show": "b4p",
+  "ep": null,
+  "hook": "DJ & MC Chemistry",
+  "youtube_id": "d3h5q7VzcPA",
+  "recorded": "2026-10-19",
+  "confirm": "NOT VERIFIED: description says 'Joe Polo'; DJ Authorize's own episode names his long-time MC partner 'Joe Po'/'Pope' - likely Joe Pope (Dyckman announcer). Confirm with the user before publishing.",
+  "about": "DJ Authorize (basketball DJ) and his MC partner.",
+  "youtube": {
+   "title": "DJ Authorize & Joe Pope: DJ & MC Chemistry | NYC Streetball Sound | Ballin' 4 Peace Podcast",
+   "description": "DJ and MC chemistry. DJ Authorize and Joe Pope, two of the voices behind New York streetball, on the 20-year partnership that lets each one call the other's next sound effect, taking New York energy to Miami Pro-Am (and losing it), Pookie Wilson as the greatest they ever saw, the DJs and announcers who shaped the sound, whether the one-on-one boom is changing the culture, all-time Knicks lineups, and the story behind \"I authorize this.\"\n\n0:00 Intro\n1:37 Who Runs New York Basketball Culture?\n5:13 The Story Behind Their DJ-MC Chemistry\n9:32 Taking New York Streetball to Miami\n13:50 From the Brooklyn Nets to Streetball Legends\n17:02 Building—and Losing—Miami Pro-Am\n22:19 Streetball’s Most Underrated Players\n28:50 Finding a Voice in the Game\n31:13 The DJs Who Shaped the Sound\n32:40 What Makes a Great Announcer?\n34:50 One-on-One Showdowns and Ballislife\n37:10 Is Streetball Culture Changing?\n38:56 NBA Stars, Knicks Legends, and All-Time Lineups\n45:44 Predicting the NBA’s Next Champions\n47:49 The Story Behind “I Authorize This”\n50:52 Respect, Peace, and Final Shoutouts\n\nGuests: DJ Authorize & Joe Pope.\n\nHosted by Slim the Announcer & H20.\nFollow @ballin4peace on Instagram. Subscribe and turn on notifications for every new episode.\nSponsorships, brand partnerships & distribution: info@ballin4peace.org\n\nWatch every Ballin' 4 Peace Podcast episode: https://www.youtube.com/playlist?list=PLL6kNIDzQXCtkjFkEJCvwcok8wlTpQ8iO\nSubscribe: https://www.youtube.com/@ballin4peacetv?sub_confirmation=1\nBallin' 4 Peace: https://ballin4peace.org\n\n#Ballin4Peace #Basketball #NYCHoops #HoopsCulture #Podcast",
+   "tags": [
+    "DJ Authorize",
+    "Joe Pope",
+    "streetball DJ",
+    "streetball announcer",
+    "Miami Pro-Am",
+    "Dyckman",
+    "Pookie Wilson",
+    "NYC streetball",
+    "Knicks all-time lineup",
+    "one-on-one basketball",
+    "Ballin 4 Peace",
+    "Ballin 4 Peace Podcast",
+    "basketball podcast",
+    "NYC basketball",
+    "Slim the Announcer",
+    "H20",
+    "hoops culture"
+   ]
+  },
+  "instagram": {
+   "caption": "DJ and MC chemistry. 🎧🎤\nDJ Authorize and Joe Pope on 20 years of calling games together, Miami Pro-Am and the sound of NYC streetball.\nFollow @ballin4peace for more. Full episode on YouTube (link in bio).\n#Ballin4Peace #Basketball #NYCHoops #HoopsCulture #Podcast",
+   "tags": [
+    "@ballin4peace"
+   ]
+  },
+  "guests": [
+   "DJ Authorize",
+   "Joe Pope"
+  ],
+  "guest_frames": [
+   {
+    "frame": "work/b4p-dj/frames/s03_0037.jpg",
+    "box": [
+     1190,
+     388,
+     71,
+     88
+    ]
+   },
+   {
+    "frame": "work/ww-17-joe-pope/frames/yt_maxres1.jpg",
+    "box": [
+     206.12152099609375,
+     250.1367950439453,
+     88.86539459228516,
+     108.5494155883789
+    ]
+   }
+  ]
  }
 ]
