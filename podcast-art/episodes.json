@@ -2941,7 +2941,18 @@
     "@ballin4peace"
    ]
   },
-  "guest": "MRG"
+  "guest": "MRG",
+  "guest_frames": [
+   {
+    "frame": "work/b4p-mrg/frames/yt_maxres2.jpg",
+    "box": [
+     899.189208984375,
+     123.1917724609375,
+     81.51346588134766,
+     99.57894134521484
+    ]
+   }
+  ]
  },
  {
   "id": "b4p-cha-ching",
@@ -2982,6 +2993,59 @@
     "@ballin4peace"
    ]
   },
-  "guest": "Cha-Ching"
+  "guest": "Cha-Ching",
+  "guest_frames": [
+   {
+    "frame": "work/b4p-cha-ching/frames/yt_maxres2.jpg",
+    "box": [
+     365.3199157714844,
+     73.60780334472656,
+     86.04063415527344,
+     108.8161849975586
+    ]
+   }
+  ]
+ },
+ {
+  "id": "b4p-taz",
+  "show": "b4p",
+  "ep": null,
+  "hook": "Father First",
+  "youtube_id": "G4uFRHxayHc",
+  "recorded": "2026-10-19",
+  "confirm": "Son verified: Markquis Nowell (transcript says 'Marquise Noel'), 2023 Bob Cousy Award, K-State, Raptors (Wikipedia). Father per K-State roster is Marcus Nowell Sr.; the nickname 'Taz' is NOT VERIFIED online.",
+  "about": "Streetball announcer; father of Markquis Nowell.",
+  "youtube": {
+   "title": "Taz: Father First | Markquis Nowell's Dad & Rucker Voice | Ballin' 4 Peace Podcast",
+   "description": "Father first. Taz, the Rucker announcer behind some of streetball's best nicknames and father of Harlem point guard Markquis Nowell (2023 Bob Cousy Award winner at Kansas State), on stepping away from the mic to raise his son, the NBA draft process and its politics, the regrets he'd change as a hoop dad, Team Nike and the changing streetball culture, a Dyckman title game the lights went out on, and his New York Mount Rushmores.\n\n0:00 Intro\n1:29 Taz’s Voice and Basketball Beginnings\n4:23 Fatherhood and Stepping Away\n5:54 Recognizing His Son’s Potential\n8:26 Team Nike and Streetball’s Changing Culture\n12:37 A Father’s Proud Moments\n14:07 The NBA Draft and Politics\n18:51 Recruiting Challenges and Family Support\n21:39 Parenting, Pressure, and Regrets\n26:52 New York Basketball Mount Rushmores\n30:05 The Announcers Worth Watching\n32:55 Overrated Players and a Painful Dyckman Game\n37:17 Preserving Streetball’s Community\n40:46 Personal Growth and NBA Debates\n43:51 Peace, Healing, and Closing Reflections\n45:44 Uplifting the Community and Giving Flowers\n\nGuest: Taz, streetball announcer and father of Markquis Nowell.\n\nHosted by Slim the Announcer & H20.\nFollow @ballin4peace on Instagram. Subscribe and turn on notifications for every new episode.\nSponsorships, brand partnerships & distribution: info@ballin4peace.org\n\nWatch every Ballin' 4 Peace Podcast episode: https://www.youtube.com/playlist?list=PLL6kNIDzQXCtkjFkEJCvwcok8wlTpQ8iO\nSubscribe: https://www.youtube.com/@ballin4peacetv?sub_confirmation=1\nBallin' 4 Peace: https://ballin4peace.org\n\n#Ballin4Peace #Basketball #NYCHoops #HoopsCulture #Podcast",
+   "tags": [
+    "Taz",
+    "Markquis Nowell",
+    "Markquis Nowell dad",
+    "Bob Cousy Award",
+    "Kansas State basketball",
+    "Harlem basketball",
+    "Rucker Park",
+    "streetball announcer",
+    "NBA draft",
+    "hoop dad",
+    "Dyckman",
+    "Team Nike",
+    "Ballin 4 Peace",
+    "Ballin 4 Peace Podcast",
+    "basketball podcast",
+    "NYC basketball",
+    "Slim the Announcer",
+    "H20",
+    "hoops culture"
+   ]
+  },
+  "instagram": {
+   "caption": "Father first. 🏀\nTaz on stepping away from the mic to raise Markquis Nowell, the NBA draft, and the regrets every hoop dad should hear.\nFollow @ballin4peace for more. Full episode on YouTube (link in bio).\n#Ballin4Peace #Basketball #NYCHoops #HoopsCulture #Podcast",
+   "tags": [
+    "@ballin4peace"
+   ]
+  },
+  "guest": "Taz"
  }
 ]
